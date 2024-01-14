@@ -17,6 +17,6 @@ public class Order {
 
     private LocalDateTime dateIssued;
     private double price;
-    private String ticketNumber;
+    private int nTickets;
 
 }
