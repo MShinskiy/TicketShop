@@ -17,4 +17,11 @@ public class Ticket {
     private int row;
     private int seat;
 
+    @ManyToOne
+    @JoinColumn(name="customerId")
+    private Customer customer;
+
+    @ManyToOne
+    @JoinColumn(name = "concertId")
+    private Concert concert;
 }

@@ -3,6 +3,7 @@ package com.imse.ticketshop.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -21,4 +22,6 @@ public class Venue {
     private String city;
     private String country;
 
+    @OneToMany(mappedBy = "venue")
+    private List<Concert> concerts;
 }
