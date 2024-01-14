@@ -12,5 +12,14 @@ public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    private UUID userId;
+
+    private String email;
+    private String password;
+    private int age;
+    private String gender;
+    private String phone;
+    private String city;
+    private String country;
+
 }
