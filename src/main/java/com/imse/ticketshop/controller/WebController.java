@@ -27,6 +27,24 @@ public class WebController {
         return "home";
     }
 
+    @PostMapping("/filldb")
+    public void fillDb() {
+
+    }
+
+    @PostMapping("/login")
+    public String getLoginPage() {
+        /*
+        TODO get all customers and venues
+         */
+        return "home";
+    }
+
+    @PostMapping("/login")
+    public String doLogin() {
+
+    }
+
     @PostMapping("/addConcert")
     public String addConcert(@RequestBody MultiValueMap<String, String> values) {
 
