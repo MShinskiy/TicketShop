@@ -32,17 +32,18 @@ public class WebController {
 
     }
 
-    @PostMapping("/login")
+    @GetMapping("/login")
     public String getLoginPage() {
         /*
         TODO get all customers and venues
          */
-        return "home";
+
+        return "login";
     }
 
     @PostMapping("/login")
     public String doLogin() {
-
+        return "home";
     }
 
     @PostMapping("/addConcert")
