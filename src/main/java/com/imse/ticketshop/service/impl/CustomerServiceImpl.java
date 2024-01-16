@@ -5,6 +5,8 @@ import com.imse.ticketshop.repository.CustomerRepository;
 import com.imse.ticketshop.service.CustomerService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
@@ -16,7 +18,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 
     @Override
-    public Customer getCustomer() {
-        return null;
+    public List<Customer> getAllCustomer() {
+        return customerRepo.findAll();
     }
 }
