@@ -49,12 +49,20 @@ public class GameController {
                     .get("Contact").getAsJsonObject()
                     .get("DTE_Contact_Id__c").getAsString();
 
+            User user = userService.getUser(dtprf);
+            if(user == null) {
+                /* TODO handle user doesn't exist
+                *   create or don't allow entry? */
+            }
+
+            model.addAttribute("HouseStateJSON", );
+
             //Send current set broadcast to a newly connected user
-            return "broadcast";
+            return "index";
         } catch (NullPointerException e) {
             log.error("Could not parse json string {} ", query, e);
             //Send empty frame on error
-            return "frame";
+            return "index";
         }
     }
 

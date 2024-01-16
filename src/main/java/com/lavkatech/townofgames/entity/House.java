@@ -10,6 +10,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
+/**
+ * Сущность описывает дома которые будут отображены на карте
+ */
 @Entity
 @Table(name = "houses")
 @Data
@@ -22,6 +25,7 @@ public class House {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    private String name;
     private String description;
     private TaskStatus taskStatus;
     private VisibilityStatus visibilityStatus;

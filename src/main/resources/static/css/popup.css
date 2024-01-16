@@ -1,0 +1,23 @@
+.popup-container {
+    position: fixed;
+    bottom: -100%;
+    background-color: #fff;
+    z-index: 4;
+    width: 100%;
+    max-width: inherit;
+    min-width: inherit;
+    box-shadow: 0px -5px 10px rgba(0, 0, 0, 0.2);
+    transition: bottom 0.3s ease-in-out;
+}
+
+.popup-content {
+    padding: 20px;
+}
+
+.popup-container:not(.active) .popup-content {
+    bottom: -100%;
+}
+
+.popup-container.active {
+    bottom: 0;
+}

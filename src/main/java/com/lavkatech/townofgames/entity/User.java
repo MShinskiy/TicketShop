@@ -14,6 +14,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Сущность описывает игроков
+ */
 @Data
 @Entity
 @Builder

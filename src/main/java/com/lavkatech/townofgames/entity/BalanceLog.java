@@ -9,6 +9,10 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * Сущность логов баланса игроков
+ */
+
 @Entity
 @Table(name = "balances")
 @Builder

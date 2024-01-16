@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * Сущность логов посещения домов
+ */
 @Entity
 @Table(name = "visits")
 @Builder

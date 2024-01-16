@@ -1,0 +1,85 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    height: 100%;
+    max-width: 800px;
+    min-width: 200px;
+    margin: 0 auto;
+    background-image: url("/img/v1_2.png");
+    background-position: center;
+    background-size: cover;
+    font-family: "Raleway", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+img {
+    pointer-events: none;
+}
+
+#playground {
+    position: relative;
+    width: 100%;
+    box-shadow: 0 0 64px rgba(0, 0, 0, 0.4);
+}
+
+.map {
+    margin-top: 126px;
+    display: block;
+    width: 100%;
+}
+
+.bg-blur-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -2;
+    height: 100%;
+    width: 100%;
+    backdrop-filter: blur(16px);
+}
+
+
+/* Верхняя панель (HUD пользователя)*/
+
+#HUD {
+    padding: 12px 32px;
+    position: fixed;
+    top: 0;
+    box-sizing: border-box;
+    z-index: 8;
+    width: 100%;
+    max-width: inherit;
+    min-width: inherit;
+    background-color: #637AB0;
+    color: white;
+}
+
+.userinfo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.5em;
+    width: 100%;
+}
+
+#username {
+    font-weight: bold;
+}
+
+.resources {
+    margin: 8px 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.resources-group {
+    display: flex;
+    align-items: center;
+}
+
+.resources-group > img {
+    margin-right: 8px;
+}
