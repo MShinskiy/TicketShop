@@ -1,10 +1,7 @@
 package com.lavkatech.townofgames.entity;
 
 import com.lavkatech.townofgames.entity.cosnt.Group;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -36,6 +33,10 @@ public class User {
     private LocalDateTime lastLogin = LocalDateTime.now();
     private LocalDateTime lastCoinChange = LocalDateTime.now();
     private LocalDateTime lastTicketChange = LocalDateTime.now();
+    private String userProgressJson;
+
+/*    @OneToMany(mappedBy = "user")
+    private List<UserTask> userTasks;*/
 
     @OneToMany(mappedBy = "user")
     private List<HouseVisitLog> houseVisitLog = new ArrayList<>();

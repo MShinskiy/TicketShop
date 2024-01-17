@@ -3,6 +3,8 @@ package com.lavkatech.townofgames.controller;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.lavkatech.townofgames.entity.User;
+import com.lavkatech.townofgames.entity.dto.HouseStatusDto;
+import com.lavkatech.townofgames.service.HouseService;
 import com.lavkatech.townofgames.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,6 +21,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 @Controller
 public class GameController {
@@ -29,10 +32,12 @@ public class GameController {
     private String key;
     private static final Logger log = LogManager.getLogger();
     private final UserService userService;
+    private final HouseService houseService;
 
     @Autowired
-    public GameController(UserService userService) {
+    public GameController(UserService userService, HouseService houseService) {
         this.userService = userService;
+        this.houseService = houseService;
     }
 
 
@@ -55,7 +60,9 @@ public class GameController {
                 *   create or don't allow entry? */
             }
 
-            model.addAttribute("HouseStateJSON", );
+            List<HouseStatusDto> dtosToFront = houseService.getHousesDtosForUser(user);
+            Gson gson = new Gson();
+            model.addAttribute("HouseStateJSON", gson.toJson(dtosToFront));
 
             //Send current set broadcast to a newly connected user
             return "index";
