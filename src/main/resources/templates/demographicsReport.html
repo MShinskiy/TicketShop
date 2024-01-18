@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>dReport</title>
+</head>
+<body>
+<tr>Filter by Genre:</tr>
+<input type="text" id="inputGenre" onkeyup="filterByColumn(0, 'inputGenre')" placeholder="Filter By Genre..">
+<tr>Filter by Age Range:</tr>
+<input type="text" id="inputAge" onkeyup="filterByColumn(1, 'inputAge')" placeholder="Filter By Age Range..">
+<tr>Filter by Gender:</tr>
+<input type="text" id="inputGender" onkeyup="filterByColumn(2, 'inputGender')" placeholder="Filter By Gender..">
+
+<table id="drTable">
+    <tr>
+        <th onclick="sortTable(0)">Genre</th>
+        <th onclick="sortTable(1)">Age Range</th>
+        <th onclick="sortTable(2)">Gender</th>
+        <th>Number of Tickets Sold</th>
+    </tr>
+    <tr th:each="reportRow : ${reportData}">
+        <td th:text="${reportRow.getGenre()}"></td>
+        <td th:text="${reportRow.getAgeRange()}"></td>
+        <td th:text="${reportRow.getGender()}"></td>
+        <td th:text="${reportRow.getNoTickets()}"></td>
+    </tr>
+</table>
+
+<script>
+    function sortTable(n) {
+        var table = document.getElementById("drTable");
+        var rows = table.rows;
+        var switching = true;
+        var dir = "asc";
+        var switchcount = 0;
+
+        while (switching) {
+            switching = false;
+
+            for (var i = 1; i < rows.length - 1; i++) {
+                var shouldSwitch = false;
+                var x = rows[i].getElementsByTagName("td")[n];
+                var y = rows[i + 1].getElementsByTagName("td")[n];
+
+                var xText = x.innerHTML.toLowerCase();
+                var yText = y.innerHTML.toLowerCase();
+
+                if ((dir == "asc" && xText > yText) || (dir == "desc" && xText < yText)) {
+                    shouldSwitch = true;
+                    break;
+                }
+            }
+
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                switchcount++;
+            } else {
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
+    }
+</script>
+
+<script>
+    function filterByColumn(col, filtertype) {
+
+        var filter = document.getElementById(filtertype).value.toUpperCase();
+        var rows = document.getElementById("drTable").getElementsByTagName("tr");
+
+        for (var i = 0; i < rows.length; i++) {
+            var cell = rows[i].getElementsByTagName("td")[col];
+            var cellText = "";
+
+            if (cell) {
+                cellText = cell.textContent || cell.innerText;
+                ;
+            }
+
+            if (filter === "") {
+                rows[i].style.display = "";
+            } else {
+                // Check if the cell content contains the whole word
+                var cellTextUpperCase = cellText.trim().toUpperCase();
+                if (cellTextUpperCase === filter || cellTextUpperCase.includes(" " + filter + " ")) {
+                    rows[i].style.display = "";
+                } else {
+                    rows[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+</body>
+</html>

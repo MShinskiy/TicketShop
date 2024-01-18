@@ -7,10 +7,7 @@ import java.util.List;
 
 @Service
 public interface ConcertService {
-
-    List<Concert> getAllConcerts();
-    List<Concert> getConcertsInCity(String city);
-    List<Concert> getConcertsInVenue(String venueName);
-    List<Concert> getFilteredConcerts(String city, String venueName);
+    Concert getConcertByID(String id);
+    List<Concert> getConcertsByCity(String city);
     void addConcert(Concert concert);
 }

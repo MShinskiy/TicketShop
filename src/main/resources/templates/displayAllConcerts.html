@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Concerts</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+
+<table id="myTable">
+    <tr>
+        <th></th>
+        <th>Band</th>
+        <th>Venue</th>
+        <th>City</th>
+        <th>Price</th>
+        <th>Number of Tickets</th>
+    </tr>
+    <tr th:each="concert : ${concertsInRome}">
+        <td style="visibility:collapse;" th:text="${concert.concertId}"></td>
+        <td th:text="${concert.band}"></td>
+        <td th:text="${concert.getVenue().getName()}"></td>
+        <td th:text="${concert.getVenue().getCity()}"></td>
+        <td th:text="${concert.price}"></td>
+        <td><input type="number" name="noTickets" value="0"></td>
+    </tr>
+    </table>
+
+    <button onclick="sendDataToBackend()" formtarget="_self">Place Order</button>
+    <div id="message"></div>
+<script th:inline="javascript">
+        function sendDataToBackend() {
+            var tableData = [];
+            $('#myTable tbody tr').each(function(row, tr){
+                tableData[row]={
+                    "id" : $(tr).find('td:eq(0)').text(),
+                    "qty" : $(tr).find('td:eq(5) input[name="noTickets"]').val(),
+                };
+            });
+
+            var jsonData = JSON.stringify(tableData);
+
+            $.ajax({
+                type: 'POST',
+                contentType: 'application/json',
+                 dataType: 'json',
+                url: '/displayAllConcerts',
+                data: jsonData,
+              /*  success: function(response) {
+                // Show success message as a popup
+                alert('Order placed successfully!');
+                console.log(response);
+            },*/
+            error: function(response) {
+                // Show success message as a popup
+                alert('Order placed successfully!');
+                 window.location.href = '/home';
+                console.log(response);
+            }
+            });
+        }
+    </script>
+
+</body>
+</html>

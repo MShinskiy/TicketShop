@@ -94,7 +94,15 @@ public class DBFillerService {
         fillOrders();
         fillTicketsBasedOnOrders();
         log.info("Database has been filled.");
-        //fillGroups();
+    }
+
+    public void clearDB(){
+        ticketRepository.deleteAll();
+        orderRepository.deleteAll();
+        concertRepository.deleteAll();
+        venueRepository.deleteAll();
+        customerRepository.deleteAll();
+        log.info("Database has been cleared.");
     }
 
     private String generateRandomString(boolean numbersOnly) {
@@ -127,6 +135,18 @@ public class DBFillerService {
         Random r = new Random();
         int low = 10;
         int high = 100;
+
+        var customer = Customer.builder()
+                .customerId(UUID.fromString("80309813-9e81-4122-ab92-92d92781c044"))
+                .email(generateRandomString(false) + "@" + domains[1 % domains.length])
+                .password(generateRandomString(false))
+                .age(r.nextInt(high - low) + low)
+                .gender(gender[1 % gender.length])
+                .phone(generateRandomString(true))
+                .city(cities[1 % cities.length])
+                .country(countries[1 % countries.length])
+                .build();
+        customerRepository.save(customer);
 
         for (int i = 0; i < noCustomers; i++) {
             customers[i] = Customer.builder()
@@ -223,12 +243,20 @@ public class DBFillerService {
             orderRepository.save(orders[i]);
 
             // update customer
-            customer.updateOrders(orders[i]);
-            customerRepository.save(customer);
+            for(var c : customers) {
+                if(c.getCustomerId() == customer.getCustomerId()){
+                    c.updateOrders(orders[i]);
+                    customerRepository.save(c);
+                }
+            }
 
             //update concerts
-            concert.updateOrders(orders[i]);
-            concertRepository.save(concert);
+            for(var c : concerts) {
+                if(c.getConcertId() == concert.getConcertId()){
+                    c.updateOrders(orders[i]);
+                    concertRepository.save(c);
+                }
+            }
         }
     }
 
@@ -260,19 +288,4 @@ public class DBFillerService {
             }
         }
     }
-
-/*    public void fillGroups(){
-
-        Random r = new Random();
-        var customers = customerRepository.findAll();
-        var noGroups = 3;
-
-        var customer = customers.get(r.nextInt(customers.size()));
-        var customer1 = customers.get(r.nextInt(customers.size()));
-        var customer2 = customers.get(r.nextInt(customers.size()));
-        var customer3 = customers.get(r.nextInt(customers.size()));
-
-        customer.updateGroup(customer1, customer2, customer3);
-        customerRepository.save(customer);
-    }*/
 }

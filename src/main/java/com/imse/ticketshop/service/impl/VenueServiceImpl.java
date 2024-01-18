@@ -6,7 +6,9 @@ import com.imse.ticketshop.repository.VenueRepository;
 import com.imse.ticketshop.service.VenueService;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -44,5 +46,15 @@ public class VenueServiceImpl implements VenueService {
                         .nTickets(Integer.parseInt(String.valueOf(row[4])))
                         .build())
                 .toList();
+    }
+
+    @Override
+    public Set<String> getCities() {
+        var venues = venueRepo.findAll();
+        var cities = new HashSet<String>();
+        for (var v : venues) {
+            cities.add(v.getCity());
+        }
+        return cities;
     }
 }

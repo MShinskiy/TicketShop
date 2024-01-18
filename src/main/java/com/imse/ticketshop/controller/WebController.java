@@ -1,19 +1,16 @@
 package com.imse.ticketshop.controller;
 
 import com.imse.ticketshop.entity.Concert;
-import com.imse.ticketshop.entity.Venue;
 import com.imse.ticketshop.entity.dto.GenrePopularityReportDto;
 import com.imse.ticketshop.entity.enumeration.Role;
-import com.imse.ticketshop.service.ConcertService;
-import com.imse.ticketshop.service.CustomerService;
-import com.imse.ticketshop.service.VenueService;
+import com.imse.ticketshop.service.*;
 import com.imse.ticketshop.service.db.DBFillerService;
 import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 
@@ -22,19 +19,30 @@ import java.util.*;
 @Controller
 public class WebController {
 
+    private final OrderService orderService;
     private final CustomerService customerService;
     private final ConcertService concertService;
     private final VenueService venueService;
+    private final TicketService ticketService;
     private final DBFillerService dbFillerService;
     private static final Logger log = LogManager.getLogger();
 
 
-    public WebController(CustomerService customerService, ConcertService concertService, VenueService venueService, DBFillerService dbFillerService) {
+    public WebController(OrderService orderService,
+                         CustomerService customerService,
+                         ConcertService concertService,
+                         VenueService venueService,
+                         TicketService ticketService,
+                         DBFillerService dbFillerService) {
+        this.orderService = orderService;
         this.concertService = concertService;
         this.venueService = venueService;
         this.customerService = customerService;
+        this.ticketService = ticketService;
         this.dbFillerService = dbFillerService;
     }
+
+    //Maxim---------------
 
     @GetMapping("/db/fill")
     @ResponseStatus(HttpStatus.OK)
@@ -42,10 +50,11 @@ public class WebController {
         dbFillerService.fillDatabase();
     }
 
+
     @DeleteMapping("/db/delete")
     @ResponseStatus(HttpStatus.OK)
     public void deleteDb() {
-        //dbFillerService.fillDatabase();
+        dbFillerService.clearDB();
     }
 
     @GetMapping("/login")
@@ -53,7 +62,7 @@ public class WebController {
         //Combine all users and send them to front
         Map<UUID, String> idUsernameMap = new HashMap<>();
         venueService.getAllVenues().forEach(venue -> idUsernameMap.put(venue.getVenueId(), venue.getEmail() + " (venue)"));
-        customerService.getAllCustomer().forEach(customer -> idUsernameMap.put(customer.getCustomerId(), customer.getEmail() + " (customer)"));
+        customerService.getAllCustomers().forEach(customer -> idUsernameMap.put(customer.getCustomerId(), customer.getEmail() + " (customer)"));
         model.addAttribute("users", idUsernameMap);
         return "login";
     }
@@ -98,12 +107,50 @@ public class WebController {
     }
 
     @GetMapping("/report/popularity")
-    public String getPopularityReport(Model model, HttpSession session) {
+    public String getPopularityReport(Model model) {
         //Generate report
         List<GenrePopularityReportDto> report = venueService.getReport();
         if(report != null) log.debug("Report has been successfully generated.");
         //Send to frontend
         model.addAttribute("report", report);
         return "popularity-report";
+    }
+
+    //Stefania--------
+    @GetMapping("/placeOrder")
+    public String getHomeScreen() {
+        return "placeOrder";
+    }
+
+    @ModelAttribute("cities")
+    public List<String> getCities() {
+        return new ArrayList<>(venueService.getCities());
+    }
+
+    @GetMapping("/displayAllConcerts")
+    public String getHomeScreen(@RequestParam String selectedCity, Model model) {
+        var concerts = concertService.getConcertsByCity(selectedCity);
+        model.addAttribute("concertsInRome", concerts);
+        return "displayAllConcerts";
+    }
+
+    @PostMapping(value = "/displayAllConcerts",consumes = MediaType.APPLICATION_JSON_VALUE)
+    public String handleTableData(@RequestBody List<Map<String, String>> tableData) {
+
+        var data = tableData.remove(0);
+        // tableData.subList(0, 1).clear();
+        orderService.addNewOrder(tableData);
+        ticketService.generateTickets(tableData);
+
+        return "home";
+    }
+
+    @GetMapping("/demographicsReport")
+    public String getHomeScreen(Model model) {
+
+        var data = customerService.getDataForReport();
+        model.addAttribute("reportData", data);
+
+        return "demographicsReport";
     }
 }

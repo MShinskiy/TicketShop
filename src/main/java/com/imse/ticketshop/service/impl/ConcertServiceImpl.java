@@ -6,7 +6,9 @@ import com.imse.ticketshop.repository.ConcertRepository;
 import com.imse.ticketshop.service.ConcertService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ConcertServiceImpl implements ConcertService {
@@ -18,23 +20,22 @@ public class ConcertServiceImpl implements ConcertService {
     }
 
     @Override
-    public List<Concert> getAllConcerts() {
-        return null;
+    public Concert getConcertByID(String id) {
+        var concertId = UUID.fromString(id);
+        return concertRepo.findById(concertId).get();
     }
 
     @Override
-    public List<Concert> getConcertsInCity(String city) {
-        return null;
-    }
+    public List<Concert> getConcertsByCity(String city) {
 
-    @Override
-    public List<Concert> getConcertsInVenue(String venueName) {
-        return null;
-    }
-
-    @Override
-    public List<Concert> getFilteredConcerts(String city, String venueName) {
-        return null;
+        var result = new ArrayList<Concert>();
+        var concerts = concertRepo.findAll();
+        for(var c : concerts) {
+            if(c.getVenue().getCity().equals(city)) {
+                result.add(c);
+            }
+        }
+        return result;
     }
 
     @Override

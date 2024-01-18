@@ -1,12 +1,14 @@
 package com.imse.ticketshop.service.impl;
 
 import com.imse.ticketshop.entity.Customer;
+import com.imse.ticketshop.entity.dto.DemographicsReport;
 import com.imse.ticketshop.repository.CustomerRepository;
 import com.imse.ticketshop.service.CustomerService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -19,7 +21,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 
     @Override
-    public List<Customer> getAllCustomer() {
+    public List<Customer> getAllCustomers() {
         return customerRepo.findAll();
     }
 
@@ -31,5 +33,18 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer getCustomerById(UUID id) {
         return customerRepo.findById(id).orElse(null);
+    }
+
+    @Override
+    public List<DemographicsReport> getDataForReport() {
+
+        var x = customerRepo.demographicsReportData().stream()
+                .map(obj -> new DemographicsReport(
+                        String.valueOf(obj[0]),
+                        String.valueOf(obj[1]),
+                        String.valueOf(obj[2]),
+                        Integer.parseInt(String.valueOf(obj[3]))
+                )).collect(Collectors.toList());
+        return x;
     }
 }

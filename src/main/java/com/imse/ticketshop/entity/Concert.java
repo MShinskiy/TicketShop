@@ -50,4 +50,10 @@ public class Concert {
             tickets = new ArrayList<>();
         this.tickets.add(t);
     }
+
+    public void updateTickets(Ticket t){
+        if(this.tickets == null)
+            tickets = new ArrayList<>();
+        this.tickets.add(t);
+    }
 }
