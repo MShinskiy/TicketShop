@@ -1,11 +1,9 @@
 package com.imse.ticketshop.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,5 +27,12 @@ public class Venue {
     private String country;
 
     @OneToMany(mappedBy = "venue")
-    private List<Concert> concerts;
+    @ToString.Exclude
+    private List<Concert> concerts = new ArrayList<>();
+
+    public void updateConcerts(Concert c){
+        if(this.concerts == null)
+            concerts = new ArrayList<>();
+        this.concerts.add(c);
+    }
 }

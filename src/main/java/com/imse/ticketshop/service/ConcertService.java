@@ -12,4 +12,5 @@ public interface ConcertService {
     List<Concert> getConcertsInCity(String city);
     List<Concert> getConcertsInVenue(String venueName);
     List<Concert> getFilteredConcerts(String city, String venueName);
+    void addConcert(Concert concert);
 }

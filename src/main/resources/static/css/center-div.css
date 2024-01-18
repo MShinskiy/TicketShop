@@ -1,0 +1,23 @@
+body {
+    height: 100vh;
+}
+
+.container-div {
+    height: 100%;
+}
+
+.bg-around-form {
+    background: #EEECEC;
+    padding: 10px 10px 10px 10px;
+    border-radius: 10px;
+    width: 400px;
+}
+
+.bg {
+    height: 100%;
+    width: 100%;
+    z-index: -100000;
+    position: absolute;
+    top: 0;
+    left: 0;
+}

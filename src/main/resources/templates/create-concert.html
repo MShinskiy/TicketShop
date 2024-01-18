@@ -3,20 +3,48 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Create Venue</title>
+    <title>Create Concert</title>
+    <link th:href="@{/css/center-div.css}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <body>
-<h2>Create concert</h2>
-<form action="/addConcert" method="post">
-    <input type="text" name="city">
-    <input type="text" name="location">
-    <input type="text" name="phone">
-    <input type="text" name="genre">
-    <input type="text" name="time">
-    <input type="text" name="ntickets">
-    <input type="text" name="price">
-
-    <input type="submit" value="Proceed">
-</form>
+<img class="bg" th:src="@{/img/bg.png}">
+<div class="container-div d-flex justify-content-center align-items-center align-self-center">
+    <form class="bg-around-form" action="#" th:action="@{/concert/create}" th:object="${concert}" method="post">
+        <h2 class="d-flex justify-content-center align-items-center align-self-center form-group">Create concert</h2>
+        <div class="form-group">
+            <label for="location">Location</label>
+            <input type="text" class="form-control" id="location" th:field="*{location}" placeholder="Location">
+        </div>
+        <div class="form-group">
+            <label for="band">Band</label>
+            <input type="text" class="form-control" id="band" th:field="*{band}" placeholder="Band">
+        </div>
+        <div class="form-group">
+            <label for="genre">Genre</label>
+            <input type="text" class="form-control" id="genre" th:field="*{genre}" placeholder="Genre">
+        </div>
+        <div class="form-group">
+            <label for="start-datetime">Date and Time</label>
+            <input type="datetime-local" class="form-control" id="start-datetime" th:field="*{startTime}" placeholder="Date and Time">
+        </div>
+        <div class="form-group">
+            <label for="price">Price</label>
+            <input type="text" class="form-control" id="price" th:field="*{price}" placeholder="Price" value="0.0">
+        </div>
+        <div class="form-group">
+            <label for="capacity">Capacity (# of tickets for sale)</label>
+            <input type="text" class="form-control" id="capacity" th:field="*{capacity}" placeholder="Capacity (# of tickets for sale)" value="0">
+        </div>
+        <div class="form-group">
+            <button type="submit" class="form-control btn btn-primary mb-2 " style="margin-top: 10px;">Create event</button>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="form-control btn btn-info mb-2 "
+                    style="margin-top: 10px;" formmethod="get"
+                    formaction="/home">To home</button>
+        </div>
+    </form>
+</div>
 </body>
 </html>

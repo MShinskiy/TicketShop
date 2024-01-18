@@ -1,7 +1,7 @@
 package com.imse.ticketshop.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -11,6 +11,9 @@ import java.util.UUID;
 @Table(name = "orders")
 @Entity
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Order {
 
     @Id
@@ -22,6 +25,7 @@ public class Order {
     private int nTickets;
 
     @ManyToMany
+    @ToString.Exclude
     private List<Concert> concert = new ArrayList<>();
 
     @ManyToOne

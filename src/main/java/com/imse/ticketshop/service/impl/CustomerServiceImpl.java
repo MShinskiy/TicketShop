@@ -6,6 +6,7 @@ import com.imse.ticketshop.service.CustomerService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -20,5 +21,15 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public List<Customer> getAllCustomer() {
         return customerRepo.findAll();
+    }
+
+    @Override
+    public Boolean doesCustomerWithIdExist(UUID id) {
+        return customerRepo.existsById(id);
+    }
+
+    @Override
+    public Customer getCustomerById(UUID id) {
+        return customerRepo.findById(id).orElse(null);
     }
 }

@@ -4,15 +4,51 @@
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
-
+    <link th:href="@{/css/center-div.css}" rel="stylesheet">
+    <link th:href="@{/css/home.css}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script th:src="@{/js/db.js}"></script>
 </head>
 <body>
-<h1>Home page</h1>
-<form method="post" action="/filldb">
-    <input type="submit" value="Fill DB">
-</form><br/>
-<form method="get" th:action="/login">
-    <input type="submit" value="Login">
-</form>
+<img class="bg" th:src="@{/img/bg.png}">
+<div class="container-div d-flex justify-content-center align-items-center align-self-center">
+    <div class="bg-around-form">
+        <h4 class="d-flex justify-content-center align-items-center align-self-center form-group"
+            th:text = "${session.login} == null ? 'Ticket shop' :'Hello, ' +  ${session.name}">
+        </h4>
+        <div class="form-group">
+            <button id="fill-button" class="form-control nav-button">Fill DB</button>
+        </div>
+        <div class="form-group">
+            <button id="delete-button" class="form-control nav-button">Delete data</button>
+        </div>
+        <div class="form-group">
+            <form method="get" th:action="@{/demographicsReport}">
+                <input class="form-control nav-button" type="submit"
+                       value="Demographics Report (Stefania)">
+            </form>
+        </div>
+        <div class="form-group">
+            <form method="get" th:action="@{/report/popularity}">
+                <input class="form-control nav-button" type="submit"
+                       value="City Popularity Report (Maxim)">
+            </form>
+        </div>
+        <div class="form-group">
+            <form method="get" th:action="@{/concert/create}">
+                <input class="form-control nav-button" type="submit" id="toVenueAccount"
+                       th:if="${session.role != null && session.role == T(com.imse.ticketshop.entity.enumeration.Role).VENUE}"
+                       value="Go to Account">
+            </form>
+        </div>
+        <div class="form-group">
+            <form method="get" th:action="@{/login}">
+                <input class="form-control nav-button" type="submit"
+                       th:value="${session.login} == null ? 'Login' : 'Change user' ">
+            </form>
+        </div>
+    </div>
+</div>
 </body>
 </html>

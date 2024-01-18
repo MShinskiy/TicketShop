@@ -1,10 +1,7 @@
 package com.imse.ticketshop.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +9,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "customers")
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -37,5 +35,16 @@ public class Customer {
     private List<Customer> customersGroup = new ArrayList<>();
 
     @OneToMany(mappedBy = "customer")
-    private List<Order> orders = new ArrayList<>();
+    private List<Order> orders;
+
+    public void updateOrders(Order o) {
+        if(this.orders == null)
+            orders = new ArrayList<>();
+        this.orders.add(o);
+    }
+    public void addTicket(Ticket t) {
+        if (this.tickets == null)
+            tickets = new ArrayList<>();
+        this.tickets.add(t);
+    }
 }
