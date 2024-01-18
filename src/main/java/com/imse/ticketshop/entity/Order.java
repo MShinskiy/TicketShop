@@ -24,7 +24,7 @@ public class Order {
     private double price;
     private int nTickets;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @ToString.Exclude
     private List<Concert> concert = new ArrayList<>();
 

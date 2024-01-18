@@ -31,11 +31,11 @@ public class Concert {
     @JoinColumn(name = "venueId")
     private Venue venue;
 
-    @OneToMany
+    @OneToMany(mappedBy = "concert", cascade = CascadeType.ALL)
     @ToString.Exclude
     private List<Ticket> tickets;
 
-    @ManyToMany // TODO many to many required?
+    @ManyToMany(mappedBy = "concert", cascade = CascadeType.ALL) // TODO many to many required?
     @ToString.Exclude
     private List<Order> orders;
 

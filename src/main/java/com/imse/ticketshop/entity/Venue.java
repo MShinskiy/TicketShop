@@ -26,7 +26,7 @@ public class Venue {
     private String city;
     private String country;
 
-    @OneToMany(mappedBy = "venue")
+    @OneToMany(mappedBy = "venue", cascade = CascadeType.ALL)
     @ToString.Exclude
     private List<Concert> concerts = new ArrayList<>();
 

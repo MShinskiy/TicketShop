@@ -21,11 +21,11 @@ public class Ticket {
     private int row;
     private int seat;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="customerId")
     private Customer customer;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "concertId")
     private Concert concert;
 }

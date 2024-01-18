@@ -28,13 +28,13 @@ public class Customer {
     private String city;
     private String country;
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Ticket> tickets = new ArrayList<>();
 
     @OneToMany // TODO ??
     private List<Customer> customersGroup = new ArrayList<>();
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Order> orders;
 
     public void updateOrders(Order o) {
