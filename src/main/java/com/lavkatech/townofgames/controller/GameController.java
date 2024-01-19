@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.lavkatech.townofgames.entity.User;
 import com.lavkatech.townofgames.entity.dto.HouseStatusDto;
+import com.lavkatech.townofgames.entity.enums.Group;
 import com.lavkatech.townofgames.service.HouseService;
 import com.lavkatech.townofgames.service.UserService;
 import org.apache.logging.log4j.LogManager;
@@ -58,23 +59,31 @@ public class GameController {
             if(user == null) {
                 /* TODO handle user doesn't exist
                 *   create or don't allow entry? */
+                return "error";
+            }
+
+            Group userGroup = user.getUserGroup();
+            if(userGroup == null) {
+                /* TODO handle client not
+                    providing user group */
+                return "error";
             }
 
             List<HouseStatusDto> dtosToFront = houseService.getHousesDtosForUser(user);
             Gson gson = new Gson();
             model.addAttribute("HouseStateJSON", gson.toJson(dtosToFront));
-
+            model.addAttribute("UserStateJSON", gson.toJson(user.toDto()));
             //Send current set broadcast to a newly connected user
             return "index";
         } catch (NullPointerException e) {
             log.error("Could not parse json string {} ", query, e);
-            //Send empty frame on error
-            return "index";
+            //Send error frame on error
+            return "error";
         }
     }
 
     //AES256CBC Message decryption
-    public static String decrypt(String encrypted, String initVector, String key) {
+    private static String decrypt(String encrypted, String initVector, String key) {
         try {
             IvParameterSpec iv = new IvParameterSpec(initVector.getBytes(StandardCharsets.UTF_8));
             SecretKeySpec sKeySpec = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), "AES");

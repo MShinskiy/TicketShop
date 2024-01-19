@@ -6,7 +6,7 @@
 body {
     height: 100%;
     max-width: 800px;
-    min-width: 200px;
+    min-width: 320px;
     margin: 0 auto;
     background-image: url("/img/v1_2.png");
     background-position: center;
@@ -25,7 +25,7 @@ img {
 }
 
 .map {
-    margin-top: 126px;
+    margin-top: 137px;
     display: block;
     width: 100%;
 }
@@ -44,7 +44,7 @@ img {
 /* Верхняя панель (HUD пользователя)*/
 
 #HUD {
-    padding: 12px 32px;
+    padding: 6px 12px;
     position: fixed;
     top: 0;
     box-sizing: border-box;
@@ -76,10 +76,39 @@ img {
 }
 
 .resources-group {
+    position: relative;
+    cursor: pointer;
+    font-size: 0.92em;
     display: flex;
+    text-align: center;
+    flex-direction: column;
     align-items: center;
+    user-select: none;
 }
 
 .resources-group > img {
-    margin-right: 8px;
+    height: 38px;
+}
+
+.btn-tooltip {
+    width: 20px;
+    position: absolute;
+    bottom: 2px;
+}
+
+#tooltip {
+    position: absolute;
+    pointer-events: none;
+    background-color: #6262c9e8;
+    max-width: inherit;
+    min-width: inherit; 
+    margin-top: 16px;
+    left: 2%;
+    right: 2%;
+    color: #fff;
+    padding: 16px;
+    border-radius: 6px;
+    opacity: 0;
+    transition: opacity 0.5s;
+    z-index: 16;
 }

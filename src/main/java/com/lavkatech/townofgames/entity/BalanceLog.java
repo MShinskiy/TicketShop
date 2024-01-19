@@ -1,6 +1,6 @@
 package com.lavkatech.townofgames.entity;
 
-import com.lavkatech.townofgames.entity.cosnt.Game;
+import com.lavkatech.townofgames.entity.enums.Game;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,9 +25,9 @@ public class BalanceLog {
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name = "dtprf")
     private User user;
 
+    @Enumerated(EnumType.STRING)
     private Game game;
     private long spent;
     private long won;

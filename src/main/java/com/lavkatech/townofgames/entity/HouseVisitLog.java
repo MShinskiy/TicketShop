@@ -24,10 +24,8 @@ public class HouseVisitLog {
     private LocalDateTime timestamp;
 
     @ManyToOne
-    @JoinColumn(name = "id")
     private House house;
 
     @ManyToOne
-    @JoinColumn(name = "dtprf")
     private User user;
 }

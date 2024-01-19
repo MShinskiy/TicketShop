@@ -1,6 +1,7 @@
 package com.lavkatech.townofgames.entity;
 
-import com.lavkatech.townofgames.entity.cosnt.Group;
+import com.lavkatech.townofgames.entity.dto.UserDto;
+import com.lavkatech.townofgames.entity.enums.Group;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,9 +26,10 @@ public class User {
     @Id
     private String dtprf;
 
-    private Group group;
+    private String username;
+    @Enumerated(EnumType.STRING)
+    private Group userGroup;
     private long coins = 0;
-    private long tickets = 0;
     private long points = 0;
     private LocalDateTime createdOn = LocalDateTime.now();
     private LocalDateTime lastLogin = LocalDateTime.now();
@@ -43,4 +45,14 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<BalanceLog> balanceLog = new ArrayList<>();
+
+    public UserDto toDto() {
+        return UserDto.builder()
+                .dtprf(dtprf)
+                .username(username)
+                .group(userGroup)
+                .coins(coins)
+                .points(points)
+                .build();
+    }
 }

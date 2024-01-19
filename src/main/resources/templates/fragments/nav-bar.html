@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Fragments</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+  <div class="d-flex justify-content-center" th:fragment="nav-bar (current-page)">
+    <form method="get">
+      <button class="btn btn-info" th:if="current-page == 'admin'" th:formaction="/administration/edit">К панели редактирования</button>
+      <button class="btn btn-info" th:if="current-page == 'edit'" th:formaction="/administration/admin">К панели администрирования</button>
+      <button class="btn btn-secondary" th:formaction="/logout">Выход</button>
+    </form>
+  </div>
+</body>
+</html>

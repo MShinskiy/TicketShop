@@ -1,43 +1,54 @@
 <!DOCTYPE html>
-<html lang="ru">
-<head>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <title>Мини Городок</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/houses.css">
-    <link rel="stylesheet" href="css/popup.css">
+    <link rel="stylesheet" th:href="@{/static/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/houses.css}">
+    <link rel="stylesheet" th:href="@{/css/popup.css}">
 
     <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
 </head>
 
 <body>
-<!-- Верхняя панель с информацией о пользователе -->
+    <!-- Верхняя панель с информацией о пользователе -->
     <div id="HUD">
-    <div class="userinfo">
-        <p id="username">Игрок</p>
-        <img src="img/menu.svg"></img>
-    </div>
-
-    <div class="resources">
-        <div class="resources-group">
-            <img src="img/coin.svg" height="36px">
-            <br><span id="money-count"></span> монет активно из </br> 5 000 начисленных</p>
+        <div class="userinfo">
+            <p id="username">Игрок</p>
+            <a href="#">
+                <img th:src="@{/static/img/menu.svg}"></img>
+            </a>
         </div>
-        <div class="resources-group">
-            <img src="img/ticket.png" height="36px">
-            <p><span id="tickets-count"></span> билетов активно из </br> 6 000 начисленных</p>
+    
+        <div class="resources">
+            <div class="resources-group" data-tooltip="money">
+                <img th:src="@{/img/coin.svg}">
+                <p>
+                    <span id="money-count"></span> / <span id="money-total"></span>
+                    <img class="btn-tooltip" th:src="@{/img/info.svg}">
+                </p>
+            </div>
+            <div class="resources-group" data-tooltip="tickets">
+                <img th:src="@{/img/ticket.png}">
+                <p>
+                    <span id="tickets-count"></span> / <span id="tickets-total"></span>
+                    <img class="btn-tooltip" th:src="@{/img/info.svg}">
+                </p>
+            </div>
+            <div class="resources-group" data-tooltip="tasks">
+                <img th:src="@{/img/flag.png}">
+                <p>
+                    <span id="tasks-count">5</span> / <span id="tasks-total"></span>
+                    <img class="btn-tooltip" th:src="@{/img/info.svg}">
+                </p>
+            </div>
         </div>
-        <div class="resources-group">
-            <img src="img/flag.png" height="24px">
-            <p><span id="tasks-count"></span> 5 / 10 </br>заданий выполнено</p>
-        </div>
-    </div>
 
-
-
-</div>
+        <!-- Появляющаяся подсказка по ресурсам -->
+        <div id="tooltip">Подсказка</div>
+    </div>    
 
     <!-- Всплывающее окно с информацией о здании -->
     <div class="popup-container" id="popupContainer">
@@ -49,7 +60,7 @@
 
     <!-- Карта с домами -->
     <div id="playground">
-        <img class="map" src="img/v1_2.png">
+        <img class="map" th:src="@{/img/v1_2.png}">
 
         <div class="house house-1" data-house="1"></div>
         <div class="house house-2" data-house="2"></div>
@@ -65,6 +76,6 @@
 
     <div class="bg-blur-overlay"></div>
 
-    <script src="js/script.js"></script>
+    <script th:src="@{/js/script.js}"></script>
 </body>
 </html>

@@ -1,4 +1,12 @@
 package com.lavkatech.townofgames.entity.dto;
 
-public record UserDto() {
+import com.lavkatech.townofgames.entity.enums.Group;
+import lombok.Builder;
+
+@Builder
+public record UserDto(String dtprf,
+                      String username,
+                      long coins,
+                      Group group,
+                      long points) {
 }

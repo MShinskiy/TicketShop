@@ -13,31 +13,42 @@
 </head>
 
 <body>
-<!-- Верхняя панель с информацией о пользователе -->
+    <!-- Верхняя панель с информацией о пользователе -->
     <div id="HUD">
-    <div class="userinfo">
-        <p id="username">Игрок</p>
-        <img src="img/menu.svg"></img>
-    </div>
-
-    <div class="resources">
-        <div class="resources-group">
-            <img src="img/coin.svg" height="36px">
-            <br><span id="money-count"></span> монет активно из </br> 5 000 начисленных</p>
+        <div class="userinfo">
+            <p id="username">Игрок</p>
+            <a href="#">
+                <img src="img/menu.svg"></img>
+            </a>
         </div>
-        <div class="resources-group">
-            <img src="img/ticket.png" height="36px">
-            <p><span id="tickets-count"></span> билетов активно из </br> 6 000 начисленных</p>
+    
+        <div class="resources">
+            <div class="resources-group" data-tooltip="money">
+                <img src="img/coin.svg">
+                <p>
+                    <span id="money-count"></span> / <span id="money-total"></span>
+                    <img class="btn-tooltip" src="img/info.svg">
+                </p>
+            </div>
+            <div class="resources-group" data-tooltip="tickets">
+                <img src="img/ticket.png">
+                <p>
+                    <span id="tickets-count"></span> / <span id="tickets-total"></span>
+                    <img class="btn-tooltip" src="img/info.svg">
+                </p>
+            </div>
+            <div class="resources-group" data-tooltip="tasks">
+                <img src="img/flag.png">
+                <p>
+                    <span id="tasks-count">5</span> / <span id="tasks-total"></span>
+                    <img class="btn-tooltip" src="img/info.svg">
+                </p>
+            </div>
         </div>
-        <div class="resources-group">
-            <img src="img/flag.png" height="24px">
-            <p><span id="tasks-count"></span> 5 / 10 </br>заданий выполнено</p>
-        </div>
-    </div>
 
-
-
-</div>
+        <!-- Появляющаяся подсказка по ресурсам -->
+        <div id="tooltip">Подсказка</div>
+    </div>    
 
     <!-- Всплывающее окно с информацией о здании -->
     <div class="popup-container" id="popupContainer">

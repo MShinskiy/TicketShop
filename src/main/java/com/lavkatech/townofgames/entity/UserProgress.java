@@ -10,7 +10,7 @@ import java.util.UUID;
 @Getter
 public class UserProgress {
 
-    private final Map<UUID, TaskProgress> progressPerHouseMap;
+    private final Map<UUID, TasksProgress> progressPerHouseMap;
 
     public UserProgress() {
         this.progressPerHouseMap = new HashMap<>();

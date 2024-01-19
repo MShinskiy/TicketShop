@@ -1,8 +1,9 @@
 package com.lavkatech.townofgames.entity;
 
-import com.lavkatech.townofgames.entity.cosnt.Group;
-import com.lavkatech.townofgames.entity.cosnt.TaskStatus;
-import com.lavkatech.townofgames.entity.cosnt.VisibilityStatus;
+import com.lavkatech.townofgames.entity.dto.HouseStatusDto;
+import com.lavkatech.townofgames.entity.enums.Group;
+import com.lavkatech.townofgames.entity.enums.TaskStatus;
+import com.lavkatech.townofgames.entity.enums.VisibilityStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,8 +34,15 @@ public class House {
     private String buttonURL1;
     private String buttonText2;
     private String buttonURL2;
+    @Enumerated(EnumType.STRING)
     private VisibilityStatus visibilityStatus;
-    private Group houseGroup;   //Принадлежность дома к карте
+    // Принадлежность дома к карте,
+    //дома с группой SIX всегда на карте домов с группой NINE
+    @Enumerated(EnumType.STRING)
+    private Group houseGroup;
+
+    @OneToMany(mappedBy = "house")
+    private List<HouseVisitLog> houseVisitLogList;
 
     @OneToOne
     @JoinColumn(name = "id")
@@ -46,4 +54,39 @@ public class House {
 
     /*@OneToMany(mappedBy = "house")
     private List<Task> houseTasks;*/
+
+    // Получить DTO из статуса дома игрока
+    public HouseStatusDto toDto(User user) {
+        // Получить прогресс пользователя на поле
+        UserProgress userProgress =
+                UserProgress.fromString(user.getUserProgressJson());
+
+        //Получить прогресс пользователя по дому
+        TasksProgress houseProgress = userProgress
+                .getProgressPerHouseMap()
+                .get(id);
+
+        //Получить данные о заданиях дома
+        int tasksCompleted = houseProgress.completed();
+        int tasksTotal = houseProgress.total();
+
+        // Всего заданий 0? -> EMPTY, сделаны все задания? -> COMPLETE, иначе AVAILABLE
+        TaskStatus status = tasksTotal > 0 ?
+                tasksTotal == tasksCompleted ?
+                        TaskStatus.COMPLETE : TaskStatus.AVAILABLE
+                : TaskStatus.EMPTY;
+        // Создание DTO
+        HouseStatusDto dto
+                = new HouseStatusDto(name, description, tasksCompleted, tasksTotal, status);
+
+        // Добавление информации о заданиях
+        for(Task task : houseProgress.keys())
+            dto.addTask(task.getDescription(), houseProgress.get(task));
+
+        // Добавление информации о кнопках
+        dto.addButton(buttonText1, buttonURL1);
+        dto.addButton(buttonText2, buttonURL2);
+
+        return dto;
+    }
 }
