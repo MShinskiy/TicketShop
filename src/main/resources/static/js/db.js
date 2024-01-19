@@ -15,6 +15,21 @@ $(document).ready(() => {
         });
         $("#fill-button").css("background", "#D1D1D1");
     });
+    $("#migration-button").on("click", () => {
+        $.ajax({
+            url:origin + "/db/migrate",
+            type: 'GET',
+            success: () => {
+                $("#migration-button").css("background", "#DBFFDC");
+            },
+            error: () => {
+                $("#migration-button").css("background", "#FFDBDB");
+            }
+        }).always(() => {
+                resetColorAfterSeconds("fill-button", 1);
+        });
+        $("#migration-button").css("background", "#D1D1D1");
+    });
     $("#delete-button").on("click", () => {
         $.ajax({
             url:origin + "/db/delete",

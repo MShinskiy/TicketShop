@@ -1,10 +1,11 @@
 package com.imse.ticketshop.controller;
 
-import com.imse.ticketshop.entity.Concert;
-import com.imse.ticketshop.entity.dto.GenrePopularityReportDto;
-import com.imse.ticketshop.entity.enumeration.Role;
-import com.imse.ticketshop.service.*;
-import com.imse.ticketshop.service.db.DBFillerService;
+import com.imse.ticketshop.entity.rdbms.Concert;
+import com.imse.ticketshop.entity.rdbms.dto.GenrePopularityReportDto;
+import com.imse.ticketshop.entity.rdbms.enumeration.Role;
+import com.imse.ticketshop.service.nosql.db.DBMigrationToNoSqlService;
+import com.imse.ticketshop.service.rdbms.db.DBFillerService;
+import com.imse.ticketshop.service.rdbms.*;
 import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,6 +26,7 @@ public class WebController {
     private final VenueService venueService;
     private final TicketService ticketService;
     private final DBFillerService dbFillerService;
+    private final DBMigrationToNoSqlService dbMigrationToNoSqlService;
     private static final Logger log = LogManager.getLogger();
 
 
@@ -33,13 +35,14 @@ public class WebController {
                          ConcertService concertService,
                          VenueService venueService,
                          TicketService ticketService,
-                         DBFillerService dbFillerService) {
+                         DBFillerService dbFillerService, DBMigrationToNoSqlService dbMigrationToNoSqlService) {
         this.orderService = orderService;
         this.concertService = concertService;
         this.venueService = venueService;
         this.customerService = customerService;
         this.ticketService = ticketService;
         this.dbFillerService = dbFillerService;
+        this.dbMigrationToNoSqlService = dbMigrationToNoSqlService;
     }
 
     //Maxim---------------
@@ -50,6 +53,11 @@ public class WebController {
         dbFillerService.fillDatabase();
     }
 
+    @GetMapping("/db/migrate")
+    @ResponseStatus(HttpStatus.OK)
+    public void migrateDb() {
+        dbMigrationToNoSqlService.migrateToNoSql();
+    }
 
     @DeleteMapping("/db/delete")
     @ResponseStatus(HttpStatus.OK)
