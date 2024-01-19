@@ -3,19 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
+    <link th:href="@{/css/center-div.css}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <body>
-<form method="get" action="/displayAllConcerts">
-    Select city:
-    <select id="dropdown" name="selectedCity">
-        <option th:each="city : ${cities}"
-                th:text="${city}"
-                th:value="${city}">
-
-        </option>
-    </select>
-    <input type="submit">
-</form>
+<img class="bg" th:src="@{/img/bg.png}">
+<div class="container-div d-flex justify-content-center align-items-center align-self-center">
+    <form class="bg-around-form" method="get" action="/displayAllConcerts">
+        <h2 class="d-flex justify-content-center align-items-center align-self-center form-group">Select a City</h2>
+        <div class="form-group">
+            <select class="form-select" id="dropdown" name="selectedCity">
+                <option th:each="city : ${cities}"
+                        th:text="${city}"
+                        th:value="${city}">
+                </option>
+            </select>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="form-control btn btn-primary mb-2 "
+                    style="margin-top: 10px;">Next
+            </button>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="form-control btn btn-secondary mb-2 "
+                    style="margin-top: 10px;" formmethod="get"
+                    formaction="/home">Home</button>
+        </div>
+    </form>
+</div>
 </body>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"

@@ -135,12 +135,11 @@ public class WebController {
     }
 
     @PostMapping(value = "/displayAllConcerts",consumes = MediaType.APPLICATION_JSON_VALUE)
-    public String handleTableData(@RequestBody List<Map<String, String>> tableData) {
+    public String handleTableData(@RequestBody List<Map<String, String>> tableData, HttpSession session) {
 
-        var data = tableData.remove(0);
-        // tableData.subList(0, 1).clear();
-        orderService.addNewOrder(tableData);
-        ticketService.generateTickets(tableData);
+        UUID uuid = (UUID) session.getAttribute("login");
+        orderService.addNewOrder(tableData, uuid);
+        ticketService.generateTickets(tableData, uuid);
 
         return "home";
     }

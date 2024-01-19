@@ -10,13 +10,23 @@
     <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
 </head>
 <body>
-<table class="table table-striped sortable">
+<div>
+    <form  th:method="get" th:action="@{/home}">
+        <input style="margin: 10px;" class="btn btn-secondary" type="submit" value="Home">
+    </form>
+</div>
+<table class="table table-striped sortable" id="table">
     <tr>
-        <th>City</th>
-        <th>Venue name</th>
-        <th>Band</th>
-        <th>Genre</th>
-        <th>Number of tickets sold</th>
+        <th>City<br>
+            <input type="text" id="cityFilter" placeholder="Enter city..."></th>
+        <th>Venue name<br>
+            <input type="text" id="venueFilter" placeholder="Enter venue..."></th>
+        <th>Band<br>
+            <input type="text" id="bandFilter" placeholder="Enter band..."></th>
+        <th>Genre<br>
+            <input type="text" id="genreFilter" placeholder="Enter genre..."></th>
+        <th>Number of tickets sold<br>
+            <input type="text" id="ticketsFilter" placeholder="Enter number of tickets..."></th>
     </tr>
     <tr class="item" th:each="row : ${report}">
         <td th:text="${row.cityVenue()}"></td>
@@ -27,4 +37,32 @@
     </tr>
 </table>
 </body>
+<script>
+    $("#cityFilter").on("keyup", (e) => doFilter(e.currentTarget.value, 0));
+    $("#venueFilter").on("keyup", (e) => doFilter(e.currentTarget.value, 1));
+    $("#bandFilter").on("keyup", (e) => doFilter(e.currentTarget.value, 2));
+    $("#genreFilter").on("keyup", (e) => doFilter(e.currentTarget.value, 3));
+    $("#ticketsFilter").on("keyup", (e) => doFilter(e.currentTarget.value, 4));
+
+    function doFilter(input, column) {
+        // Declare variables
+        let inputCap = input.toUpperCase();
+        let table = document.getElementById("table");
+        let tr = table.getElementsByTagName("tr");
+
+        // Loop through all table rows, and hide those who don't match the search query
+        for (let i = 0; i < tr.length; i++) {
+            const row = tr[i];
+            let td = row.getElementsByTagName("td")[column];
+            if (td) {
+                let val = td.textContent || td.innerText;
+                if (val.toUpperCase().indexOf(inputCap) > -1) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            }
+        }
+    }
+</script>
 </html>

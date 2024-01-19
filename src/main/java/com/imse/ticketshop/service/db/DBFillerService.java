@@ -136,18 +136,6 @@ public class DBFillerService {
         int low = 10;
         int high = 100;
 
-        var customer = Customer.builder()
-                .customerId(UUID.fromString("80309813-9e81-4122-ab92-92d92781c044"))
-                .email(generateRandomString(false) + "@" + domains[1 % domains.length])
-                .password(generateRandomString(false))
-                .age(r.nextInt(high - low) + low)
-                .gender(gender[1 % gender.length])
-                .phone(generateRandomString(true))
-                .city(cities[1 % cities.length])
-                .country(countries[1 % countries.length])
-                .build();
-        customerRepository.save(customer);
-
         for (int i = 0; i < noCustomers; i++) {
             customers[i] = Customer.builder()
                     .email(generateRandomString(false) + "@" + domains[i % domains.length])

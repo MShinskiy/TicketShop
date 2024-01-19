@@ -11,10 +11,7 @@ import com.imse.ticketshop.service.OrderService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -38,16 +35,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void addNewOrder(List<Map<String, String>> tableData) {
+    public void addNewOrder(List<Map<String, String>> tableData, UUID uuid) {
         LocalDateTime now = LocalDateTime.now();
         var totalPrice = computeTotalPrice(tableData);
         var totalNumberOfTickets = computeTotalNumberOfTickets(tableData);
         var concertsWithTickets =  getConcertsWithTickets(tableData);
 
-        // test data
-        var customers = customerService.getAllCustomers();
-        Random r = new Random();
-        var customer = customers.get(r.nextInt(customers.size()));
+        var customer = customerRepo.findById(uuid).get();
 
         var order = Order.builder()
                 .dateIssued(now)

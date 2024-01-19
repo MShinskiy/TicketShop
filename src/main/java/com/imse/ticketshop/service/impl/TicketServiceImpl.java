@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
 
 @Service
 public class TicketServiceImpl implements TicketService {
@@ -36,12 +37,10 @@ public class TicketServiceImpl implements TicketService {
 
 
     @Override
-    public void generateTickets(List<Map<String, String>> tableData) {
+    public void generateTickets(List<Map<String, String>> tableData, UUID uuid) {
         Random r = new Random();
 
-        //test data
-        var customers = customerService.getAllCustomers();
-        var customer = customers.get(r.nextInt(customers.size()));
+        var customer = customerRepo.findById(uuid).get();
 
         for(var elem : tableData){
 

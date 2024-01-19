@@ -2,7 +2,6 @@ package com.imse.ticketshop.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
