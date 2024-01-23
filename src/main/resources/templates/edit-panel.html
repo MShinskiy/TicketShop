@@ -9,12 +9,19 @@
 <div>
     <label for="select-map">Выберите карту:</label>
     <select id="select-map">
-        <option></option>
+        <option th:each="map : ${T(com.lavkatech.townofgames.entity.enums.Group).values()}"
+                th:text="${map}"
+                th:value="${map}"
+        ></option>
     </select>
 
     <label for="select-house">Выберите дом:</label>
     <select id="select-house">
-        <option></option>
+        <option th:each="house : ${houses}"
+                th:text="${house.getName()}"
+                th:value="${house.getId()}"
+                th:attr="data-group=${house.getHouseGroup()}"
+        ></option>
     </select>
     <form>
         <table>
@@ -46,5 +53,9 @@
         <input type="submit" value="Принять изменения">
     </form>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script th:src="@{/js/editPaneScript.js}"></script>
 </body>
 </html>
