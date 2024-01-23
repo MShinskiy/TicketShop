@@ -3,7 +3,6 @@ package com.lavkatech.townofgames.controller;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.lavkatech.townofgames.entity.User;
-import com.lavkatech.townofgames.entity.dto.HouseStatusDto;
 import com.lavkatech.townofgames.entity.enums.Group;
 import com.lavkatech.townofgames.service.HouseService;
 import com.lavkatech.townofgames.service.UserService;
@@ -14,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.crypto.Cipher;
@@ -22,7 +21,6 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 @Controller
 public class GameController {
@@ -42,7 +40,7 @@ public class GameController {
     }
 
 
-    @GetMapping("/play")
+    @PostMapping("/play")
     public String getHomeScreen(@RequestBody String query, Model model) {
         //Decipher query parameter
         String param = URLDecoder.decode(query.replaceAll("query=", ""), StandardCharsets.UTF_8);
@@ -54,25 +52,38 @@ public class GameController {
                     .get("User").getAsJsonObject()
                     .get("Contact").getAsJsonObject()
                     .get("DTE_Contact_Id__c").getAsString();
+            String group = o
+                    .get("User").getAsJsonObject()
+                    .get("Contact").getAsJsonObject()
+                    .get("Group").getAsString();
+            Group g = Group.groupOf(Integer.parseInt(group));
+            User user = dtprf.equals("DEMO") ?
+                    User.builder()
+                            .dtprf(dtprf)
+                            .username("demo username")
+                            .userGroup(g)
+                            .coins(2000)
+                            .points(5000)
+                            .build() :
+                    userService.getUserOrNull(dtprf);
 
-            User user = userService.getUser(dtprf);
-            if(user == null) {
-                /* TODO handle user doesn't exist
-                *   create or don't allow entry? */
+            /*if(user == null) {
+                *//* TODO handle user doesn't exist
+                *   create or don't allow entry? *//*
                 return "error";
             }
 
             Group userGroup = user.getUserGroup();
             if(userGroup == null) {
-                /* TODO handle client not
-                    providing user group */
+                *//* TODO handle client not
+                    providing user group *//*
                 return "error";
             }
 
-            List<HouseStatusDto> dtosToFront = houseService.getHousesDtosForUser(user);
-            Gson gson = new Gson();
-            model.addAttribute("HouseStateJSON", gson.toJson(dtosToFront));
-            model.addAttribute("UserStateJSON", gson.toJson(user.toDto()));
+            List<HouseStatusDto> houses = houseService.getHousesDtosForUser(user);
+            UserDto userDto = user.toDto();
+            MapDto map = new MapDto(userDto, houses);
+            model.addAttribute("map", map.toJsonString());*/
             //Send current set broadcast to a newly connected user
             return "index";
         } catch (NullPointerException e) {

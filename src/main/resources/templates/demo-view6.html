@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Демо</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="application/javascript" th:src="@{/js/demoViewScript.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/demoViewScript.css}"/>
+</head>
+<body>
+<form id="form" target="iframe_window" action="/townofgames/play" method="post">
+    <input type="text" name="query" value="7XBNDZieuWOhiNWhjGU4dIOynb6UcBI2nLFCw2kJtF2WTtKlvwd7xDn4jVh/DyzZwRB9OClNMMbBhvjJ736Q8tK7tjc+fqsR1vVsBQ+bKqXmHTSvLe4AtaQXw4h81MYDaBCBnAevJsKTbLIGtx4ugmXc5beulHHIUIIutb3IbSI=">
+    <input type="submit">
+</form>
+
+<iframe src="" name="iframe_window" style="width: 100%; height: 100%; position: fixed; bottom: 0px; right: 0px; left: 0px;">
+</iframe>
+</body>
+</html>

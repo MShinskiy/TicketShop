@@ -8,10 +8,15 @@ body {
     max-width: 800px;
     min-width: 320px;
     margin: 0 auto;
-    background-image: url("/img/v1_2.png");
+    background-image: url("../img/maps/v1_2.png");
     background-position: center;
     background-size: cover;
     font-family: "Raleway", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 16px;
+}
+
+.overflow-hidden {
+    overflow: hidden;
 }
 
 img {
@@ -21,13 +26,14 @@ img {
 #playground {
     position: relative;
     width: 100%;
-    box-shadow: 0 0 64px rgba(0, 0, 0, 0.4);
 }
 
-.map {
+#map {
     margin-top: 137px;
     display: block;
     width: 100%;
+    transition: opacity 0.6s;
+    box-shadow: 0 0 64px rgba(0, 0, 0, 0.8);
 }
 
 .bg-blur-overlay {
@@ -42,9 +48,8 @@ img {
 
 
 /* Верхняя панель (HUD пользователя)*/
-
 #HUD {
-    padding: 6px 12px;
+    padding: 6px 18px;
     position: fixed;
     top: 0;
     box-sizing: border-box;
@@ -54,13 +59,14 @@ img {
     min-width: inherit;
     background-color: #637AB0;
     color: white;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
 }
 
 .userinfo {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 1.5em;
+    font-size: 2em;
     width: 100%;
 }
 
@@ -78,7 +84,7 @@ img {
 .resources-group {
     position: relative;
     cursor: pointer;
-    font-size: 0.92em;
+    font-size: 1em;
     display: flex;
     text-align: center;
     flex-direction: column;

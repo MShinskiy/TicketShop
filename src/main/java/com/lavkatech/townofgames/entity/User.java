@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Сущность описывает игроков
@@ -23,19 +24,23 @@ import java.util.List;
 @NoArgsConstructor
 public class User {
 
-    @Id
-    private String dtprf;
+    public User(String dtprf) {
+        this.dtprf = dtprf;
+    }
 
-    private String username;
+    @Id
+    private String dtprf = null;
+
+    private String username = null;
     @Enumerated(EnumType.STRING)
-    private Group userGroup;
+    private Group userGroup = null;
     private long coins = 0;
     private long points = 0;
     private LocalDateTime createdOn = LocalDateTime.now();
     private LocalDateTime lastLogin = LocalDateTime.now();
     private LocalDateTime lastCoinChange = LocalDateTime.now();
     private LocalDateTime lastTicketChange = LocalDateTime.now();
-    private String userProgressJson;
+    private String userProgressJson = UserProgress.initString();
 
 /*    @OneToMany(mappedBy = "user")
     private List<UserTask> userTasks;*/
@@ -47,12 +52,20 @@ public class User {
     private List<BalanceLog> balanceLog = new ArrayList<>();
 
     public UserDto toDto() {
+        UserProgress up = UserProgress.fromString(userProgressJson);
+        int count = up.getProgressPerHouseMap().values().stream().filter(Objects::nonNull)
+                .mapToInt(TasksProgress::completed).sum();
+        int total = up.getProgressPerHouseMap().values().stream()
+                .mapToInt(TasksProgress::total).sum();
+
         return UserDto.builder()
                 .dtprf(dtprf)
                 .username(username)
                 .group(userGroup)
                 .coins(coins)
                 .points(points)
+                .tasksCount(count)
+                .tasksTotal(total)
                 .build();
     }
 }

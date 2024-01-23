@@ -4,6 +4,7 @@ import com.lavkatech.townofgames.entity.House;
 import com.lavkatech.townofgames.entity.enums.Group;
 import com.lavkatech.townofgames.entity.report.ImportDto;
 import com.lavkatech.townofgames.service.HouseService;
+import com.lavkatech.townofgames.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
@@ -28,11 +29,13 @@ import java.util.*;
 public class AdminController {
 
     private final HouseService houseService;
+    private final UserService userService;
     private static final Logger log = LogManager.getLogger();
     private final static String tempPath = System.getProperty("java.io.tmpdir") + File.separator;
 
-    public AdminController(HouseService houseService) {
+    public AdminController(HouseService houseService, UserService userService) {
         this.houseService = houseService;
+        this.userService = userService;
     }
 
     @GetMapping("/administration/edit")
@@ -67,6 +70,7 @@ public class AdminController {
         //Update users from file
         try {
             List<ImportDto> parsedMap = parseFile(tempFile);
+            userService.updateUsers(parsedMap);
             /*for (String dtprf : parsedMap.keySet())
                 userService.updateUserMoves(dtprf, parsedMap.get(dtprf));*/
 
@@ -115,6 +119,12 @@ public class AdminController {
                     log.error("Importing row {} was skipped because service failed to parse group (dtrpf={})", row.getRowNum(), dtprf);
                 else if( dtprf == null || dtprf.equals(""))
                     log.error("Importing row {} was skipped because service failed to parse dtprf (dtrpf={})", row.getRowNum(), dtprf);
+                else if( nCoinsToAdd == null)
+                    log.error("Importing row {} was skipped because service failed to parse coins (dtrpf={})", row.getRowNum(), dtprf);
+                else if( nPointsToAdd == null)
+                    log.error("Importing row {} was skipped because service failed to parse points (dtrpf={})", row.getRowNum(), dtprf);
+                else if( nTasksToAdd == null)
+                    log.error("Importing row {} was skipped because service failed to parse tasks (dtrpf={})", row.getRowNum(), dtprf);
                 else
                     userData.add(new ImportDto(dtprf, nCoinsToAdd, nPointsToAdd, nTasksToAdd, group));
             }

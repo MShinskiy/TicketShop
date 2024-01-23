@@ -8,5 +8,7 @@ public record UserDto(String dtprf,
                       String username,
                       long coins,
                       Group group,
-                      long points) {
+                      long points,
+                      int tasksCount,
+                      int tasksTotal) {
 }

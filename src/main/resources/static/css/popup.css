@@ -1,23 +1,126 @@
-.popup-container {
+#popup-container {
     position: fixed;
-    bottom: -100%;
-    background-color: #fff;
+    top: +100%;
+    overflow-y: scroll;
     z-index: 4;
-    width: 100%;
     max-width: inherit;
     min-width: inherit;
-    box-shadow: 0px -5px 10px rgba(0, 0, 0, 0.2);
-    transition: bottom 0.3s ease-in-out;
+    max-height: calc(100% - 137px);
+    width: 100%;
+    transition: top 0.6s ease;
+    box-shadow: 0 0 64px rgba(0, 0, 0, 0.8);
+}
+
+#popup-container.active {
+    top: 137px;
+}
+
+#popup-house-img {
+    display: block;
+    width: 100%;
+    
+}
+
+#popup-close-btn {
+    cursor: pointer;
+    position: fixed;
+    padding: 8px 16px;
+    margin: 12px 18px;
+    font-size: 1.2em;
+    font-weight: bold;
+    border-radius: 12px;
+    opacity: 0.5;
+    background-color: white;
+    border: 0;
+    transition: opacity 0.3s;
+}
+
+#popup-close-btn:hover {
+    opacity: 0.8;
+}
+
+#popup-close-btn:active {
+    opacity: 1;
 }
 
 .popup-content {
-    padding: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 18px;
+    background: linear-gradient(180deg, #8da8e6 0%, #9494e5 50%, #D9D9D9 100%);
 }
 
-.popup-container:not(.active) .popup-content {
-    bottom: -100%;
+.popup-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.popup-container.active {
-    bottom: 0;
+#popup-house-name {
+    text-transform: uppercase;
+}
+
+#popup-house-icon {
+    width: 56px;
+    margin-right: 16px;
+}
+
+#popup-bonus-task {
+    margin: 1em 0;
+}
+
+.popup-body {
+    font-size: 1em;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.popup-task-block {
+    background-color: white;
+    padding: 12px 24px;
+    margin-bottom: 0.5em;
+    border-radius: 16px;
+}
+
+#bonus-task-amount {
+    font-size: 1.2em;
+}
+
+.popup-task-status {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 0.8em;
+}
+
+.popup-task-status > img {
+    height: 36px;
+    margin-right: 4px;
+}
+
+.popup-button {
+    cursor: pointer;
+    min-width: 256px;
+    display: block;
+    padding: 8px 16px;
+    text-transform: uppercase;
+    background-color: #B487B8;
+    border-radius: 12px;
+    font-size: 1.2em;
+    margin-top: 0.8em;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    color: black;
+}
+
+.popup-button:hover {
+    background-color: #a87fac;
+}
+
+.popup-button:active {
+    background-color: #936e97;
 }

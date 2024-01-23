@@ -30,13 +30,6 @@
                     <img class="btn-tooltip" src="img/info.svg">
                 </p>
             </div>
-            <div class="resources-group" data-tooltip="tickets">
-                <img src="img/ticket.png">
-                <p>
-                    <span id="tickets-count"></span> / <span id="tickets-total"></span>
-                    <img class="btn-tooltip" src="img/info.svg">
-                </p>
-            </div>
             <div class="resources-group" data-tooltip="tasks">
                 <img src="img/flag.png">
                 <p>
@@ -51,16 +44,53 @@
     </div>    
 
     <!-- Всплывающее окно с информацией о здании -->
-    <div class="popup-container" id="popupContainer">
+    <div id="popup-container">
+        <button id="popup-close-btn">
+            <img src="img/back.svg">
+            НАЗАД
+        </button>
+
+        <img id="popup-house-img" src="img/houses/example.png">
+
         <div class="popup-content">
-            <p id="popupContent">Содержимое всплывающего окна</p>
-            <button id="closePopupBtn">Закрыть</button>
+            <div class="popup-header">
+                <img id="popup-house-icon" src="img/poker-chip.png">
+                <h1 id="popup-house-name"></h1>
+            </div>
+
+            <div class="popup-body">
+                <p id="popup-tasks-count">Выполнено заданий 2 / 2</p>
+                <p id="popup-bonus-task">Выполняйте задания, чтобы получить дополнительное вознаграждение <b id="bonus-task-amount">1000</b> монет!</p>
+
+                <div class="popup-task-block">
+                    Содержимое задачи. Большое содержимое задачи. Огромное содержимое задачи.
+                    Содержимое задачи. Большое содержимое задачи. Огромное содержимое задачи.
+
+                    <div class="popup-task-status">
+                        <img src="img/check.png">
+                        Выполнено
+                    </div>
+                </div>
+
+                <div class="popup-task-block">
+                    Содержимое задачи. Большое содержимое задачи. Огромное содержимое задачи.
+                    Содержимое задачи. Большое содержимое задачи. Огромное содержимое задачи.
+
+                    <div class="popup-task-status">
+                        <img src="img/check.png">
+                        Выполнено
+                    </div>
+                </div>
+
+                <a class="popup-button" href="#">О программе фишки</a>
+                <a class="popup-button" href="#">В раздел результаты</a>
+            </div>
         </div>
     </div>
 
     <!-- Карта с домами -->
     <div id="playground">
-        <img class="map" src="img/v1_2.png">
+        <img id="map" src="img/maps/v1_2.png">
 
         <div class="house house-1" data-house="1"></div>
         <div class="house house-2" data-house="2"></div>

@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org"><head>
+<html lang="ru"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <title>Мини Городок</title>
-    <link rel="stylesheet" th:href="@{/static/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/css/houses.css}">
     <link rel="stylesheet" th:href="@{/css/popup.css}">
 
@@ -18,22 +19,15 @@
         <div class="userinfo">
             <p id="username">Игрок</p>
             <a href="#">
-                <img th:src="@{/static/img/menu.svg}"></img>
+                <img th:src="@{/img/menu.svg}"></img>
             </a>
         </div>
     
         <div class="resources">
             <div class="resources-group" data-tooltip="money">
-                <img th:src="@{/img/coin.svg}">
+                <img th:src="@{img/coin.svg}">
                 <p>
                     <span id="money-count"></span> / <span id="money-total"></span>
-                    <img class="btn-tooltip" th:src="@{/img/info.svg}">
-                </p>
-            </div>
-            <div class="resources-group" data-tooltip="tickets">
-                <img th:src="@{/img/ticket.png}">
-                <p>
-                    <span id="tickets-count"></span> / <span id="tickets-total"></span>
                     <img class="btn-tooltip" th:src="@{/img/info.svg}">
                 </p>
             </div>
@@ -51,16 +45,53 @@
     </div>    
 
     <!-- Всплывающее окно с информацией о здании -->
-    <div class="popup-container" id="popupContainer">
+    <div id="popup-container">
+        <button id="popup-close-btn">
+            <img th:src="@{/img/back.svg}">
+            НАЗАД
+        </button>
+
+        <img id="popup-house-img" th:src="@{/img/houses/example.png}">
+
         <div class="popup-content">
-            <p id="popupContent">Содержимое всплывающего окна</p>
-            <button id="closePopupBtn">Закрыть</button>
+            <div class="popup-header">
+                <img id="popup-house-icon" th:src="@{/img/poker-chip.png}">
+                <h1 id="popup-house-name"></h1>
+            </div>
+
+            <div class="popup-body">
+                <p id="popup-tasks-count">Выполнено заданий 2 / 2</p>
+                <p id="popup-bonus-task">Выполняйте задания, чтобы получить дополнительное вознаграждение <b id="bonus-task-amount">1000</b> монет!</p>
+
+                <div class="popup-task-block">
+                    Содержимое задачи. Большое содержимое задачи. Огромное содержимое задачи.
+                    Содержимое задачи. Большое содержимое задачи. Огромное содержимое задачи.
+
+                    <div class="popup-task-status">
+                        <img th:src="@{/img/check.png}">
+                        Выполнено
+                    </div>
+                </div>
+
+                <div class="popup-task-block">
+                    Содержимое задачи. Большое содержимое задачи. Огромное содержимое задачи.
+                    Содержимое задачи. Большое содержимое задачи. Огромное содержимое задачи.
+
+                    <div class="popup-task-status">
+                        <img th:src="@{/img/check.png}">
+                        Выполнено
+                    </div>
+                </div>
+
+                <a class="popup-button" href="#">О программе фишки</a>
+                <a class="popup-button" href="#">В раздел результаты</a>
+            </div>
         </div>
     </div>
 
     <!-- Карта с домами -->
     <div id="playground">
-        <img class="map" th:src="@{/img/v1_2.png}">
+        <img id="map" th:src="@{/img/maps/v1_2.png}">
 
         <div class="house house-1" data-house="1"></div>
         <div class="house house-2" data-house="2"></div>
@@ -75,7 +106,7 @@
     </div>
 
     <div class="bg-blur-overlay"></div>
-
+    <script type="application/json"></script><
     <script th:src="@{/js/script.js}"></script>
 </body>
 </html>
