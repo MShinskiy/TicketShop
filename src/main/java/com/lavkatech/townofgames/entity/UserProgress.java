@@ -12,8 +12,8 @@ import java.util.UUID;
 
 @Getter
 public class UserProgress {
-
-    private final Map<UUID, TasksProgress> progressPerHouseMap;
+    //House id - task progress
+    private final Map<UUID, HouseProgress> progressPerHouseMap;
 
     public UserProgress() {
         this.progressPerHouseMap = new HashMap<>();

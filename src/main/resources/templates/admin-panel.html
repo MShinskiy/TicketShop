@@ -20,6 +20,13 @@
             <div class="form-group">
                 <input type="file" name="file" accept=".xlsx" class="form-control-file">
             </div>
+            <label for="select-import-type">Выберете импорт</label>
+            <select id="select-import-type" name="import-type">
+                <option th:each="type : ${T(com.lavkatech.townofgames.entity.report.ImportType).values()}"
+                        th:text="type.value"
+                        th:value="type">
+                </option>
+            </select>
             <button type="submit" class="btn btn-primary">Импорт</button>
         </form>
         <span th:if="${msgUld != null}" th:text="${msgUld}"></span>

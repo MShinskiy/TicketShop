@@ -1,9 +1,7 @@
 package com.lavkatech.townofgames.entity;
 
 import com.lavkatech.townofgames.entity.dto.HouseStatusDto;
-import com.lavkatech.townofgames.entity.enums.Group;
-import com.lavkatech.townofgames.entity.enums.TaskStatus;
-import com.lavkatech.townofgames.entity.enums.VisibilityStatus;
+import com.lavkatech.townofgames.entity.enums.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,29 +26,35 @@ public class House {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    private int mapId;
     private String name;
     private String description;
     private String buttonText1;
     private String buttonURL1;
     private String buttonText2;
     private String buttonURL2;
+    private String buttonText3;
+    private String buttonURL3;
+    private String taskProgressDescription;
     @Enumerated(EnumType.STRING)
     private VisibilityStatus visibilityStatus;
-    // Принадлежность дома к карте,
-    //дома с группой SIX всегда на карте домов с группой NINE
+    // Принадлежность дома к карте
     @Enumerated(EnumType.STRING)
     private Group houseGroup;
+    // Принадлежность дома к уровню
+    @Enumerated(EnumType.STRING)
+    private LevelSA houseLevel;
 
     @OneToMany(mappedBy = "house")
     private List<HouseVisitLog> houseVisitLogList;
 
     @OneToOne
     @JoinColumn(name = "id")
-    private Task task1;
+    private Task task1 = null;
 
     @OneToOne
     @JoinColumn(name = "id")
-    private Task task2;
+    private Task task2 = null;
 
     /*@OneToMany(mappedBy = "house")
     private List<Task> houseTasks;*/
@@ -62,13 +66,20 @@ public class House {
                 UserProgress.fromString(user.getUserProgressJson());
 
         //Получить прогресс пользователя по дому
-        TasksProgress houseProgress = userProgress
+        HouseProgress houseProgress = userProgress
                 .getProgressPerHouseMap()
                 .get(id);
 
         //Получить данные о заданиях дома
-        int tasksCompleted = houseProgress.completed();
-        int tasksTotal = houseProgress.total();
+        int tasksCompleted = houseProgress.tasksCompleted();
+        int tasksTotal = houseProgress.tasksTotal();
+        String renderedString = String.format(taskProgressDescription, new String[]{
+                houseProgress.getDescVar1(),
+                houseProgress.getDescVar2(),
+                houseProgress.getDescVar3(),
+        });
+        long coins = houseProgress.getCurrentCoins();
+        long maxCoins = houseProgress.getMaxCoins();
 
         // Всего заданий 0? -> EMPTY, сделаны все задания? -> COMPLETE, иначе AVAILABLE
         TaskStatus status = tasksTotal > 0 ?
@@ -77,11 +88,11 @@ public class House {
                 : TaskStatus.EMPTY;
         // Создание DTO
         HouseStatusDto dto
-                = new HouseStatusDto(name, description, tasksCompleted, tasksTotal, status);
+                = new HouseStatusDto(name, description, tasksCompleted, tasksTotal, status, coins, maxCoins, renderedString);
 
         // Добавление информации о заданиях
-        for(Task task : houseProgress.keys())
-            dto.addTask(task.getDescription(), houseProgress.get(task));
+        for(Task task : houseProgress.tasksList())
+            dto.addTask(task.getDescription(), houseProgress.getTaskStatus(task));
 
         // Добавление информации о кнопках
         dto.addButton(buttonText1, buttonURL1);

@@ -2,19 +2,24 @@
   "user": {
     "dtprf": "RU-000000000",
     "username": "player1",
-    "coins": 1000,
-    "group": "SIX",
+    "coins": 3000,
+    "maxCoins": 6500,
+    "group": "PARTNER",
+    "level": "HIGH",
     "points": 2000,
     "tasksCount": 6,
     "tasksTotal": 14
   },
-  "map": [
-    {
+  "map": {
+    "1": {
       "name": "Салон Апгрейд",
       "description": "Описание дома",
       "tasksComplete": 0,
       "tasksTotal": 2,
-      "taskStatus": "AVAILABLE",
+      "coins": 0,
+      "maxCoins": 1000,
+      "taskStatus": "AVAILABL  E",
+      "taskDescriptionStringMap": "Карта описания.",
       "tasks": [
         {
           "description": "Описание задания 1",
@@ -36,12 +41,15 @@
         }
       ]
     },
-    {
+    "2": {
       "name": "Университет",
       "description": "Описание дома",
       "tasksComplete": 2,
       "tasksTotal": 2,
+      "coins": 1000,
+      "maxCoins": 1000,
       "taskStatus": "COMPLETE",
+      "taskDescriptionStringMap": "Карта описания.",
       "tasks": [
         {
           "description": "Описание задания 1",
@@ -63,12 +71,15 @@
         }
       ]
     },
-    {
+    "3": {
       "name": "Дом чеков",
       "description": "Описание дома",
       "tasksComplete": 0,
       "tasksTotal": 2,
+      "coins": 0,
+      "maxCoins": 1000,
       "taskStatus": "AVAILABLE",
+      "taskDescriptionStringMap": "Карта описания.",
       "tasks": [
         {
           "description": "Описание задания 1",
@@ -90,12 +101,15 @@
         }
       ]
     },
-    {
-      "name": "Клуб регистрации",
+    "4": {
+      "name": "Q Клуб",
       "description": "Описание дома",
       "tasksComplete": 0,
       "tasksTotal": 0,
+      "coins": 0,
+      "maxCoins": 0,
       "taskStatus": "EMPTY",
+      "taskDescriptionStringMap": "Карта описания.",
       "tasks": [],
       "buttons": [
         {
@@ -108,111 +122,15 @@
         }
       ]
     },
-    {
-      "name": "Парк Удача",
-      "description": "Описание дома",
-      "tasksComplete": 1,
-      "tasksTotal": 2,
-      "taskStatus": "AVAILABLE",
-      "tasks": [
-        {
-          "description": "Описание задания 1",
-          "isComplete": false
-        },
-        {
-          "description": "Описание задания 2",
-          "isComplete": true
-        }
-      ],
-      "buttons": [
-        {
-          "text": "Текст кнопки 1",
-          "url": "URL кнопки 1"
-        },
-        {
-          "text": "Текст кнопки 2",
-          "url": "URL кнопки 2"
-        }
-      ]
-    },
-    {
-      "name": "Магазин Аксессуаров",
-      "description": "Описание дома",
-      "tasksComplete": 2,
-      "tasksTotal": 2,
-      "taskStatus": "COMPLETE",
-      "tasks": [
-        {
-          "description": "Описание задания 1",
-          "isComplete": true
-        },
-        {
-          "description": "Описание задания 2",
-          "isComplete": true
-        }
-      ],
-      "buttons": [
-        {
-          "text": "Текст кнопки 1",
-          "url": "URL кнопки 1"
-        },
-        {
-          "text": "Текст кнопки 2",
-          "url": "URL кнопки 2"
-        }
-      ]
-    },
-    {
-      "name": "Фотостудия",
-      "description": "Описание дома",
-      "tasksComplete": 0,
-      "tasksTotal": 0,
-      "taskStatus": "EMPTY",
-      "tasks": [],
-      "buttons": [
-        {
-          "text": "Текст кнопки 1",
-          "url": "URL кнопки 1"
-        },
-        {
-          "text": "Текст кнопки 2",
-          "url": "URL кнопки 2"
-        }
-      ]
-    },
-    {
-      "name": "Прокат инвентаря",
-      "description": "Описание дома",
-      "tasksComplete": 0,
-      "tasksTotal": 2,
-      "taskStatus": "AVAILABLE",
-      "tasks": [
-        {
-          "description": "Описание задания 1",
-          "isComplete": false
-        },
-        {
-          "description": "Описание задания 2",
-          "isComplete": false
-        }
-      ],
-      "buttons": [
-        {
-          "text": "Текст кнопки 1",
-          "url": "URL кнопки 1"
-        },
-        {
-          "text": "Текст кнопки 2",
-          "url": "URL кнопки 2"
-        }
-      ]
-    },
-    {
+    "5": {
       "name": "Фабрика фишек",
       "description": "Описание дома",
       "tasksComplete": 1,
       "tasksTotal": 2,
+      "coins": 500,
+      "maxCoins": 1000,
       "taskStatus": "AVAILABLE",
+      "taskDescriptionStringMap": "Карта описания.",
       "tasks": [
         {
           "description": "Описание задания 1",
@@ -221,6 +139,113 @@
         {
           "description": "Описание задания 2",
           "isComplete": false
+        }
+      ],
+      "buttons": [
+        {
+          "text": "Текст кнопки 1",
+          "url": "URL кнопки 1"
+        },
+        {
+          "text": "Текст кнопки 2",
+          "url": "URL кнопки 2"
+        }
+      ]
+    },
+    "6": {
+      "name": "Фото студия",
+      "description": "Описание дома",
+      "tasksComplete": 0,
+      "tasksTotal": 0,
+      "coins": 0,
+      "maxCoins": 0,
+      "taskStatus": "EMPTY",
+      "taskDescriptionStringMap": "Карта описания.",
+      "tasks": [],
+      "buttons": [
+        {
+          "text": "Текст кнопки 1",
+          "url": "URL кнопки 1"
+        },
+        {
+          "text": "Текст кнопки 2",
+          "url": "URL кнопки 2"
+        }
+      ]
+    },
+    "7": {
+      "name": "Магазин Аксессуаров",
+      "description": "Описание дома",
+      "tasksComplete": 2,
+      "tasksTotal": 2,
+      "coins": 1000,
+      "maxCoins": 1000,
+      "taskStatus": "COMPLETE",
+      "taskDescriptionStringMap": "Карта описания.",
+      "tasks": [
+        {
+          "description": "Описание задания 1",
+          "isComplete": true
+        },
+        {
+          "description": "Описание задания 2",
+          "isComplete": true
+        }
+      ],
+      "buttons": [
+        {
+          "text": "Текст кнопки 1",
+          "url": "URL кнопки 1"
+        },
+        {
+          "text": "Текст кнопки 2",
+          "url": "URL кнопки 2"
+        }
+      ]
+    },
+    "8": {
+      "name": "Прокат инвентаря",
+      "description": "Описание дома",
+      "tasksComplete": 0,
+      "tasksTotal": 2,
+      "coins": 0,
+      "maxCoins": 1000,
+      "taskStatus": "AVAILABLE",
+      "taskDescriptionStringMap": "Карта описания.",
+      "tasks": [
+        {
+          "description": "Описание задания 1",
+          "isComplete": false
+        },
+        {
+          "description": "Описание задания 2",
+          "isComplete": false
+        }
+      ],
+      "buttons": [
+        {
+          "text": "Текст кнопки 1",
+          "url": "URL кнопки 1"
+        },
+        {
+          "text": "Текст кнопки 2",
+          "url": "URL кнопки 2"
+        }
+      ]
+    },
+    "9": {
+      "name": "Игровой клуб",
+      "description": "Описание дома",
+      "tasksComplete": 1,
+      "tasksTotal": 1,
+      "coins": 500,
+      "maxCoins": 500,
+      "taskStatus": "COMPLETE",
+      "taskDescriptionStringMap": "Карта описания.",
+      "tasks": [
+        {
+          "description": "Описание задания 1",
+          "isComplete": true
         }
       ],
       "buttons": [
@@ -234,5 +259,5 @@
         }
       ]
     }
-  ]
+  }
 }

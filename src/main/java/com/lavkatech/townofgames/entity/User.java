@@ -2,6 +2,7 @@ package com.lavkatech.townofgames.entity;
 
 import com.lavkatech.townofgames.entity.dto.UserDto;
 import com.lavkatech.townofgames.entity.enums.Group;
+import com.lavkatech.townofgames.entity.enums.LevelSA;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,7 +35,10 @@ public class User {
     private String username = null;
     @Enumerated(EnumType.STRING)
     private Group userGroup = null;
+    @Enumerated(EnumType.STRING)
+    private LevelSA userLevel = null;
     private long coins = 0;
+    private long maxCoins = 0;
     private long points = 0;
     private LocalDateTime createdOn = LocalDateTime.now();
     private LocalDateTime lastLogin = LocalDateTime.now();
@@ -53,16 +57,23 @@ public class User {
 
     public UserDto toDto() {
         UserProgress up = UserProgress.fromString(userProgressJson);
+        //Получить сумму сделанных заданий пользователя по зданиям
         int count = up.getProgressPerHouseMap().values().stream().filter(Objects::nonNull)
-                .mapToInt(TasksProgress::completed).sum();
+                .mapToInt(HouseProgress::tasksCompleted).sum();
+        //Получить сумму всех заданий пользователя по зданиям
         int total = up.getProgressPerHouseMap().values().stream()
-                .mapToInt(TasksProgress::total).sum();
+                .mapToInt(HouseProgress::tasksTotal).sum();
+        //Получить сумму максимального кол-во монет по зданиям
+        long max = up.getProgressPerHouseMap().values().stream()
+                .mapToLong(HouseProgress::getMaxCoins).sum();
 
         return UserDto.builder()
                 .dtprf(dtprf)
                 .username(username)
                 .group(userGroup)
+                .level(userLevel)
                 .coins(coins)
+                .maxCoins(max)
                 .points(points)
                 .tasksCount(count)
                 .tasksTotal(total)

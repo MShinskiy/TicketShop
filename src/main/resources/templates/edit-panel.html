@@ -9,9 +9,17 @@
 <div>
     <label for="select-map">Выберите карту:</label>
     <select id="select-map">
-        <option th:each="map : ${T(com.lavkatech.townofgames.entity.enums.Group).values()}"
-                th:text="${map}"
-                th:value="${map}"
+        <option th:each="group : ${T(com.lavkatech.townofgames.entity.enums.Group).values()}"
+                th:text="${group}"
+                th:value="${group}"
+        ></option>
+    </select>
+
+    <label for="select-level">Выберите уровень:</label>
+    <select id="select-level">
+        <option th:each="level : ${T(com.lavkatech.townofgames.entity.enums.LevelSA).values()}"
+                th:text="${level}"
+                th:value="${level}"
         ></option>
     </select>
 
@@ -20,34 +28,34 @@
         <option th:each="house : ${houses}"
                 th:text="${house.getName()}"
                 th:value="${house.getId()}"
-                th:attr="data-group=${house.getHouseGroup()}"
+                th:attr="data-group=${house.getHouseGroup()}, data-level=${house.getHouseLevel()}"
         ></option>
     </select>
-    <form>
-        <table>
+    <form id="edit-form" >
+        <table th:each="house : ${houses}" th:attr="table-for=${house.getId()}" style="display:none;">
             <tr>
-                <th></th><th></th><th></th>
+                <th>Параметр</th><th>Значение</th><th>URL</th>
             </tr>
             <tr>
-                <td></td><td></td><td></td>
+                <td>Название</td><td><input type="text" th:value="${house.getName()}" input-param="name"></td><td></td>
             </tr>
             <tr>
-                <td></td><td></td><td></td>
+                <td>Описание</td><td><input type="text" th:value="${house.getDescription()}" input-param="desc"></td><td></td>
             </tr>
             <tr>
-                <td></td><td></td><td></td>
+                <td>Задача 1</td><td><input type="text" th:value="${house.getTask1()} != null? ${house.getTask1().getDescription()} : ''" input-param="task1"></td><td></td>
             </tr>
             <tr>
-                <td></td><td></td><td></td>
+                <td>Задача 2</td><td><input type="text" th:value="${house.getTask2()} != null? ${house.getTask2().getDescription()} : ''" input-param="task2"></td><td></td>
             </tr>
             <tr>
-                <td></td><td></td><td></td>
+                <td>Кнопка 1</td><td><input type="text" th:value="${house.getButtonText1()}" input-param="btn-text1"></td><td><input type="text" th:value="${house.getButtonURL1()}" input-param="btn-url1"></td>
             </tr>
             <tr>
-                <td></td><td></td><td></td>
+                <td>Кнопка 2</td><td><input type="text" th:value="${house.getButtonText2()}" input-param="btn-text2"></td><td><input type="text" th:value="${house.getButtonURL2()}" input-param="btn-url2"></td>
             </tr>
             <tr>
-                <td></td><td></td><td></td>
+                <td>Кнопка 3</td><td><input type="text" th:value="${house.getButtonText3()}" input-param="btn-text3"></td><td><input type="text" th:value="${house.getButtonURL3()}" input-param="btn-url3"></td>
             </tr>
         </table>
         <input type="submit" value="Принять изменения">
