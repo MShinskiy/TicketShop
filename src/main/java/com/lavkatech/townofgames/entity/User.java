@@ -25,8 +25,15 @@ import java.util.Objects;
 @NoArgsConstructor
 public class User {
 
-    public User(String dtprf) {
+    public User(String dtprf, String username, Group group, LevelSA level) {
         this.dtprf = dtprf;
+        this.username = username;
+        this.userGroup = group;
+        this.userLevel = level;
+        this.createdOn = LocalDateTime.now();
+        this.lastLogin = LocalDateTime.now();
+        this.lastCoinChange = LocalDateTime.now();
+        this.lastTicketChange = LocalDateTime.now();
     }
 
     @Id

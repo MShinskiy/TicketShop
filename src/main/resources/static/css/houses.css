@@ -1,75 +1,118 @@
 .house {
     position: absolute;
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    cursor: pointer;
 }
 
+
+/* Названия домов */
+.house-name-block {
+    background-color: rgba(255, 255, 255, 0.6);
+    font-weight: bold;
+    padding: 6px 12px;
+    border-radius: 6px;
+    max-width: 160px;
+    text-align: center;
+    font-size: 1em;
+}
+
+
+/* Иконка статуса над домами */
+.house-status-icon {
+    position: absolute;
+    top: -32px;
+    width: 48px;
+}
+
+
+/* Расположение домов на карте */
 .house-1 {
-    top: 2%;
-    left: 12%;
-    width: 28%;
+    top: 4.5%;
+    left: 10%;
+    width: 30%;
     height: 16%;
 }
 
 .house-2 {
-    top: 2%;
-    left: 54.5%;
-    width: 39%;
+    top: 4%;
+    left: 56%;
+    width: 40%;
     height: 20%;
 }
 
 .house-3 {
     top: 18.5%;
-    left: 32.1%;
+    left: 37%;
     width: 22%;
-    height: 14%;
-    z-index: 2;
-}
-
-.house-4 {
-    top: 26.5%;
-    left: 4%;
-    width: 34.5%;
-    height: 24%;
-}
-
-.house-5 {
-    top: 28%;
-    left: 62%;
-    width: 37.7%;
-    height: 18%;
-}
-
-.house-6 {
-    top: 50%;
-    left: 2%;
-    width: 31%;
     height: 16%;
     z-index: 2;
 }
 
-.house-7 {
+.house-4 {
+    top: 30.5%;
+    left: 61%;
+    width: 36%;
+    height: 17%;
+}
+
+.house-5 {
+    top: 29%;
+    left: 7%;
+    width: 34%;
+    height: 22%;
+}
+
+.house-6 {
     top: 49%;
-    left: 73%;
-    width: 24%;
-    height: 14%;
+    left: 68%;
+    width: 30%;
+    height: 15.5%;
+}
+
+.house-7 {
+    top: 53%;
+    left: 5%;
+    width: 30%;
+    height: 18%;
 }
 
 .house-8 {
-    top: 65%;
-    left: 76%;
-    width: 23%;
-    height: 15%;
+    top: 66%;
+    left: 72%;
+    width: 26%;
+    height: 13%;
 }
 
 .house-9 {
     top: 78%;
-    left: 4%;
-    width: 35%;
-    height: 18%;
+    left: 38%;
+    width: 28%;
+    height: 16%;
 }
 
-.house-10 {
-    top: 82%;
-    left: 65%;
-    width: 26%;
-    height: 14%;
+
+@media screen and (max-width: 600px) {
+    .house-name-block {
+        font-size: 0.9em;
+    }
+
+    .house-status-icon {
+        position: absolute;
+        top: -26px;
+        width: 40px;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .house-name-block {
+        font-size: 0.8em;
+    }
+
+    .house-status-icon {
+        position: absolute;
+        top: -22px;
+        width: 32px;
+    }
 }

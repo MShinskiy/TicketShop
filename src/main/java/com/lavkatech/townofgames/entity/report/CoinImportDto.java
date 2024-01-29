@@ -1,6 +1,17 @@
 package com.lavkatech.townofgames.entity.report;
 
-import com.lavkatech.townofgames.entity.enums.HouseName;
+import lombok.Getter;
 
-public record CoinImportDto(String dtprf, HouseName houseName, int maxValue, int newValue) {
+@Getter
+public class CoinImportDto extends ImportDto{
+    private final int houseMapId;
+    private final int maxValue;
+    private final int newValue;
+
+    public CoinImportDto(String dtprf, int houseMapId, int maxValue, int newValue) {
+        super(dtprf);
+        this.houseMapId = houseMapId;
+        this.maxValue = maxValue;
+        this.newValue = newValue;
+    }
 }

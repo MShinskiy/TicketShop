@@ -32,18 +32,19 @@ public class WebSecurityConfig {
                                 .preload(true)
                                 .maxAgeInSeconds(31536000)
                         ))
-                .csrf(AbstractHttpConfigurer::disable)
+                .csrf((csrf) -> csrf.ignoringRequestMatchers("/*"))
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers(mvcMatcherBuilder.pattern("/administration/*")).authenticated()
+                        .requestMatchers(mvcMatcherBuilder.pattern("/administration/**")).authenticated()
                         .requestMatchers(mvcMatcherBuilder.pattern("/**"), mvcMatcherBuilder.pattern("/img/*"), mvcMatcherBuilder.pattern("/resources/**"), mvcMatcherBuilder.pattern("/static/**")).permitAll()
                 )
                 .formLogin((form) -> form
                         //.loginPage("/administration/login")
-                        .successForwardUrl("/administration/admin")
-                        .defaultSuccessUrl("/administration/admin")
+                        .successForwardUrl("/administration/panel")
+                        .defaultSuccessUrl("/administration/panel")
                         .permitAll()
                 )
-                .logout(LogoutConfigurer::permitAll);
+                //.logout(LogoutConfigurer::permitAll);
+                ;
 
         return http.getOrBuild();
     }

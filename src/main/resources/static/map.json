@@ -1,6 +1,6 @@
 {
   "user": {
-    "dtprf": "RU-000000000",
+    "dtprf": "DTPRF000000000",
     "username": "player1",
     "coins": 3000,
     "maxCoins": 6500,
@@ -16,10 +16,10 @@
       "description": "Описание дома",
       "tasksComplete": 0,
       "tasksTotal": 2,
-      "coins": 0,
       "maxCoins": 1000,
       "taskStatus": "AVAILABLE",
-      "taskDescriptionStringMap": "Карта описания.",
+      "taskDescriptionStringMap": "Карта описания с b тэгом <b>1000</b>.",
+      "caption": "Сноска.",
       "tasks": [
         {
           "description": "Описание задания 1",
@@ -38,6 +38,10 @@
         {
           "text": "Текст кнопки 2",
           "url": "URL кнопки 2"
+        },
+        {
+          "text": "Текст кнопки 3",
+          "url": "URL кнопки 3"
         }
       ]
     },
@@ -46,10 +50,10 @@
       "description": "Описание дома",
       "tasksComplete": 2,
       "tasksTotal": 2,
-      "coins": 1000,
       "maxCoins": 1000,
       "taskStatus": "COMPLETE",
-      "taskDescriptionStringMap": "Карта описания.",
+      "taskDescriptionStringMap": "Карта описания с span тэгом <span>2000</span>.",
+      "caption": "Сноска.",
       "tasks": [
         {
           "description": "Описание задания 1",
@@ -68,6 +72,10 @@
         {
           "text": "Текст кнопки 2",
           "url": "URL кнопки 2"
+        },
+        {
+          "text": "Текст кнопки 3",
+          "url": "URL кнопки 3"
         }
       ]
     },
@@ -76,10 +84,10 @@
       "description": "Описание дома",
       "tasksComplete": 0,
       "tasksTotal": 2,
-      "coins": 0,
       "maxCoins": 1000,
       "taskStatus": "AVAILABLE",
       "taskDescriptionStringMap": "Карта описания.",
+      "caption": "Сноска.",
       "tasks": [
         {
           "description": "Описание задания 1",
@@ -98,6 +106,10 @@
         {
           "text": "Текст кнопки 2",
           "url": "URL кнопки 2"
+        },
+        {
+          "text": "Текст кнопки 3",
+          "url": "URL кнопки 3"
         }
       ]
     },
@@ -106,10 +118,10 @@
       "description": "Описание дома",
       "tasksComplete": 0,
       "tasksTotal": 0,
-      "coins": 0,
       "maxCoins": 0,
       "taskStatus": "EMPTY",
       "taskDescriptionStringMap": "Карта описания.",
+      "caption": "Сноска.",
       "tasks": [],
       "buttons": [
         {
@@ -119,6 +131,10 @@
         {
           "text": "Текст кнопки 2",
           "url": "URL кнопки 2"
+        },
+        {
+          "text": "Текст кнопки 3",
+          "url": "URL кнопки 3"
         }
       ]
     },
@@ -127,10 +143,10 @@
       "description": "Описание дома",
       "tasksComplete": 1,
       "tasksTotal": 2,
-      "coins": 500,
       "maxCoins": 1000,
       "taskStatus": "AVAILABLE",
       "taskDescriptionStringMap": "Карта описания.",
+      "caption": "Сноска.",
       "tasks": [
         {
           "description": "Описание задания 1",
@@ -157,10 +173,10 @@
       "description": "Описание дома",
       "tasksComplete": 0,
       "tasksTotal": 0,
-      "coins": 0,
       "maxCoins": 0,
       "taskStatus": "EMPTY",
       "taskDescriptionStringMap": "Карта описания.",
+      "caption": "Сноска.",
       "tasks": [],
       "buttons": [
         {
@@ -178,10 +194,10 @@
       "description": "Описание дома",
       "tasksComplete": 2,
       "tasksTotal": 2,
-      "coins": 1000,
       "maxCoins": 1000,
       "taskStatus": "COMPLETE",
       "taskDescriptionStringMap": "Карта описания.",
+      "caption": "Сноска.",
       "tasks": [
         {
           "description": "Описание задания 1",
@@ -208,10 +224,10 @@
       "description": "Описание дома",
       "tasksComplete": 0,
       "tasksTotal": 2,
-      "coins": 0,
       "maxCoins": 1000,
       "taskStatus": "AVAILABLE",
       "taskDescriptionStringMap": "Карта описания.",
+      "caption": "Сноска.",
       "tasks": [
         {
           "description": "Описание задания 1",
@@ -238,10 +254,10 @@
       "description": "Описание дома",
       "tasksComplete": 1,
       "tasksTotal": 1,
-      "coins": 500,
       "maxCoins": 500,
       "taskStatus": "COMPLETE",
       "taskDescriptionStringMap": "Карта описания.",
+      "caption": "Сноска.",
       "tasks": [
         {
           "description": "Описание задания 1",

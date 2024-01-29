@@ -1,30 +1,150 @@
-let selectedMap = "";
-let selectedLevel = "";
+let selectedMap = $("#select-map option:selected").val();
+let selectedLevel = $("#select-level option:selected").val();
 let selectedHouse;
+let selectedIds;
+let validForm = true;
+let token;
+let header;
+let csrfHeader;
 
-$("#select-map").on('change', () => {
-    selectedMap = $("#select-map option:selected").val();
-});
+$(document).ready(() => {
+    token = $("meta[name='_csrf']").attr("content");
+    header = $("meta[name='_csrf_header']").attr("content");
+    csrfHeader = {};
+    csrfHeader[header] = token;
 
-$("#select-level").on('change', () => {
-    selectedLevel = $("#select-level option:selected").val();
-});
+    $("#select-map").on('change', () => {
+        selectedMap = $("#select-map option:selected").val();
+        changeHouseVisibility();
+        changeOptionsVisibility();
+        changeEditPaneVisibility();
+        updateIds()
+    });
 
-$("#select-house option").each(() => {
-    if(selectedMap === $(this).attr("data-group") && selectedLevel === $(this).attr("data-level"))
-        $(this).css("display", "block");
-    else
-        $(this).css("display", "none");
+    $("#select-level").on('change', () => {
+        selectedLevel = $("#select-level option:selected").val();
+        changeHouseVisibility();
+        changeOptionsVisibility();
+        changeEditPaneVisibility();
+        updateIds()
+    });
 
-    $(this).on('change', () => {
+    $("#select-house").on('change', () => {
         selectedHouse = $("#select-house option:selected").val();
-        $("table").each(() => {
-            if(selectedHouse === $(this).attr("table-for"))
-                $(this).css("display", "block");
+        changeEditPaneVisibility();
+    });
+
+    $("input[input-param='progress-desc']").each(function () {
+        $(this).on('keyup', () => {
+            let input = $(this).val();
+            let isvalidinput = isValidInput(input);
+            if (isvalidinput)
+                $(this).css("background-color", "");
             else
-                $(this).css("display", "none");
+                $(this).css("background-color", "#FDD6D6");
+
+            validForm = isvalidinput;
         });
     });
+
+    $("#submit-form").on('click', function () {
+        $(this).prop("disabled", !validForm);
+        if (!validForm)
+            return
+
+        $.post(
+            "/townofgames/administration/edit",
+            parseTables()
+        );
+    });
+
+    $("#submit-demo-form").on('click', function () {
+        $(this).prop("disabled", !validForm);
+        if (!validForm)
+            return
+
+        $.ajax({
+                url: "/townofgames/administration/demo",
+                type: 'post',
+                data: parseTables(),
+                headers: csrfHeader
+            }
+        );
+    });
+
+    updateIds();
+    changeHouseVisibility();
 });
+
+function isValidInput(input) {
+    const regex = /^(?:[^{]*{\d}[^{]*){0,3}$/;
+    const matches = input.match(regex);
+    return matches != null && matches.length > 0;
+}
+
+function changeHouseVisibility() {
+    $("#select-house option").each(function () {
+        if (selectedMap === $(this).attr("data-group") && selectedLevel === $(this).attr("data-level"))
+            $(this).css("display", "block");
+        else
+            $(this).css("display", "none");
+    });
+}
+
+function changeEditPaneVisibility() {
+    selectedHouse = $("#select-house option:selected").val();
+    $("table").each(function () {
+        if (selectedHouse === $(this).attr("table-for"))
+            $(this).css("display", "block");
+        else
+            $(this).css("display", "none");
+    });
+}
+
+function changeOptionsVisibility() {
+    $("#select-house option").each(function () {
+        if (selectedMap === $(this).attr("data-group") && selectedLevel === $(this).attr("data-level"))
+            $(this).css("display", "block");
+        else
+            $(this).css("display", "none");
+    });
+}
+
+function updateIds() {
+    selectedIds = [];
+    $("#select-house option").each(function () {
+        if (selectedMap === $(this).attr("data-group") && selectedLevel === $(this).attr("data-level"))
+            selectedIds.push($(this).val());
+    });
+}
+
+function parseTables() {
+    let editMap =
+        {
+            group: selectedMap,
+            level: selectedLevel
+        };
+    $("table").each(function () {
+        let id = $(this).attr("table-for");
+        if (selectedIds.includes(id)) {
+            editMap[id] = {
+                name: $(this).find("input[name='name']").val(),
+                mapId: $(this).attr("house-map-id"),
+                progress: $(this).find("input[name='progress-desc']").val(),
+                description: $(this).find("input[name='description']").val(),
+                task1: $(this).find("input[name='task1']").val(),
+                task2: $(this).find("input[name='task2']").val(),
+                text1: $(this).find("input[name='btn-text1']").val(),
+                url1: $(this).find("input[name='btn-url1']").val(),
+                text2: $(this).find("input[name='btn-text2']").val(),
+                url2: $(this).find("input[name='btn-url2']").val(),
+                text3: $(this).find("input[name='btn-text3']").val(),
+                url3: $(this).find("input[name='btn-url3']").val(),
+                caption: $(this).find("input[name='caption']").val()
+            };
+        }
+    });
+    return editMap;
+}
 
 

@@ -19,9 +19,14 @@ public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    private String description;
-    private long reward;
+    private String description = "";
+    //private long reward = 0;
 
     @OneToOne
-    private House house;
+    private House house = null;
+
+    public Task(String description, House house) {
+        this.description = description;
+        this.house = house;
+    }
 }

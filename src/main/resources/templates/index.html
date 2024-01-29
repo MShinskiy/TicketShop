@@ -1,15 +1,23 @@
 <!DOCTYPE html>
-<html lang="ru"
-      xmlns:th="http://www.thymeleaf.org">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--
+      Эта строчка необходима в родительской странице, куда вставляется <iframe>,
+      поскольку позволяет корректно отображать страницу на мобильных устройствах
+      как на мобильных устройствах, а не десктопе.
+
+      Параметр user-scalable=no отвечает за возможность пользователям увеличивать страницу двумя пальцами.
+      Его оставляем по желанию, но я бы его не удалял.
+    -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     
-    <title>Мини Городок</title>
+    <title>УспехоГрад</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/css/houses.css}">
     <link rel="stylesheet" th:href="@{/css/popup.css}">
 
+    <!-- Шрифт подкачивается с Google Fonts -->
     <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
 </head>
 
@@ -17,96 +25,86 @@
     <!-- Верхняя панель с информацией о пользователе -->
     <div id="HUD">
         <div class="userinfo">
-            <p id="username">Игрок</p>
-            <a href="#">
-                <img th:src="@{/img/menu.svg}"></img>
+            <!-- Временное расположение ресурсов -->
+            <div class="resources">
+                <div class="resources-group clickable" data-tooltip="money">
+                    <img th:src="@{/img/coin.svg}">
+                    <p>
+                        <span id="money-count"></span> / <span id="money-total"></span>
+                        <img class="btn-tooltip" th:src="@{/img/info.svg}">
+                    </p>
+                </div>
+                <div class="resources-group clickable" data-tooltip="tasks">
+                    <img th:src="@{/img/flag.png}">
+                    <p>
+                        <span id="tasks-count">5</span> / <span id="tasks-total"></span>
+                        <img class="btn-tooltip" th:src="@{/img/info.svg}">
+                    </p>
+                </div>
+            </div>
+
+            <!-- Никнейм и меню бургер. Никнейм временно отключен -->
+            <p id="username" class="display-none"></p>
+            <a class="clickable" href="https://dte.pmruservice.com/dte-main/game_rules">
+                <img class="menu-burger" th:src="@{/img/menu.svg}"></img>
             </a>
-        </div>
-    
-        <div class="resources">
-            <div class="resources-group" data-tooltip="money">
-                <img th:src="@{img/coin.svg}">
-                <p>
-                    <span id="money-count"></span> / <span id="money-total"></span>
-                    <img class="btn-tooltip" th:src="@{/img/info.svg}">
-                </p>
-            </div>
-            <div class="resources-group" data-tooltip="tasks">
-                <img th:src="@{/img/flag.png}">
-                <p>
-                    <span id="tasks-count">5</span> / <span id="tasks-total"></span>
-                    <img class="btn-tooltip" th:src="@{/img/info.svg}">
-                </p>
-            </div>
         </div>
 
         <!-- Появляющаяся подсказка по ресурсам -->
-        <div id="tooltip">Подсказка</div>
+        <div id="tooltip"></div>
     </div>    
 
     <!-- Всплывающее окно с информацией о здании -->
     <div id="popup-container">
+        <!-- Кнопка назад -->
         <button id="popup-close-btn">
             <img th:src="@{/img/back.svg}">
             НАЗАД
         </button>
 
-        <img id="popup-house-img" th:src="@{/img/houses/example.png}">
+        <!-- Персональная картинка каждого дома -->
+        <img id="popup-house-img">
 
+        <!-- Персональное содержимое каждого дома. Наполняется динамически -->
         <div class="popup-content">
+            <!-- Название и персональная иконка дома. Иконка временно отключена -->
             <div class="popup-header">
-                <img id="popup-house-icon" th:src="@{/img/poker-chip.png}">
+                <img class="display-none" id="popup-house-icon" th:src="@{/img/poker-chip.png}">
                 <h1 id="popup-house-name"></h1>
             </div>
 
-            <div class="popup-body">
-                <p id="popup-tasks-count">Выполнено заданий 2 / 2</p>
-                <p id="popup-bonus-task">Выполняйте задания, чтобы получить дополнительное вознаграждение <b id="bonus-task-amount">1000</b> монет!</p>
+            <p id="popup-house-task-description"></p>
+            <p id="popup-house-description"></p>
 
-                <div class="popup-task-block">
-                    Содержимое задачи. Большое содержимое задачи. Огромное содержимое задачи.
-                    Содержимое задачи. Большое содержимое задачи. Огромное содержимое задачи.
-
-                    <div class="popup-task-status">
-                        <img th:src="@{/img/check.png}">
-                        Выполнено
-                    </div>
-                </div>
-
-                <div class="popup-task-block">
-                    Содержимое задачи. Большое содержимое задачи. Огромное содержимое задачи.
-                    Содержимое задачи. Большое содержимое задачи. Огромное содержимое задачи.
-
-                    <div class="popup-task-status">
-                        <img th:src="@{/img/check.png}">
-                        Выполнено
-                    </div>
-                </div>
-
-                <a class="popup-button" href="#">О программе фишки</a>
-                <a class="popup-button" href="#">В раздел результаты</a>
-            </div>
+            <!-- Задачи, кнопки, сноски -->
+            <div id="popup-body"></div>
         </div>
     </div>
 
-    <!-- Карта с домами -->
+    <!-- Карта с домами. Наполняется динамически -->
     <div id="playground">
-        <img id="map" th:src="@{/img/maps/v1_2.png}">
-
-        <div class="house house-1" data-house="1"></div>
-        <div class="house house-2" data-house="2"></div>
-        <div class="house house-3" data-house="3"></div>
-        <div class="house house-4" data-house="4"></div>
-        <div class="house house-5" data-house="5"></div>
-        <div class="house house-6" data-house="6"></div>
-        <div class="house house-7" data-house="7"></div>
-        <div class="house house-8" data-house="8"></div>
-        <div class="house house-9" data-house="9"></div>
-        <div class="house house-10" data-house="10"></div>
+        <img id="map">
     </div>
 
     <div class="bg-blur-overlay"></div>
-    <script type="application/json"></script>
+    
+    <!-- Подгрузка картинок домов -->
+    <div class="display-none">
+        <img th:src="@{/img/houses/1.jpg}">
+        <img th:src="@{/img/houses/2.jpg}">
+        <img th:src="@{/img/houses/3.jpg}">
+        <img th:src="@{/img/houses/4.jpg}">
+        <img th:src="@{/img/houses/5.jpg}">
+        <img th:src="@{/img/houses/6.jpg}">
+        <img th:src="@{/img/houses/7.jpg}">
+        <img th:src="@{/img/houses/8.jpg}">
+        <img th:src="@{/img/houses/9.jpg}">
+    </div>
+
+    <script id="jsonData" type="application/json" th:value="${json} != null? json : 'no json received'">
+
+    </script>
+    
     <script th:src="@{/js/script.js}"></script>
 </body>
 </html>

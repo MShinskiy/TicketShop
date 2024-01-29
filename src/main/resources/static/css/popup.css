@@ -2,23 +2,22 @@
     position: fixed;
     top: +100%;
     overflow-y: scroll;
-    z-index: 4;
+    z-index: 8;
     max-width: inherit;
     min-width: inherit;
-    max-height: calc(100% - 137px);
+    max-height: calc(100% - 85px);
     width: 100%;
     transition: top 0.6s ease;
     box-shadow: 0 0 64px rgba(0, 0, 0, 0.8);
 }
 
 #popup-container.active {
-    top: 137px;
+    top: 85px;
 }
 
 #popup-house-img {
     display: block;
     width: 100%;
-    
 }
 
 #popup-close-btn {
@@ -52,7 +51,13 @@
     background: linear-gradient(180deg, #8da8e6 0%, #9494e5 50%, #D9D9D9 100%);
 }
 
+.popup-content span {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
 .popup-header {
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -63,31 +68,29 @@
 }
 
 #popup-house-icon {
-    width: 56px;
-    margin-right: 16px;
+    max-width: 56px;
+    margin-right: 12px;
 }
 
-#popup-bonus-task {
+#popup-house-description {
     margin: 1em 0;
 }
 
-.popup-body {
+#popup-body {
     font-size: 1em;
-    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
 }
 
 .popup-task-block {
     background-color: white;
     padding: 12px 24px;
     margin-bottom: 0.5em;
-    border-radius: 16px;
-}
-
-#bonus-task-amount {
-    font-size: 1.2em;
+    border-radius: 12px;
+    box-sizing: border-box;
+    width: inherit;
 }
 
 .popup-task-status {
@@ -123,4 +126,23 @@
 
 .popup-button:active {
     background-color: #936e97;
+}
+
+.popup-footnote {
+    margin-top: 2em;
+    font-size: small;
+}
+
+.display-none {
+    display: none;
+}
+
+@media screen and (max-width: 600px) {
+    #popup-container.active {
+        top: 82px; /* HUD margin */
+    }
+
+    #popup-house-name {
+        font-size: 1.8em;
+    }
 }

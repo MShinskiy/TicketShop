@@ -3,63 +3,123 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title>Панель редактирования</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <body>
-<div>
-    <label for="select-map">Выберите карту:</label>
-    <select id="select-map">
-        <option th:each="group : ${T(com.lavkatech.townofgames.entity.enums.Group).values()}"
-                th:text="${group}"
-                th:value="${group}"
-        ></option>
-    </select>
-
-    <label for="select-level">Выберите уровень:</label>
-    <select id="select-level">
-        <option th:each="level : ${T(com.lavkatech.townofgames.entity.enums.LevelSA).values()}"
-                th:text="${level}"
-                th:value="${level}"
-        ></option>
-    </select>
-
-    <label for="select-house">Выберите дом:</label>
-    <select id="select-house">
-        <option th:each="house : ${houses}"
-                th:text="${house.getName()}"
-                th:value="${house.getId()}"
-                th:attr="data-group=${house.getHouseGroup()}, data-level=${house.getHouseLevel()}"
-        ></option>
-    </select>
-    <form id="edit-form" >
-        <table th:each="house : ${houses}" th:attr="table-for=${house.getId()}" style="display:none;">
-            <tr>
-                <th>Параметр</th><th>Значение</th><th>URL</th>
-            </tr>
-            <tr>
-                <td>Название</td><td><input type="text" th:value="${house.getName()}" input-param="name"></td><td></td>
-            </tr>
-            <tr>
-                <td>Описание</td><td><input type="text" th:value="${house.getDescription()}" input-param="desc"></td><td></td>
-            </tr>
-            <tr>
-                <td>Задача 1</td><td><input type="text" th:value="${house.getTask1()} != null? ${house.getTask1().getDescription()} : ''" input-param="task1"></td><td></td>
-            </tr>
-            <tr>
-                <td>Задача 2</td><td><input type="text" th:value="${house.getTask2()} != null? ${house.getTask2().getDescription()} : ''" input-param="task2"></td><td></td>
-            </tr>
-            <tr>
-                <td>Кнопка 1</td><td><input type="text" th:value="${house.getButtonText1()}" input-param="btn-text1"></td><td><input type="text" th:value="${house.getButtonURL1()}" input-param="btn-url1"></td>
-            </tr>
-            <tr>
-                <td>Кнопка 2</td><td><input type="text" th:value="${house.getButtonText2()}" input-param="btn-text2"></td><td><input type="text" th:value="${house.getButtonURL2()}" input-param="btn-url2"></td>
-            </tr>
-            <tr>
-                <td>Кнопка 3</td><td><input type="text" th:value="${house.getButtonText3()}" input-param="btn-text3"></td><td><input type="text" th:value="${house.getButtonURL3()}" input-param="btn-url3"></td>
-            </tr>
-        </table>
-        <input type="submit" value="Принять изменения">
+<div class="d-flex justify-content-center" style="margin: 10px 0 10px 0">
+    <form method="get">
+        <button class="btn btn-info" th:formaction="@{/administration/panel}">К панели администрирования</button>
+        <button class="btn btn-secondary" th:method="post" th:formaction="@{/logout}">Выход</button>
     </form>
+
+</div>
+<div class="container">
+    <div class="row justify-content-md-center">
+        <div class="col col-lg-1 w-50">
+            <div class="card text-center">
+                <h5 class="card-title">Параметры</h5>
+                <div class="input-group mb-3 justify-content-center">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="select-map">Выберите карту:</label>
+                    </div>
+                    <select class="custom-select" id="select-map">
+                        <option th:each="group : ${T(com.lavkatech.townofgames.entity.enums.Group).values()}"
+                                th:text="${group}"
+                                th:value="${group}"
+                        ></option>
+                    </select>
+                </div>
+                <div class="input-group mb-3 justify-content-center">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="select-level">Выберите уровень:</label>
+                    </div>
+                    <select class="custom-select" id="select-level">
+                        <option th:each="level : ${T(com.lavkatech.townofgames.entity.enums.LevelSA).values()}"
+                                th:text="${level}"
+                                th:value="${level}"
+                        ></option>
+                    </select>
+                </div>
+                <div class="input-group mb-3 justify-content-center">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="select-house">Выберите дом:</label>
+                    </div>
+                    <select class="custom-select" id="select-house">
+                        <option disabled selected value="default"> -- выберите опцию -- </option>
+                        <option th:each="house : ${houses}"
+                                th:text="${house.getName()}"
+                                th:value="${house.getId()}"
+                                th:attr="data-group=${house.getHouseGroup()}, data-level=${house.getHouseLevel()}"
+                        ></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex justify-content-center">
+        <form id="edit-form">
+            <table class="table table-bordered"
+                   style="display:none;"
+                   th:each="house : ${houses}"
+                   th:attr="table-for=${house.getId()}, house-map-id=${house.getMapId()}">
+                <tr>
+                    <th scope="col">Параметр</th>
+                    <th scope="col">Значение</th>
+                    <th scope="col">URL</th>
+                </tr>
+                <tr>
+                    <th scope="row">Название</th>
+                    <td><input type="text" name="name" th:value="${house.getName()}"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th scope="row">Прогресс пользователя</th>
+                    <td><input type="text" name="progress-desc" th:value="${house.getTaskProgressDescription()}"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th  scope="row">Описание</th>
+                    <td><input type="text" name="description" th:value="${house.getDescription()}"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th  scope="row">Задача 1 (белое поле)</th>
+                    <td><input type="text" name="task1" th:value="${house.getTask1()} != null? ${house.getTask1().getDescription()} : ''"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th  scope="row">Задача 2 (белое поле)</th>
+                    <td><input type="text" name="task2" th:value="${house.getTask2()} != null? ${house.getTask2().getDescription()} : ''"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th  scope="row">Кнопка 1</th>
+                    <td><input type="text" name="btn-text1" th:value="${house.getButtonText1()}"></td>
+                    <td><input type="text" name="btn-url1" th:value="${house.getButtonURL1()}"></td>
+                </tr>
+                <tr>
+                    <th  scope="row">Кнопка 2</th>
+                    <td><input type="text" name="btn-text2" th:value="${house.getButtonText2()}"></td>
+                    <td><input type="text" name="btn-url2" th:value="${house.getButtonURL2()}"></td>
+                </tr>
+                <tr>
+                    <th  scope="row">Кнопка 3</th>
+                    <td><input type="text" name="btn-text3" th:value="${house.getButtonText3()}"></td>
+                    <td><input type="text" name="btn-url3" th:value="${house.getButtonURL3()}"></td>
+                </tr>
+                <tr>
+                    <th  scope="row">Поле под сноску</th>
+                    <td><input type="text" name="caption" th:value="${house.getCaption()}"></td>
+                    <td></td>
+                </tr>
+            </table>
+            <input id="submit-form" type="submit" value="Принять изменения" class="btn btn-primary">
+            <input id="submit-demo-form" type="submit" value="Посмотреть Демо" class="btn btn-primary">
+        </form>
+    </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
         integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="

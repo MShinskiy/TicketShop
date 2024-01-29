@@ -1,10 +1,13 @@
 package com.lavkatech.townofgames.entity.report;
 
-import com.lavkatech.townofgames.entity.enums.Group;
+import lombok.Getter;
 
-public record ImportDto(String dtprf,
-                        int coins,
-                        int points,
-                        int tasks,
-                        Group group) {
+@Getter
+public class ImportDto {
+
+    private final String dtprf;
+
+    public ImportDto(String dtprf) {
+        this.dtprf = dtprf;
+    }
 }

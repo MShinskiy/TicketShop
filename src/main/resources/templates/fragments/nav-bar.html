@@ -9,9 +9,9 @@
 <body>
   <div class="d-flex justify-content-center" th:fragment="nav-bar (current-page)">
     <form method="get">
-      <button class="btn btn-info" th:if="current-page == 'admin'" th:formaction="/administration/edit">К панели редактирования</button>
-      <button class="btn btn-info" th:if="current-page == 'edit'" th:formaction="/administration/admin">К панели администрирования</button>
-      <button class="btn btn-secondary" th:formaction="/logout">Выход</button>
+      <button class="btn btn-info" th:if="${current-page} == 'admin'" th:formaction="/administration/edit">К панели редактирования</button>
+      <button class="btn btn-info" th:if="current-page == 'edit'" th:formaction="/administration/panel">К панели администрирования</button>
+      <button class="btn btn-secondary" th:value="current-page" th:method="post" th:formaction="@{/logout}">Выход</button>
     </form>
   </div>
 </body>

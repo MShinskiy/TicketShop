@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.lavkatech.townofgames.entity.User;
 import com.lavkatech.townofgames.entity.enums.Group;
+import com.lavkatech.townofgames.entity.enums.LevelSA;
 import com.lavkatech.townofgames.service.HouseService;
 import com.lavkatech.townofgames.service.UserService;
 import org.apache.logging.log4j.LogManager;
@@ -45,33 +46,75 @@ public class GameController {
         //Decipher query parameter
         String param = URLDecoder.decode(query.replaceAll("query=", ""), StandardCharsets.UTF_8);
         query = decrypt(param, initVector, key);
+        if(query == null) {
+            log.error("Could not decrypt query {} with vector {} and key {}", param, initVector, key);
+            model.addAttribute("errorMsg", String.format("Could not decrypt query %s with vector %s and key %s", param, initVector, key));
+            return "error";
+        }
         //Get user params
         try {
             JsonObject o = new Gson().fromJson(query, JsonObject.class);
-            String dtprf = o
+            JsonObject contactObj = o
                     .get("User").getAsJsonObject()
-                    .get("Contact").getAsJsonObject()
-                    .get("DTE_Contact_Id__c").getAsString();
-            String group = o
-                    .get("User").getAsJsonObject()
-                    .get("Contact").getAsJsonObject()
-                    .get("Group").getAsString();
-            Group g = Group.groupOf(Integer.parseInt(group));
-            User user = dtprf.equals("DEMO") ?
+                    .get("Contact").getAsJsonObject();
+            String dtprf = contactObj.get("DTE_Contact_Id__c").getAsString();
+            String group = contactObj.get("mapID").getAsString();
+            String level = contactObj.get("levelSA").getAsString();
+
+           /* User user = dtprf.equals("DEMO") ?
                     User.builder()
                             .dtprf(dtprf)
                             .username("demo username")
-                            .userGroup(g)
+                            .userGroup(Group.PARTNER)
+                            .userLevel(LevelSA.HIGH)
                             .coins(2000)
                             .points(5000)
                             .build() :
                     userService.getUserOrNull(dtprf);
-
-            /*if(user == null) {
+            if(user == null) {
                 *//* TODO handle user doesn't exist
                 *   create or don't allow entry? *//*
+                model.addAttribute("errorMsg", String.format("No user was found for dtprf %s", dtprf));
                 return "error";
             }
+
+            //Parse group from query
+            Group g;
+            if(group == null) {
+                g = user.getUserGroup();
+                if(g == null) {
+                    model.addAttribute("errorMsg", String.format("No group was found for user with dtprf %s", dtprf));
+                    return "error";
+                }
+            } else {
+                try {
+                    g = Group.valueOf(group.toUpperCase());
+                } catch (IllegalArgumentException iae) {
+                    log.error("Error while parsing {} to Group", group);
+                    model.addAttribute("errorMsg", String.format("Error while parsing %s to Group", group));
+                    return "error";
+                }
+            }
+
+            //Parse level from query
+            LevelSA l;
+            if(level == null) {
+                l = user.getUserLevel();
+                if(l == null) {
+                    model.addAttribute("errorMsg", String.format("No level was found for user with dtprf %s", dtprf));
+                    return "error";
+                }
+            } else {
+                try {
+                    l = LevelSA.valueOf(level.toUpperCase());
+                } catch (IllegalArgumentException iae) {
+                    log.error("Error while parsing {} to LevelSA", level);
+                    model.addAttribute("errorMsg", String.format("Error while parsing %s to LevelSA", level));
+                    return "error";
+                }
+            }*/
+
+            /*
 
             Group userGroup = user.getUserGroup();
             if(userGroup == null) {
@@ -88,6 +131,7 @@ public class GameController {
             return "index";
         } catch (NullPointerException e) {
             log.error("Could not parse json string {} ", query, e);
+            model.addAttribute("errorMsg", String.format("Could not parse json string %s ", query));
             //Send error frame on error
             return "error";
         }

@@ -16,23 +16,23 @@ public class HouseStatusDto {
     private final String description;
     private final int tasksComplete;
     private final int tasksTotal;
-    private final long coins;
     private final long maxCoins;
     private final TaskStatus taskStatus;
     private final String taskDescriptionStringMap;
+    private final String caption;
 
     private final List<TaskJson> tasks;
     private final List<ButtonJson> buttons;
 
-    public HouseStatusDto(String name, String description, int tasksComplete, int tasksTotal, TaskStatus taskStatus, long coins, long maxCoins, String taskDescriptionStringMap) {
+    public HouseStatusDto(String name, String description, int tasksComplete, int tasksTotal, TaskStatus taskStatus, long maxCoins, String taskDescriptionStringMap, String caption) {
         this.name = name;
         this.description = description;
         this.tasksComplete = tasksComplete;
         this.tasksTotal = tasksTotal;
-        this.coins = coins;
         this.maxCoins = maxCoins;
         this.taskStatus = taskStatus;
         this.taskDescriptionStringMap = taskDescriptionStringMap;
+        this.caption = caption;
         tasks = new ArrayList<>();
         buttons = new ArrayList<>();
     }

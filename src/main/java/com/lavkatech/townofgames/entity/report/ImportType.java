@@ -7,6 +7,9 @@ public enum ImportType {
 
     private final String value;
 
+    public String value() {
+        return value;
+    }
 
     ImportType(String value) {
         this.value = value;

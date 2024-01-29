@@ -1,4 +1,3 @@
-/*
 package com.lavkatech.townofgames.entity;
 
 import jakarta.persistence.*;
@@ -10,11 +9,12 @@ import lombok.NoArgsConstructor;
 import java.util.UUID;
 
 @Data
-@Entity
+//@Entity
 @Builder
-@Table(name = "usersTasks")
+//@Table(name = "usersTasks")
 @AllArgsConstructor
 @NoArgsConstructor
+@Deprecated
 public class UserTask {
 
     @Id
@@ -28,4 +28,3 @@ public class UserTask {
     @OneToOne
     private Task task;
 }
-*/

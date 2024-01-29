@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter;
 /*
     Is required to parse LocalDateTime into json using Gson library
  */
-public class LocaleDateTimeAdapter extends TypeAdapter<LocalDateTime> {
+public class LocalDateTimeAdapter extends TypeAdapter<LocalDateTime> {
 
     @Value("${time.format}")
     private String dateTimeFormat;

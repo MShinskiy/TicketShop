@@ -4,10 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Getter
 @Setter
@@ -15,14 +12,16 @@ public class HouseProgress {
     //Task - isComplete
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
-    private final Map<Task, Boolean> tasks;
+    private final Map<UUID, Boolean> tasks;
+    private final int mapId;
     private long maxCoins = 0;
     private long currentCoins = 0;
     private String descVar1 = "";
     private String descVar2 = "";
     private String descVar3 = "";
 
-    public HouseProgress() {
+    public HouseProgress(int mapId) {
+        this.mapId = mapId;
         tasks = new LinkedHashMap<>();
     }
 
@@ -37,23 +36,23 @@ public class HouseProgress {
     }
 
     // Добавить задание
-    public void putTask(Task task) {
+    public void putTask(UUID task) {
         tasks.put(task, false);
     }
 
-    // Вернуть задание
-    public Boolean getTaskStatus(Task task) {
+    // Вернуть статус задания
+    public Boolean getTaskStatus(UUID task) {
         return tasks.get(task);
     }
 
     // Вернуть задания
-    public List<Task> tasksList() {
+    public List<UUID> getTasksList() {
         return new ArrayList<>(tasks.keySet());
     }
 
-    //return false if previous mapping was true or no mapping (null)
+    //return false if previous mapping was true (was already marked as finished) or no mapping/null (doesn't exist)
     //true - complete, false - active
-    public boolean finishTask(Task task) {
+    public boolean finishTask(UUID task) {
         Boolean res = tasks.put(task, true);
         return res != null && !res;
     }
