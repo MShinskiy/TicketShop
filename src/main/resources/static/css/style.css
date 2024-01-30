@@ -38,7 +38,7 @@ img {
 }
 
 #map {
-    margin-top: 85px; /* HUD margin */
+    margin-top: 93px; /* HUD margin */
     display: block;
     width: 100%;
     box-shadow: 0 0 64px rgba(0, 0, 0, 0.8);
@@ -102,6 +102,7 @@ img {
     text-align: center;
     flex-direction: column;
     align-items: center;
+    padding: 4px 24px;
 }
 
 .resources-group > img {
@@ -111,7 +112,7 @@ img {
 .btn-tooltip {
     width: 20px;
     position: absolute;
-    bottom: 2px;
+    bottom: 8px;
 }
 
 #tooltip {
@@ -150,6 +151,6 @@ img {
     }
 
     #map {
-        margin-top: 82px; /* HUD margin */
+        margin-top: 90px; /* HUD margin */
     }
 }

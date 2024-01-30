@@ -5,7 +5,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-class HouseEdit {
+public class HouseEdit {
+    private String uuid;
     private String name;
     private String mapId;
     private String progress;
@@ -19,6 +20,6 @@ class HouseEdit {
     private String text3;
     private String url3;
     private String caption;
-    private String group;
     private String level;
+    private String group;
 }

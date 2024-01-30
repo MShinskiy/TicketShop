@@ -41,11 +41,11 @@ let popupHouseTaskDescriptionEl = document.getElementById('popup-house-task-desc
 switch (Object.keys(jsonData.map).length) {
     case 6:
         bodyEl.classList.add("map-6");
-        mapEl.src = "img/maps/map6.jpg";
+        mapEl.src = "/townofgames/img/maps/map6.jpg";
         break;
     case 9:
         bodyEl.classList.add("map-9");
-        mapEl.src = "img/maps/map9.jpg";
+        mapEl.src = "/townofgames/img/maps/map9.jpg";
 }
 
 
@@ -55,10 +55,10 @@ for (var key in jsonData.map) {
     let houseStatusIconSrc;
     switch (jsonData.map[key].taskStatus) {
         case "AVAILABLE":
-            houseStatusIconSrc = "img/icons/coin.png";
+            houseStatusIconSrc = "/townofgames/img/icons/coin.png";
             break;
         case "COMPLETE":
-            houseStatusIconSrc = "img/icons/check.png";
+            houseStatusIconSrc = "/townofgames/img/icons/check.png";
             break;
         case "EMPTY":
             houseStatusIconSrc = null;
@@ -94,7 +94,7 @@ document.querySelectorAll(".resources-group").forEach(function(el) {
         let tooltipText;
         switch (el.dataset.tooltip) {
             case "money":
-                tooltipText = `Монеты: ${moneyCount.toLocaleString("ru-RU")} активно из ${moneyTotal.toLocaleString("ru-RU")} начисленных.`;
+                tooltipText = `Монеты: ${moneyCount.toLocaleString("ru-RU")} начислено из ${moneyTotal.toLocaleString("ru-RU")} доступных.`;
                 break;
             case "tasks":
                 tooltipText = `Задания: ${tasksCount} выполнено из ${tasksTotal} доступных.`;
@@ -136,7 +136,7 @@ document.querySelectorAll(".house").forEach(function(el) {
         let houseObject = jsonData.map[el.dataset.house];
 
         // Изменение динамического содержимого всплывающего окна
-        popupHouseImgEl.src = `img/houses/${el.dataset.house}.jpg`;
+        popupHouseImgEl.src = `/townofgames/img/houses/${el.dataset.house}.jpg`;
         popupHouseNameEl.textContent = houseObject.name;
         popupHouseDescriptionEl.innerHTML = houseObject.description;      
         
@@ -166,7 +166,7 @@ document.querySelectorAll(".house").forEach(function(el) {
                     popupTaskStatus.classList.add('popup-task-status');
 
                     let imgEl = document.createElement('img');
-                    imgEl.setAttribute('src', 'img/check.png');
+                    imgEl.setAttribute('src', '/townofgames/img/check.png');
 
                     popupTaskStatus.appendChild(imgEl);
                     popupTaskStatus.appendChild(document.createTextNode('Выполнено'));

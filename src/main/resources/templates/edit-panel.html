@@ -64,7 +64,7 @@
             <table class="table table-bordered"
                    style="display:none;"
                    th:each="house : ${houses}"
-                   th:attr="table-for=${house.getId()}, house-map-id=${house.getMapId()}">
+                   th:attr="table-for=${house.getId()}, house-map-id=${house.getMapId()}, house-group=${house.getHouseGroup()}, house-level=${house.getHouseLevel()}">
                 <tr>
                     <th scope="col">Параметр</th>
                     <th scope="col">Значение</th>
@@ -117,7 +117,7 @@
                 </tr>
             </table>
             <input id="submit-form" type="submit" value="Принять изменения" class="btn btn-primary">
-            <input id="submit-demo-form" type="submit" value="Посмотреть Демо" class="btn btn-primary">
+            <input id="submit-demo-form" type="button" value="Посмотреть Демо" class="btn btn-primary">
         </form>
     </div>
 </div>

@@ -23,8 +23,6 @@ import java.util.UUID;
 @AllArgsConstructor
 public class House {
 
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;

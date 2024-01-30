@@ -18,12 +18,12 @@
 </div>
 <div class="container">
     <div class="row justify-content-md-center">
-        <div class="col col-lg-2 w-50">
+        <div class="col col-lg-2 w-25">
             <div class="card text-center">
                 <div class="card-body">
-                    <h5 class="card-title">Импорт</h5>
+                    <h5 class="card-title">Импортировать данные</h5>
                     <form method="post" th:action="@{/administration/upload}" enctype="multipart/form-data">
-                        <div class="input-group mb-3">
+                        <div class="input-group mb-3 justify-content-center">
                             <div class="input-group-prepend">
                                 <label class="input-group-text" for="select-import-type">Тип</label>
                             </div>
@@ -36,11 +36,12 @@
                             </select>
                         </div>
                         <div class="input-group mb-3">
-                            <div class="input-group-prepend">
+  <!--                          <div class="input-group-prepend">
                                 <span class="input-group-text">Загрузить</span>
-                            </div>
+                            </div>-->
                             <div class="custom-file">
-                                <input class="custom-file-input" id="fileInput" type="file" name="file" accept=".xlsx">
+                                <label class="input-group-text" for="fileInput">Загрузить</label>
+                                <input class="form-control" id="fileInput" type="file" name="file" accept=".xlsx">
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary">Импорт</button>
@@ -57,6 +58,18 @@
             <div class="card text-center">
                 <div class="card-body">
                     <h5 class="card-title">Экспортировать отчет</h5>
+                    <div class="input-group mb-3 justify-content-center">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="select-import-type">Тип</label>
+                        </div>
+                        <select class="custom-select" id="select-export-type" name="export-type">
+                            <option disabled selected value> -- выберите опцию -- </option>
+                            <option th:each="importType : ${T(com.lavkatech.townofgames.entity.report.ExportType).values()}"
+                                    th:text="${importType.value()}"
+                                    th:value="${importType.name()}">
+                            </option>
+                        </select>
+                    </div>
                     <form method="get" th:action="@{/administration/download}">
                         <button type="submit" class="btn btn-primary">Экспорт</button>
                     </form>

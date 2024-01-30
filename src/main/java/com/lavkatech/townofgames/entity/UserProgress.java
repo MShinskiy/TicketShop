@@ -41,6 +41,13 @@ public class UserProgress {
         return gson.toJson(userProgress);
     }
 
+    public void addNewHouses(List<House> houses) {
+        for(House house : houses) {
+            if(!progressPerHouseMap.containsKey(house.getId()))
+                progressPerHouseMap.put(house.getId(), new HouseProgress(house.getMapId()));
+        }
+    }
+
     public static UserProgress fromString(String json) {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter().nullSafe())

@@ -5,14 +5,14 @@
     z-index: 8;
     max-width: inherit;
     min-width: inherit;
-    max-height: calc(100% - 85px);
+    max-height: calc(100% - 93px); /* HUD margin */
     width: 100%;
     transition: top 0.6s ease;
     box-shadow: 0 0 64px rgba(0, 0, 0, 0.8);
 }
 
 #popup-container.active {
-    top: 85px;
+    top: 93px; /* HUD margin */
 }
 
 #popup-house-img {
@@ -139,7 +139,7 @@
 
 @media screen and (max-width: 600px) {
     #popup-container.active {
-        top: 82px; /* HUD margin */
+        top: 90px; /* HUD margin */
     }
 
     #popup-house-name {

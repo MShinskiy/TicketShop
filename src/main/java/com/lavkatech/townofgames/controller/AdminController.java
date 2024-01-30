@@ -1,8 +1,12 @@
 package com.lavkatech.townofgames.controller;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.lavkatech.townofgames.entity.House;
 import com.lavkatech.townofgames.entity.dto.HouseChangesDto;
+import com.lavkatech.townofgames.entity.dto.HouseEdit;
+import com.lavkatech.townofgames.entity.enums.Group;
+import com.lavkatech.townofgames.entity.enums.LevelSA;
 import com.lavkatech.townofgames.entity.report.*;
 import com.lavkatech.townofgames.service.HouseService;
 import com.lavkatech.townofgames.service.ReportingService;
@@ -35,13 +39,6 @@ public class AdminController {
         this.reportingService = reportingService;
         this.houseService = houseService;
         this.userService = userService;
-    }
-
-    @GetMapping("/administration/edit")
-    public String getEditingPanel(Model model) {
-        List<House> houses = houseService.getAllHouses();
-        model.addAttribute("houses", houses);
-        return "edit-panel";
     }
 
     @PostMapping("/administration/upload")
@@ -95,17 +92,36 @@ public class AdminController {
         }
     }
 
+    @GetMapping("/administration/edit")
+    public String getEditingPanel(Model model) {
+        List<House> houses = houseService.getAllHouses();
+        model.addAttribute("houses", houses);
+        return "edit-panel";
+    }
+
     @PostMapping("/administration/edit")
-    public String updateHouseData(Model model) {
-        model.addAttribute("");
+    public String updateHouseData(@RequestParam(name = "edits") String editsJson, Model model) {
+        HouseChangesDto changes = new HouseChangesDto(editsJson);
+        try {
+            houseService.applyChanges(changes.getEdits());
+        } catch (IllegalStateException ise) {
+            model.addAttribute("errorMsg", ise.getMessage());
+            return "error";
+        }
+
+        List<House> houses = houseService.getAllHouses();
+        model.addAttribute("houses", houses);
         return "edit-panel";
     }
 
     @PostMapping("/administration/demo")
-    public String viewChangesDemo(HouseChangesDto dto, Model model) {
-        Gson gson = new Gson();
-        String json = gson.toJson(dto.toMapDto());
-        model.addAttribute("json", json);
+    public String viewChangesDemo(@RequestParam(name = "edits") String editsJson, Model model) {
+
+        HouseChangesDto changes = new HouseChangesDto(editsJson);
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String json = gson.toJson(changes.toDemoMapDto());
+        model.addAttribute(
+                "json", json);
         return "index";
     }
 

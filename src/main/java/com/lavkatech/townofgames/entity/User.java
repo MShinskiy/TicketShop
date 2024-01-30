@@ -34,6 +34,17 @@ public class User {
         this.lastLogin = LocalDateTime.now();
         this.lastCoinChange = LocalDateTime.now();
         this.lastTicketChange = LocalDateTime.now();
+        this.userProgressJson = UserProgress.initString();
+    }
+
+    public User(String dtprf, String username) {
+        this.dtprf = dtprf;
+        this.username = username;
+        this.createdOn = LocalDateTime.now();
+        this.lastLogin = LocalDateTime.now();
+        this.lastCoinChange = LocalDateTime.now();
+        this.lastTicketChange = LocalDateTime.now();
+        this.userProgressJson = UserProgress.initString();
     }
 
     @Id
@@ -51,6 +62,7 @@ public class User {
     private LocalDateTime lastLogin = LocalDateTime.now();
     private LocalDateTime lastCoinChange = LocalDateTime.now();
     private LocalDateTime lastTicketChange = LocalDateTime.now();
+    @Column(length = 65535)
     private String userProgressJson = UserProgress.initString();
 
 /*    @OneToMany(mappedBy = "user")

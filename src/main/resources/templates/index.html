@@ -101,10 +101,7 @@
         <img th:src="@{/img/houses/9.jpg}">
     </div>
 
-    <script id="jsonData" type="application/json" th:value="${json} != null? json : 'no json received'">
-
-    </script>
-    
+    <script id="jsonData" type="application/json" th:utext="${json} != null? ${json} : 'no json received'"></script>
     <script th:src="@{/js/script.js}"></script>
 </body>
 </html>

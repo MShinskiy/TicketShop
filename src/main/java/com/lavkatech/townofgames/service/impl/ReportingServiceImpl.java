@@ -139,9 +139,9 @@ public class ReportingServiceImpl implements ReportingService {
                 LevelSA level = null;
                 for (Cell cell : row)
                     switch (cell.getColumnIndex()) {
-                        case 0 -> dtprf = cell.getStringCellValue();
-                        case 1 -> group = Group.groupOf(tryGetNumericCellValue(cell));
-                        case 2 -> level = LevelSA.levelOf(cell.getStringCellValue());
+                        case 0 -> dtprf = tryGetStringCellValue(cell);
+                        case 1 -> group = tryGetStringCellValue(cell) != null ? Group.valueOf(tryGetStringCellValue(cell).toUpperCase()) : null;
+                        case 2 -> level = tryGetStringCellValue(cell) != null ?  LevelSA.valueOf(tryGetStringCellValue(cell).toUpperCase()) : null;
                     }
 
                 count++;
@@ -161,6 +161,7 @@ public class ReportingServiceImpl implements ReportingService {
     }
 
     private Integer tryGetNumericCellValue(Cell cell) {
+        if (cell == null) return null;
         Integer val = null;
         try {
             val = (int) cell.getNumericCellValue();
@@ -175,6 +176,7 @@ public class ReportingServiceImpl implements ReportingService {
     }
 
     private String tryGetStringCellValue(Cell cell) {
+        if (cell == null) return null;
         String val = null;
         try {
             val = cell.getStringCellValue();

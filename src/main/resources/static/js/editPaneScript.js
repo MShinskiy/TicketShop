@@ -51,11 +51,17 @@ $(document).ready(() => {
         $(this).prop("disabled", !validForm);
         if (!validForm)
             return
-
-        $.post(
-            "/townofgames/administration/edit",
-            parseTables()
-        );
+        if (confirm("Вы уверены, что хотите внести изменения?")) {
+            $.ajax({
+                    url: "/townofgames/administration/edit",
+                    method: 'post',
+                    data: {
+                        edits: JSON.stringify(parseAllTables())
+                    },
+                    headers: csrfHeader
+                }
+            );
+        }
     });
 
     $("#submit-demo-form").on('click', function () {
@@ -64,12 +70,17 @@ $(document).ready(() => {
             return
 
         $.ajax({
-                url: "/townofgames/administration/demo",
-                type: 'post',
-                data: parseTables(),
-                headers: csrfHeader
+            url: "/townofgames/administration/demo",
+            type: 'post',
+            data: {
+                edits: JSON.stringify(parseTables())
+            },
+            headers: csrfHeader,
+            success: function (htmlContent) {
+                let newTab = window.open();
+                newTab.document.write(htmlContent);
             }
-        );
+        });
     });
 
     updateIds();
@@ -119,15 +130,12 @@ function updateIds() {
 }
 
 function parseTables() {
-    let editMap =
-        {
-            group: selectedMap,
-            level: selectedLevel
-        };
+    let edits = [];
     $("table").each(function () {
         let id = $(this).attr("table-for");
         if (selectedIds.includes(id)) {
-            editMap[id] = {
+            edits.push({
+                uuid: id,
                 name: $(this).find("input[name='name']").val(),
                 mapId: $(this).attr("house-map-id"),
                 progress: $(this).find("input[name='progress-desc']").val(),
@@ -140,11 +148,39 @@ function parseTables() {
                 url2: $(this).find("input[name='btn-url2']").val(),
                 text3: $(this).find("input[name='btn-text3']").val(),
                 url3: $(this).find("input[name='btn-url3']").val(),
-                caption: $(this).find("input[name='caption']").val()
-            };
+                caption: $(this).find("input[name='caption']").val(),
+                level: $(this).attr("house-level"),
+                group: $(this).attr("house-group")
+            });
         }
     });
-    return editMap;
+    return edits;
+}
+
+function parseAllTables() {
+    let edits = [];
+    $("table").each(function () {
+        edits.push({
+            uuid: $(this).attr("table-for"),
+            name: $(this).find("input[name='name']").val(),
+            mapId: $(this).attr("house-map-id"),
+            progress: $(this).find("input[name='progress-desc']").val(),
+            description: $(this).find("input[name='description']").val(),
+            task1: $(this).find("input[name='task1']").val(),
+            task2: $(this).find("input[name='task2']").val(),
+            text1: $(this).find("input[name='btn-text1']").val(),
+            url1: $(this).find("input[name='btn-url1']").val(),
+            text2: $(this).find("input[name='btn-text2']").val(),
+            url2: $(this).find("input[name='btn-url2']").val(),
+            text3: $(this).find("input[name='btn-text3']").val(),
+            url3: $(this).find("input[name='btn-url3']").val(),
+            caption: $(this).find("input[name='caption']").val(),
+            level: $(this).attr("house-level"),
+            group: $(this).attr("house-group")
+        });
+
+    });
+    return edits;
 }
 
 

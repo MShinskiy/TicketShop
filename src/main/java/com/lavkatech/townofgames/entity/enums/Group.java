@@ -7,7 +7,7 @@ public enum Group {
     PARTNER(9);
 
     final int val;
-    private Group(int n){
+    Group(int n){
         this.val = n;
     }
 

@@ -1,27 +1,33 @@
 package com.lavkatech.townofgames.entity.dto;
 
+import com.google.gson.Gson;
 import com.lavkatech.townofgames.entity.enums.Group;
 import com.lavkatech.townofgames.entity.enums.LevelSA;
 import com.lavkatech.townofgames.entity.enums.TaskStatus;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class HouseChangesDto {
-    private String level;
-    private String group;
-    private Map<UUID, HouseEdit> editMap = new HashMap<>();
+    private List<HouseEdit> edits;
 
-    public MapDto toMapDto() {
+
+    public HouseChangesDto(String editsJson) {
+        Gson gson = new Gson();
+        this.edits = List.of(gson.fromJson(editsJson, HouseEdit[].class));
+    }
+    public MapDto toDemoMapDto() {
         Map<Integer, HouseStatusDto> map = new HashMap<>();
         int totalTasks = 0, completeTasks = 0;
-        for(HouseEdit e : editMap.values()) {
+        String group = "", level = "";
+        for(HouseEdit e : edits) {
+            group = e.getGroup();
+            level = e.getLevel();
             int tt = 0, tc = 0;
             String task1 = null, task2 = null;
             String text1 = null, text2 = null, text3 = null;
@@ -47,11 +53,11 @@ public class HouseChangesDto {
             if(!Objects.equals(e.getText3(), ""))
                 text3 = e.getText3();
             if(!Objects.equals(e.getUrl1(), ""))
-                url1 = e.getText1();
+                url1 = e.getUrl1();
             if(!Objects.equals(e.getUrl2(), ""))
-                url2 = e.getText2();
+                url2 = e.getUrl2();
             if(!Objects.equals(e.getUrl3(), ""))
-                url3 = e.getText3();
+                url3 = e.getUrl3();
 
             TaskStatus ts = tt > 0? TaskStatus.AVAILABLE : TaskStatus.EMPTY;
 
@@ -74,6 +80,7 @@ public class HouseChangesDto {
                 hsd.addButton(text2, url2);
             if(text3 != null && url3 != null)
                 hsd.addButton(text3, url3);
+            map.put(Integer.valueOf(e.getMapId()), hsd);
         }
         UserDto userDto = UserDto.builder()
                 .dtprf("DEMO")

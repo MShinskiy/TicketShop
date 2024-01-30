@@ -35,6 +35,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getOrCreateUser(String dtprf) {
+        return userRepo.findUserByDtprf(dtprf)
+                .orElse(userRepo.save(new User(dtprf, "Игрок")));
+    }
+
+    @Override
+    public User getOrCreateUser(String dtprf, Group group, LevelSA level) {
+        return userRepo.findUserByDtprf(dtprf)
+                .orElse(userRepo.save(new User(dtprf, "Игрок", group, level)));
+    }
+
+
+
+    @Override
     public User getUserOrNull(String dtprf) {
         return userRepo.findUserByDtprf(dtprf).orElse(null);
     }
@@ -141,5 +155,36 @@ public class UserServiceImpl implements UserService {
     public void addBalanceLog(User user, BalanceLog log) {
         user.getBalanceLog().add(log);
         userRepo.save(user);
+    }
+
+    @Override
+    public User saveUserChanges(User user) {
+        return userRepo.save(user);
+    }
+
+    @Override
+    public User updateUserGroupLevel(User user, Group group, LevelSA level) {
+        boolean updateRequired = false;
+        if(group != null) {
+            Group current = user.getUserGroup();
+            if(current != group) {
+                user.setUserGroup(group);
+                updateRequired = true;
+            }
+        }
+        if(level != null) {
+            LevelSA current = user.getUserLevel();
+            if(current != level) {
+                user.setUserLevel(level);
+                updateRequired = true;
+            }
+        }
+        UserProgress progress = UserProgress.fromString(user.getUserProgressJson());
+        if(updateRequired || progress.getProgressPerHouseMap().isEmpty()) {
+            List<House> newListOfHouses = houseService.getHousesForGroupAndLevel(group, level);
+            progress.addNewHouses(newListOfHouses);
+            user.setUserProgressJson(progress.toString());
+        }
+        return userRepo.save(user);
     }
 }
