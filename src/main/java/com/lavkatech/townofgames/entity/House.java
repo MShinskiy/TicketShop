@@ -1,6 +1,5 @@
 package com.lavkatech.townofgames.entity;
 
-import com.lavkatech.townofgames.entity.dto.HouseStatusDto;
 import com.lavkatech.townofgames.entity.enums.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -51,13 +50,13 @@ public class House {
     @OneToMany(mappedBy = "house")
     private List<HouseVisitLog> houseVisitLogList = new ArrayList<>();
 
-    @OneToOne
+    /*@OneToOne
     @JoinColumn(name = "id")
     private Task task1 = null;
 
     @OneToOne
     @JoinColumn(name = "id")
-    private Task task2 = null;
+    private Task task2 = null;*/
 
     public House(int mapId, String name, Group houseGroup, LevelSA houseLevel) {
         this.mapId = mapId;
@@ -66,6 +65,28 @@ public class House {
         this.houseLevel = houseLevel;
     }
 
-    /*@OneToMany(mappedBy = "house")
-    private List<Task> houseTasks;*/
+    @OneToMany(mappedBy = "house")
+    private List<Task> houseTasks;
+
+    public Task getTask1(){
+        return houseTasks.stream()
+                .filter(t -> t.getTaskOrder() == 1)
+                .findAny()
+                .orElse(null);
+    }
+
+    public void replaceTask(Task newTask) {
+        houseTasks.replaceAll(oldTask ->
+                oldTask.getTaskOrder() == newTask.getTaskOrder() ?
+                        newTask:
+                        oldTask
+        );
+    }
+
+    public Task getTask2() {
+        return houseTasks.stream()
+                .filter(t -> t.getTaskOrder() == 2)
+                .findAny()
+                .orElse(null);
+    }
 }

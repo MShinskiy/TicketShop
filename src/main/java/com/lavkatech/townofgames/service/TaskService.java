@@ -10,7 +10,7 @@ import java.util.UUID;
 public interface TaskService {
 
     Task createTask();
-    Task createTask(String description, House house);
+    Task createTask(int order, String description, House house);
 
     Task getTaskByUUID(UUID uuid);
 }

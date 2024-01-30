@@ -28,7 +28,7 @@ public class DataController {
            for(HouseName e : HouseName.values()) {
                for(Group group : Group.values()) {
                    for(LevelSA level : LevelSA.values()) {
-                       if(group == Group.OTHER && (e.id() == 1 || e.id() == 8 || e.id() == 6))
+                       if(group == Group.OTHER && (e.id() == 1 || e.id() == 8 || e.id() == 7))
                            continue;
                        houseService.createHouse(e.id(), e.canonicalName(), group, level);
                    }

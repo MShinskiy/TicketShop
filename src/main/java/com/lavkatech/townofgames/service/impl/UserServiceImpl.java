@@ -1,6 +1,7 @@
 package com.lavkatech.townofgames.service.impl;
 
 import com.lavkatech.townofgames.entity.*;
+import com.lavkatech.townofgames.entity.enums.Activity;
 import com.lavkatech.townofgames.entity.enums.Group;
 import com.lavkatech.townofgames.entity.enums.LevelSA;
 import com.lavkatech.townofgames.entity.report.CoinImportDto;
@@ -8,6 +9,7 @@ import com.lavkatech.townofgames.entity.report.ImportDto;
 import com.lavkatech.townofgames.entity.report.LevelGroupImportDto;
 import com.lavkatech.townofgames.entity.report.TasksImportDto;
 import com.lavkatech.townofgames.repository.UserRepository;
+import com.lavkatech.townofgames.service.BalanceLogService;
 import com.lavkatech.townofgames.service.HouseService;
 import com.lavkatech.townofgames.service.TaskService;
 import com.lavkatech.townofgames.service.UserService;
@@ -17,8 +19,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -26,11 +27,13 @@ public class UserServiceImpl implements UserService {
     private static final Logger log = LogManager.getLogger();
     private final UserRepository userRepo;
     private final TaskService taskService;
+    private final BalanceLogService balanceLogService;
     private final HouseService houseService;
 
-    public UserServiceImpl(UserRepository userRepo, TaskService taskService, HouseService houseService) {
+    public UserServiceImpl(UserRepository userRepo, TaskService taskService, BalanceLogService balanceLogService, HouseService houseService) {
         this.userRepo = userRepo;
         this.taskService = taskService;
+        this.balanceLogService = balanceLogService;
         this.houseService = houseService;
     }
 
@@ -60,32 +63,47 @@ public class UserServiceImpl implements UserService {
             return;
         }
         int count = 0;
+        List<String> wasModified = new ArrayList<>();
         for (ImportDto line : importLines) {
             //Получить пользователя для которого происходит импорт
             User user = userRepo
                     .findUserByDtprf(line.getDtprf())
-                    .orElse(null/*createUser(line.getDtprf())*/);
+                    .orElse(null);
+            if (user == null) continue;
+
             //Импорт
             if(line instanceof CoinImportDto dto ) {
                 //Начисление монет.
+                //Обновление
+                if(user.getUserGroup() == null || user.getUserLevel() == null)
+                    continue;
+                updateUserGroupLevel(user, user.getUserGroup(), user.getUserLevel());
                 //Получить статус домов
                 UserProgress userProgress = UserProgress.fromString(user.getUserProgressJson());
                 HouseProgress houseProgress = userProgress.getHouseProgressByHouseMapId(dto.getHouseMapId());
                 //Дом не найден
                 if(houseProgress == null) {
                     log.error("House to update is not found for user.");
-                    break;
+                    continue;
+                }
+                //Обнулить баланс перед импортом
+                if(!wasModified.contains(user.getDtprf())){
+                    user.setCoins(0);
+                    user.setMaxCoins(0);
                 }
                 //Внести изменения
                 houseProgress.setCurrentCoins(dto.getNewValue());
                 houseProgress.setMaxCoins(dto.getMaxValue());
                 //Внести изменения в пользователя для общих чисел
-                user.setCoins(userProgress.getTotalCurrentCoinsForHouses());
-                user.setMaxCoins(userProgress.getTotalMaxCoinsForHouses());
+                user.setCoins(user.getCoins() + dto.getNewValue());
+                user.setMaxCoins(user.getMaxCoins() + dto.getMaxValue());
                 //Сохранить статус домов
                 user.setUserProgressJson(userProgress.toString());
+                //Логирование
+                user.getBalanceLog().add(balanceLogService.saveLog(user, Activity.IMPORT, user.getCoins()));
                 //Сохранить пользователя
                 userRepo.save(user);
+                wasModified.add(user.getDtprf());
                 //Посчитать кол-во обработанных строк
                 count++;
             } else if(line instanceof TasksImportDto dto) {
@@ -128,7 +146,7 @@ public class UserServiceImpl implements UserService {
             } else
                 log.error("Unknown class for line {}", line);
         }
-        log.info("{} lines processed, {} lines updated", importLines.size(), count);
+        log.info("{} lines processed, {} lines updated for {} user(s)", importLines.size(), count, wasModified.size());
     }
 
     @Override
@@ -180,7 +198,7 @@ public class UserServiceImpl implements UserService {
             }
         }
         UserProgress progress = UserProgress.fromString(user.getUserProgressJson());
-        if(updateRequired || progress.getProgressPerHouseMap().isEmpty()) {
+        if(updateRequired || progress.getProgressPerHouseList().isEmpty()) {
             List<House> newListOfHouses = houseService.getHousesForGroupAndLevel(group, level);
             progress.addNewHouses(newListOfHouses);
             user.setUserProgressJson(progress.toString());

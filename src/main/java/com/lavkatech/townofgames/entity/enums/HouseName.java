@@ -10,8 +10,8 @@ public enum HouseName {
     CHECKS("Дом чеков", 3),
     Q_CLUB("Q Клуб", 4),
     CHIPS("Фабрика фишек", 5),
-    ACCESSORIES("Магазин Аксессуаров", 6),
-    PHOTO("Фото студия", 7),
+    PHOTO("Фото студия", 6),
+    ACCESSORIES("Магазин Аксессуаров", 7),
     RENTING("Прокат инвентаря", 8),
     GAME_CLUB("Игровой клуб", 9);
 

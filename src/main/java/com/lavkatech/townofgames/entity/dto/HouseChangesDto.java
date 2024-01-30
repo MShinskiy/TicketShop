@@ -74,12 +74,9 @@ public class HouseChangesDto {
                 hsd.addTask(task1, false);
             if(task2 != null)
                 hsd.addTask(task2, false);
-            if(text1 != null && url1 != null)
-                hsd.addButton(text1, url1);
-            if(text2 != null && url2 != null)
-                hsd.addButton(text2, url2);
-            if(text3 != null && url3 != null)
-                hsd.addButton(text3, url3);
+            hsd.addButton(text1, url1);
+            hsd.addButton(text2, url2);
+            hsd.addButton(text3, url3);
             map.put(Integer.valueOf(e.getMapId()), hsd);
         }
         UserDto userDto = UserDto.builder()

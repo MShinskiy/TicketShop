@@ -23,6 +23,7 @@ public class HouseVisitLog {
     private UUID id;
     private LocalDateTime timestamp;
 
+
     @ManyToOne
     private House house;
 

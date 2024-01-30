@@ -23,8 +23,8 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task createTask(String description, House house) {
-        return taskRepo.save(new Task(description, house));
+    public Task createTask(int order, String description, House house) {
+        return taskRepo.save(new Task(order, description, house));
     }
 
     @Override

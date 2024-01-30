@@ -77,13 +77,13 @@ public class User {
     public UserDto toDto() {
         UserProgress up = UserProgress.fromString(userProgressJson);
         //Получить сумму сделанных заданий пользователя по зданиям
-        int count = up.getProgressPerHouseMap().values().stream().filter(Objects::nonNull)
+        int count = up.getProgressPerHouseList().stream().filter(Objects::nonNull)
                 .mapToInt(HouseProgress::tasksCompleted).sum();
         //Получить сумму всех заданий пользователя по зданиям
-        int total = up.getProgressPerHouseMap().values().stream()
+        int total = up.getProgressPerHouseList().stream()
                 .mapToInt(HouseProgress::tasksTotal).sum();
         //Получить сумму максимального кол-во монет по зданиям
-        long max = up.getProgressPerHouseMap().values().stream()
+        long max = up.getProgressPerHouseList().stream()
                 .mapToLong(HouseProgress::getMaxCoins).sum();
 
         return UserDto.builder()

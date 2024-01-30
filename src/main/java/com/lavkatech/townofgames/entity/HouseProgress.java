@@ -13,6 +13,7 @@ public class HouseProgress {
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
     private final Map<UUID, Boolean> tasks;
+    private final UUID houseId;
     private final int mapId;
     private long maxCoins = 0;
     private long currentCoins = 0;
@@ -20,7 +21,8 @@ public class HouseProgress {
     private String descVar2 = "";
     private String descVar3 = "";
 
-    public HouseProgress(int mapId) {
+    public HouseProgress(UUID houseId, int mapId) {
+        this.houseId = houseId;
         this.mapId = mapId;
         tasks = new LinkedHashMap<>();
     }

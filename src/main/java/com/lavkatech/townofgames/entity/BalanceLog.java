@@ -1,9 +1,12 @@
 package com.lavkatech.townofgames.entity;
 
-import com.lavkatech.townofgames.entity.enums.Game;
+import com.lavkatech.townofgames.entity.enums.Activity;
+import com.lavkatech.townofgames.entity.enums.Group;
+import com.lavkatech.townofgames.entity.enums.LevelSA;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
@@ -16,6 +19,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "balances")
 @Builder
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class BalanceLog {
@@ -28,8 +32,12 @@ public class BalanceLog {
     private User user;
 
     @Enumerated(EnumType.STRING)
-    private Game game;
-    private long spent;
-    private long won;
+    private Group mapGroup;
+    @Enumerated(EnumType.STRING)
+    private LevelSA mapLevel;
+    @Enumerated(EnumType.STRING)
+    private Activity activity;
+
+    private long totalBalance;
     private LocalDateTime timestamp = LocalDateTime.now();
 }

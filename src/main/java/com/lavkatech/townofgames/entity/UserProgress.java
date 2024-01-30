@@ -6,18 +6,21 @@ import com.lavkatech.townofgames.misc.LocalDateTimeAdapter;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @Getter
 public class UserProgress {
     //House id - task progress
-    private final Map<UUID, HouseProgress> progressPerHouseMap;
+    private final List<HouseProgress> progressPerHouseList;
 
     public UserProgress() {
-        this.progressPerHouseMap = new HashMap<>();
+        this.progressPerHouseList = new ArrayList<>();
+    }
+
+    public UserProgress(List<HouseProgress> progress) {
+        this.progressPerHouseList = progress;
     }
 
 
@@ -25,26 +28,26 @@ public class UserProgress {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter().nullSafe())
                 .create();
-        return gson.toJson(new UserProgress());
+        return gson.toJson(new UserProgress().progressPerHouseList);
     }
 
     public static String initString(List<House> houses) {
         UserProgress userProgress = new UserProgress();
         for(House house : houses)
-            userProgress.getProgressPerHouseMap()
-                    .put(house.getId(), new HouseProgress(house.getMapId()));
-
+            userProgress.getProgressPerHouseList()
+                    .add(new HouseProgress(house.getId(), house.getMapId()));
 
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter().nullSafe())
                 .create();
-        return gson.toJson(userProgress);
+        return gson.toJson(userProgress.progressPerHouseList);
     }
 
     public void addNewHouses(List<House> houses) {
         for(House house : houses) {
-            if(!progressPerHouseMap.containsKey(house.getId()))
-                progressPerHouseMap.put(house.getId(), new HouseProgress(house.getMapId()));
+            if(progressPerHouseList.stream()
+                    .noneMatch(h -> h.getHouseId().equals(house.getId())))
+                progressPerHouseList.add(new HouseProgress(house.getId(), house.getMapId()));
         }
     }
 
@@ -52,7 +55,8 @@ public class UserProgress {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter().nullSafe())
                 .create();
-        return gson.fromJson(json, UserProgress.class);
+        List<HouseProgress> progresses = new ArrayList<>(List.of(gson.fromJson(json, HouseProgress[].class)));
+        return new UserProgress(progresses);
     }
 
     @Override
@@ -60,23 +64,30 @@ public class UserProgress {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter().nullSafe())
                 .create();
-        return gson.toJson(this.progressPerHouseMap);
+        return gson.toJson(this.progressPerHouseList);
     }
 
     public long getTotalCurrentCoinsForHouses() {
-        return progressPerHouseMap.values().stream()
+        return progressPerHouseList.stream()
                 .mapToLong(HouseProgress::getCurrentCoins)
                 .sum();
     }
     public long getTotalMaxCoinsForHouses() {
-        return progressPerHouseMap.values().stream()
+        return progressPerHouseList.stream()
                 .mapToLong(HouseProgress::getMaxCoins)
                 .sum();
     }
 
     public HouseProgress getHouseProgressByHouseMapId(int mapId) {
-        return progressPerHouseMap.values().stream()
+        return progressPerHouseList.stream()
                 .filter(prog -> prog.getMapId() == mapId)
+                .findAny()
+                .orElse(null);
+    }
+
+    public HouseProgress getHouseProgressByHouseId(UUID houseId) {
+        return progressPerHouseList.stream()
+                .filter(prog -> prog.getHouseId().equals(houseId))
                 .findAny()
                 .orElse(null);
     }

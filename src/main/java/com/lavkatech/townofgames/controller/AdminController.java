@@ -11,13 +11,17 @@ import com.lavkatech.townofgames.entity.report.*;
 import com.lavkatech.townofgames.service.HouseService;
 import com.lavkatech.townofgames.service.ReportingService;
 import com.lavkatech.townofgames.service.UserService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -89,6 +93,32 @@ public class AdminController {
         } finally {
             boolean isDeleted = tempFile.delete();
             log.debug("Temp file with name {} has been deleted: {}", tempFile.getName(), isDeleted);
+        }
+    }
+
+    @GetMapping(value = "/administration/download",
+            produces = MediaType.APPLICATION_OCTET_STREAM_VALUE
+    )
+    public @ResponseBody FileSystemResource getReport(@RequestParam("export-type") String export,
+                                                      Model model,
+                                                      HttpServletResponse response
+    ) {
+        try {
+            ExportType type = ExportType.valueOf(export);
+            File toDownload =
+                    type == ExportType.ACTIVITY ? reportingService.exportActivity() :
+                    type == ExportType.BALANCE ? reportingService.exportBalance() :
+                            null;
+            if(toDownload == null) throw new NullPointerException("Пустой файл отчета");
+            //Send created file to user
+            model.addAttribute("msgDwld", "Сейчас начнется скачивание...");
+            response.setHeader("Content-Disposition","attachment;filename=" + toDownload.getName());
+            log.info("Temp file with name {} has been created for export", toDownload.getName());
+            return new FileSystemResource(toDownload);
+        } catch (Exception e) {
+            log.error("Error occurred while creating report", e);
+            model.addAttribute("msgDwld", "Во время составления отчета произошла ошибка");
+            return null;
         }
     }
 

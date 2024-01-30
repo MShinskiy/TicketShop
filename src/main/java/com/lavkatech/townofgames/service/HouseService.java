@@ -16,6 +16,9 @@ public interface HouseService {
 
     List<HouseStatusDto> getCurrentMapStateForUser(User user);
     Map<Integer, HouseStatusDto> getHousesDtosForUserWithGroupAndLevel(User user, Group group, LevelSA level);
+
+    User updateLevelGroupHousesTasksProgress(User user, Group group, LevelSA level);
+
     List<House> getAllHouses();
     House getHouseForGroupLevelMapId(Group group, LevelSA level, Integer mapId);
     House createHouse(int mapId, Group group, LevelSA level);

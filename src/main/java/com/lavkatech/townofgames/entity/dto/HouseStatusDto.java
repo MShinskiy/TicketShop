@@ -42,7 +42,8 @@ public class HouseStatusDto {
     }
 
     public void addButton(String text, String url) {
-        buttons.add(new ButtonJson(text, url));
+        if(text != null && !text.isEmpty() && url != null && !url.isEmpty())
+            buttons.add(new ButtonJson(text, url));
     }
 }
 

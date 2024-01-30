@@ -1,6 +1,5 @@
 package com.lavkatech.townofgames.controller;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreType;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.lavkatech.townofgames.entity.User;
@@ -120,6 +119,7 @@ public class GameController {
                 }
             }
 
+
             user = userService.updateUserGroupLevel(user, g, l);
             Map<Integer, HouseStatusDto> houses = houseService.getHousesDtosForUserWithGroupAndLevel(user, g, l);
             UserDto userDto = user.toDto();
@@ -138,16 +138,19 @@ public class GameController {
     @PostMapping("/play")
     public String getHomeScreen(@RequestBody String query, Model model) {
         //Decipher query parameter
-        String param = URLDecoder.decode(query.replaceAll("query=", ""), StandardCharsets.UTF_8);
-        query = decrypt(param, initVector, key);
-        if(query == null) {
+        String res;
+        String param = URLDecoder.decode(query.replace("query=", ""), StandardCharsets.UTF_8);
+        res = decrypt(param, initVector, key);
+        if(res == null)
+            res = decrypt(query, initVector, key);
+        if(res == null) {
             log.error("Could not decrypt query {} with vector {} and key {}", param, initVector, key);
-            //model.addAttribute("errorMsg", genericErrorMessage);
+            model.addAttribute("errorMsg", genericErrorMessage);
             return "error";
         }
         //Get user params
         try {
-            JsonObject o = new Gson().fromJson(query, JsonObject.class);
+            JsonObject o = new Gson().fromJson(res, JsonObject.class);
             JsonObject contactObj = o
                     .get("User").getAsJsonObject()
                     .get("Contact").getAsJsonObject();

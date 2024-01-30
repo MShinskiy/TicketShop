@@ -39,12 +39,27 @@ public class HouseServiceImpl implements HouseService {
 
     @Override
     public Map<Integer, HouseStatusDto> getHousesDtosForUserWithGroupAndLevel(User user, Group group, LevelSA level) {
+        updateLevelGroupHousesTasksProgress(user, group, level);
         return houseRepo.findAll()
                 .stream()
                 // Отфильтровать дома соответственно группе
                 .filter(house -> group == house.getHouseGroup() && level == house.getHouseLevel())
                 // Запаковать в dto
                 .collect(Collectors.toMap(House::getMapId, house -> houseToDto(user, house)));
+    }
+
+    @Override
+    public User updateLevelGroupHousesTasksProgress(User user, Group group, LevelSA level) {
+        List<House> houses = houseRepo.findHouseByHouseGroupAndHouseLevel(group, level);
+        UserProgress userProgress = UserProgress.fromString(user.getUserProgressJson());
+        for(House h : houses)
+            for(Task task : h.getHouseTasks()) {
+                HouseProgress hp = userProgress.getHouseProgressByHouseMapId(h.getMapId());
+                if (!hp.getTasksList().contains(task.getId()))
+                    userProgress.getHouseProgressByHouseMapId(h.getMapId()).putTask(task.getId());
+            }
+        user.setUserProgressJson(userProgress.toString());
+        return user;
     }
 
     // Получить DTO из статуса дома игрока
@@ -55,8 +70,7 @@ public class HouseServiceImpl implements HouseService {
 
         //Получить прогресс пользователя по дому
         HouseProgress houseProgress = userProgress
-                .getProgressPerHouseMap()
-                .get(house.getId());
+                .getHouseProgressByHouseId(house.getId());
 
         //Получить данные о заданиях дома
         int tasksCompleted = houseProgress.tasksCompleted();
@@ -144,22 +158,28 @@ public class HouseServiceImpl implements HouseService {
             //update
             house.setName(e.getName());
             house.setDescription(e.getDescription());
-            house.setButtonText1(e.getText1());
-            house.setButtonURL1(e.getUrl1());
-            house.setButtonText2(e.getText2());
-            house.setButtonURL2(e.getUrl2());
-            house.setButtonText3(e.getText3());
-            house.setButtonURL3(e.getUrl3());
+            if(e.getText1() != null && !e.getText1().isEmpty() && e.getUrl1() != null && !e.getUrl1().isEmpty()) {
+                house.setButtonText1(e.getText1());
+                house.setButtonURL1(e.getUrl1());
+            }
+            if(e.getText2() != null && !e.getText2().isEmpty() && e.getUrl2() != null && !e.getUrl2().isEmpty()) {
+                house.setButtonText2(e.getText2());
+                house.setButtonURL2(e.getUrl2());
+            }
+            if(e.getText3() != null && !e.getText3().isEmpty() && e.getUrl3() != null && !e.getUrl3().isEmpty()) {
+                house.setButtonText3(e.getText3());
+                house.setButtonURL3(e.getUrl3());
+            }
             house.setTaskProgressDescription(e.getProgress());
             house.setCaption(e.getCaption());
 
             if(e.getTask1() != null && !e.getTask1().isEmpty()) {
-                Task task = taskService.createTask(e.getTask1(), house);
-                house.setTask1(task);
+                Task task = taskService.createTask(1, e.getTask1(), house);
+                house.replaceTask(task);
             }
             if(e.getTask2() != null && !e.getTask2().isEmpty()) {
-                Task task = taskService.createTask(e.getTask2(), house);
-                house.setTask2(task);
+                Task task = taskService.createTask(2, e.getTask2(), house);
+                house.replaceTask(task);
             }
 
             //save

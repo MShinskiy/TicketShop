@@ -19,13 +19,15 @@ public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+    private int taskOrder = -1;
     private String description = "";
     //private long reward = 0;
 
-    @OneToOne
+    @ManyToOne
     private House house = null;
 
-    public Task(String description, House house) {
+    public Task(int taskOrder, String description, House house) {
+        this.taskOrder = taskOrder;
         this.description = description;
         this.house = house;
     }

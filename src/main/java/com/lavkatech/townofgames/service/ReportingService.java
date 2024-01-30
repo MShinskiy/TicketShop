@@ -15,5 +15,7 @@ public interface ReportingService {
     List<CoinImportDto> importCoins(File xlsx) throws IOException;
     List<TasksImportDto> importTasks(File xlsx) throws IOException;
     List<LevelGroupImportDto> importLevelGroup(File xlsx) throws IOException;
+    File exportActivity() throws IOException;
+    File exportBalance() throws IOException;
 
 }
