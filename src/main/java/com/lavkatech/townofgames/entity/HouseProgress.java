@@ -9,10 +9,14 @@ import java.util.*;
 @Getter
 @Setter
 public class HouseProgress {
-    //Task - isComplete
+/*    //Task - isComplete
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
-    private final Map<UUID, Boolean> tasks;
+    private final Map<String, Boolean> tasksStatus;
+    //order - task
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    private final Map<Integer, String> tasksOrder;*/
     private final UUID houseId;
     private final int mapId;
     private long maxCoins = 0;
@@ -20,42 +24,74 @@ public class HouseProgress {
     private String descVar1 = "";
     private String descVar2 = "";
     private String descVar3 = "";
+    private String taskDesc1 = "";
+    private boolean taskStatus1 = false;
+    private String taskDesc2 = "";
+    private boolean taskStatus2 = false;
 
     public HouseProgress(UUID houseId, int mapId) {
         this.houseId = houseId;
         this.mapId = mapId;
-        tasks = new LinkedHashMap<>();
+        /*tasksStatus = new LinkedHashMap<>();
+        tasksOrder = new LinkedHashMap<>();*/
     }
 
     // Вернуть кол-во всех заданий
     public int tasksTotal() {
-        return tasks.size();
+        int count = 0;
+        if(!taskDesc1.isEmpty()) count++;
+        if(!taskDesc2.isEmpty()) count++;
+        return count;
     }
 
     // Вернуть кол-во завершенных заданий
     public int tasksCompleted() {
-        return (int) tasks.values().stream().filter(b -> b).count();
+        int count = 0;
+        if(taskStatus1) count++;
+        if(taskStatus2) count++;
+        return count;
     }
 
-    // Добавить задание
-    public void putTask(UUID task) {
-        tasks.put(task, false);
+    /*// Добавить задание
+    public void putTask(String task) {
+        tasksStatus.put(task, false);
+    }
+
+    public void putTask(String task, int order) {
+        tasksStatus.put(task, false);
+        tasksOrder.put(order, task);
+    }
+
+    public void removeTask(int order) {
+        String taskUUID = tasksOrder.get(order);
+        tasksStatus.remove(taskUUID);
+        tasksOrder.remove(order);
     }
 
     // Вернуть статус задания
-    public Boolean getTaskStatus(UUID task) {
-        return tasks.get(task);
+    public Boolean getTaskStatus(String task) {
+        return tasksStatus.get(task);
+    }
+
+    public String getTaskByOrder(int order){
+        return tasksOrder.get(order);
     }
 
     // Вернуть задания
-    public List<UUID> getTasksList() {
-        return new ArrayList<>(tasks.keySet());
+    public List<String> getTasksList() {
+        return new ArrayList<>(tasksStatus.keySet());
     }
+
+*//*    public boolean hasTaskCode(int taskCode) {
+        for (UUID taskId : getTasksList()) {
+
+        }
+    }*//*
 
     //return false if previous mapping was true (was already marked as finished) or no mapping/null (doesn't exist)
     //true - complete, false - active
-    public boolean finishTask(UUID task) {
-        Boolean res = tasks.put(task, true);
+    public boolean finishTask(String task) {
+        Boolean res = tasksStatus.put(task, true);
         return res != null && !res;
-    }
+    }*/
 }

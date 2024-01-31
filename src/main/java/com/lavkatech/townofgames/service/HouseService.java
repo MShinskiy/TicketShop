@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 public interface HouseService {
@@ -25,4 +26,5 @@ public interface HouseService {
     House createHouse(int mapId, String name, Group group, LevelSA level);
     List<House> getHousesForGroupAndLevel(Group group, LevelSA level);
     void applyChanges(List<HouseEdit> edits);
+    House getHouseByUUID(UUID uuid);
 }

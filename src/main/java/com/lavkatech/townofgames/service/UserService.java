@@ -13,8 +13,11 @@ import java.util.List;
 @Service
 public interface UserService {
 
-    User getOrCreateUser(String dtprf);
-    User getOrCreateUser(String dtprf, Group group, LevelSA level);
+    User getOrNull(String dtprf);
+
+    User createUser(String dtprf);
+
+    User getOrNull(String dtprf, Group group, LevelSA level);
     User getUserOrNull(String dtprf);
     void updateUsers(List<? extends ImportDto> importLines);
     User createUser(String dtprf, String username, Group group, LevelSA level);
@@ -22,4 +25,6 @@ public interface UserService {
     void addBalanceLog(User user, BalanceLog log);
     User saveUserChanges(User user);
     User updateUserGroupLevel(User user, Group group, LevelSA level);
+
+    User updateUserProgressTasks(User user);
 }

@@ -119,8 +119,8 @@ public class GameController {
                 }
             }
 
-
             user = userService.updateUserGroupLevel(user, g, l);
+            user = userService.updateUserProgressTasks(user);
             Map<Integer, HouseStatusDto> houses = houseService.getHousesDtosForUserWithGroupAndLevel(user, g, l);
             UserDto userDto = user.toDto();
             MapDto map = new MapDto(userDto, houses);
@@ -159,9 +159,11 @@ public class GameController {
             String level = contactObj.get("levelSA").getAsString();
 
 
-            User user = dtprf.equals("DEMO") ?
-                    new User("DEMO", "demo username", Group.PARTNER, LevelSA.HIGH) :
-                    userService.getOrCreateUser(dtprf);
+            User user = userService.getOrNull(dtprf);
+
+            if(user == null)
+                user = userService.createUser(dtprf);
+
 
             //Parse group from query
             Group g;
@@ -202,6 +204,7 @@ public class GameController {
             }
 
             user = userService.updateUserGroupLevel(user, g, l);
+            user = userService.updateUserProgressTasks(user);
             Map<Integer, HouseStatusDto> houses = houseService.getHousesDtosForUserWithGroupAndLevel(user, g, l);
             UserDto userDto = user.toDto();
             MapDto map = new MapDto(userDto, houses);

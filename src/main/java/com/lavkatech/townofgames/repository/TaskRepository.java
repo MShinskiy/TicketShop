@@ -1,3 +1,4 @@
+/*
 package com.lavkatech.townofgames.repository;
 
 import com.lavkatech.townofgames.entity.Task;
@@ -9,6 +10,7 @@ import java.util.UUID;
 
 @Repository
 public interface TaskRepository extends JpaRepository<Task, UUID> {
-
     Optional<Task> getTaskById(UUID id);
+
 }
+*/

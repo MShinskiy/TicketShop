@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -28,6 +29,7 @@ public class House {
 
     private int mapId;
     private String name = "";
+    @Column(length = 300)
     private String description = "";
     private String buttonText1 = "";
     private String buttonURL1 = "";
@@ -36,6 +38,7 @@ public class House {
     private String buttonText3 = "";
     private String buttonURL3 = "";
     private String taskProgressDescription = "{1}{2}{3}";
+    @Column(length = 300)
     private String caption = "";
 
     @Enumerated(EnumType.STRING)
@@ -58,6 +61,13 @@ public class House {
     @JoinColumn(name = "id")
     private Task task2 = null;*/
 
+/*    @OneToMany(mappedBy = "house")
+    private List<Task> houseTasks = new ArrayList<>();*/
+    @Column(length = 300)
+    private String task1 = "";
+    @Column(length = 300)
+    private String task2 = "";
+
     public House(int mapId, String name, Group houseGroup, LevelSA houseLevel) {
         this.mapId = mapId;
         this.name = name;
@@ -65,22 +75,11 @@ public class House {
         this.houseLevel = houseLevel;
     }
 
-    @OneToMany(mappedBy = "house")
-    private List<Task> houseTasks;
-
-    public Task getTask1(){
+    /*public Task getTask1() {
         return houseTasks.stream()
                 .filter(t -> t.getTaskOrder() == 1)
                 .findAny()
                 .orElse(null);
-    }
-
-    public void replaceTask(Task newTask) {
-        houseTasks.replaceAll(oldTask ->
-                oldTask.getTaskOrder() == newTask.getTaskOrder() ?
-                        newTask:
-                        oldTask
-        );
     }
 
     public Task getTask2() {
@@ -88,5 +87,25 @@ public class House {
                 .filter(t -> t.getTaskOrder() == 2)
                 .findAny()
                 .orElse(null);
+    }*/
+
+    /*public UUID deleteTaskWithOrder(int order) {
+        Optional<Task> optTask = houseTasks.stream()
+                .filter(task -> task.getTaskOrder() == order)
+                .findAny();
+
+        optTask.ifPresent(oldTask -> houseTasks.remove(oldTask));
+        return optTask.orElse(null) != null? optTask.get().getId() : null;
     }
+
+    public UUID replaceTask(Task newTask) {
+        UUID uuid = deleteTaskWithOrder(newTask.getTaskOrder());
+        houseTasks.add(newTask);
+        return uuid;
+    }
+
+    public boolean containsAtOrder(int order) {
+        return houseTasks.stream()
+                .anyMatch(task -> task.getTaskOrder() == order);
+    }*/
 }

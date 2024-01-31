@@ -1,17 +1,18 @@
 package com.lavkatech.townofgames.service.impl;
 
 import com.lavkatech.townofgames.entity.House;
-import com.lavkatech.townofgames.entity.Task;
-import com.lavkatech.townofgames.repository.TaskRepository;
+//import com.lavkatech.townofgames.entity.Task;
+//import com.lavkatech.townofgames.repository.TaskRepository;
 import com.lavkatech.townofgames.service.TaskService;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Service
 public class TaskServiceImpl implements TaskService {
 
-    private final TaskRepository taskRepo;
+    /*private final TaskRepository taskRepo;
 
     public TaskServiceImpl(TaskRepository taskRepo) {
         this.taskRepo = taskRepo;
@@ -31,4 +32,14 @@ public class TaskServiceImpl implements TaskService {
     public Task getTaskByUUID(UUID uuid) {
         return taskRepo.getTaskById(uuid).orElse(null);
     }
+
+    @Override
+    public int getOrderByUUID(UUID uuid) throws NoSuchElementException {
+        return taskRepo.getTaskById(uuid).orElseThrow().getTaskOrder();
+    }
+
+    @Override
+    public void deleteTaskByUUID(UUID uuid) {
+        taskRepo.deleteById(uuid);
+    }*/
 }

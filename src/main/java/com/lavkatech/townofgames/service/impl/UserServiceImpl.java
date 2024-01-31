@@ -38,22 +38,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getOrCreateUser(String dtprf) {
-        return userRepo.findUserByDtprf(dtprf)
-                .orElse(userRepo.save(new User(dtprf, "Игрок")));
+    public User getOrNull(String dtprf) {
+        Optional<User> optUser = userRepo.findByDtprf(dtprf);
+        return optUser.orElse(null);
     }
 
     @Override
-    public User getOrCreateUser(String dtprf, Group group, LevelSA level) {
-        return userRepo.findUserByDtprf(dtprf)
+    public User createUser(String dtprf) {
+        return userRepo.save(new User(dtprf, "Игрок"));
+    }
+
+    @Override
+    public User getOrNull(String dtprf, Group group, LevelSA level) {
+        return userRepo.findByDtprf(dtprf)
                 .orElse(userRepo.save(new User(dtprf, "Игрок", group, level)));
     }
 
-
-
     @Override
     public User getUserOrNull(String dtprf) {
-        return userRepo.findUserByDtprf(dtprf).orElse(null);
+        return userRepo.findByDtprf(dtprf).orElse(null);
     }
 
     @Override
@@ -67,17 +70,16 @@ public class UserServiceImpl implements UserService {
         for (ImportDto line : importLines) {
             //Получить пользователя для которого происходит импорт
             User user = userRepo
-                    .findUserByDtprf(line.getDtprf())
+                    .findByDtprf(line.getDtprf())
                     .orElse(null);
             if (user == null) continue;
-
+            //Обновление
+            if(user.getUserGroup() == null || user.getUserLevel() == null)
+                continue;
+            updateUserGroupLevel(user, user.getUserGroup(), user.getUserLevel());
             //Импорт
             if(line instanceof CoinImportDto dto ) {
                 //Начисление монет.
-                //Обновление
-                if(user.getUserGroup() == null || user.getUserLevel() == null)
-                    continue;
-                updateUserGroupLevel(user, user.getUserGroup(), user.getUserLevel());
                 //Получить статус домов
                 UserProgress userProgress = UserProgress.fromString(user.getUserProgressJson());
                 HouseProgress houseProgress = userProgress.getHouseProgressByHouseMapId(dto.getHouseMapId());
@@ -122,11 +124,15 @@ public class UserServiceImpl implements UserService {
                 houseProgress.setDescVar3(dto.getVar3());
                 //Отметить завершенные задания
                 if(dto.isTaskComplete()) {
-                    List<UUID> tasks = houseProgress.getTasksList();
+                    //Обновить задания
+                    updateUserProgressTasks(user);
+                    if (!houseProgress.getTaskDesc1().isEmpty() && dto.getTaskCode() == 1) {
+                        houseProgress.setTaskStatus1(true);
+                    } else
+                        log.error("Task to update is not found for user and house.");
 
-                    if (dto.getTaskCode() > tasks.size()) {
-                        UUID taskId = tasks.get(dto.getTaskCode() - 1);
-                        houseProgress.finishTask(taskId);
+                    if (!houseProgress.getTaskDesc2().isEmpty() && dto.getTaskCode() == 2) {
+                        houseProgress.setTaskStatus2(true);
                     } else
                         log.error("Task to update is not found for user and house.");
                 }
@@ -134,6 +140,7 @@ public class UserServiceImpl implements UserService {
                 user.setUserProgressJson(userProgress.toString());
                 //Сохранить пользователя
                 userRepo.save(user);
+                wasModified.add(user.getDtprf());
                 //Посчитать кол-во обработанных строк
                 count++;
             } else if(line instanceof LevelGroupImportDto dto) {
@@ -205,4 +212,26 @@ public class UserServiceImpl implements UserService {
         }
         return userRepo.save(user);
     }
+
+    @Override
+    public User updateUserProgressTasks(User user) {
+        UserProgress userProgress = UserProgress.fromString(user.getUserProgressJson());
+        List<House> houses = houseService.getHousesForGroupAndLevel(user.getUserGroup(), user.getUserLevel());
+        for(House house : houses) {
+            HouseProgress hp = userProgress.getHouseProgressByHouseMapId(house.getMapId());
+
+            if(house.getTask1() != null)
+                hp.setTaskDesc1(house.getTask1());
+            else
+                hp.setTaskDesc1("");
+
+            if(house.getTask2() != null)
+                hp.setTaskDesc2(house.getTask2());
+            else
+                hp.setTaskDesc2("");
+        }
+        user.setUserProgressJson(userProgress.toString());
+        return userRepo.save(user);
+    }
+
 }
