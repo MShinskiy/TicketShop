@@ -134,12 +134,12 @@ public class HouseServiceImpl implements HouseService {
 
     @Override
     public House createHouse(int mapId, Group group, LevelSA level) {
-        return houseRepo.save(
+        return null;/*houseRepo.save(
                 House.builder()
                         .mapId(mapId)
                         .houseGroup(group)
                         .houseLevel(level)
-                        .build());
+                        .build());*/
     }
 
     @Override

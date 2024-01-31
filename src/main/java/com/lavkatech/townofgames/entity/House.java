@@ -18,7 +18,6 @@ import java.util.UUID;
 @Entity
 @Table(name = "houses")
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class House {
@@ -49,9 +48,6 @@ public class House {
     // Принадлежность дома к уровню
     @Enumerated(EnumType.STRING)
     private LevelSA houseLevel;
-
-    @OneToMany(mappedBy = "house")
-    private List<HouseVisitLog> houseVisitLogList = new ArrayList<>();
 
     /*@OneToOne
     @JoinColumn(name = "id")

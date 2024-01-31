@@ -28,6 +28,7 @@ public class HouseProgress {
     private boolean taskStatus1 = false;
     private String taskDesc2 = "";
     private boolean taskStatus2 = false;
+    private String visitTimeStamp = "";
 
     public HouseProgress(UUID houseId, int mapId) {
         this.houseId = houseId;

@@ -19,7 +19,6 @@ import java.util.Objects;
  */
 @Data
 @Entity
-@Builder
 @Table(name = "users")
 @AllArgsConstructor
 @NoArgsConstructor
@@ -59,7 +58,7 @@ public class User {
     private long maxCoins = 0;
     private long points = 0;
     private LocalDateTime createdOn = LocalDateTime.now();
-    private LocalDateTime lastLogin = LocalDateTime.now();
+    private LocalDateTime lastLogin = null;
     private LocalDateTime lastCoinChange = LocalDateTime.now();
     private LocalDateTime lastTicketChange = LocalDateTime.now();
     @Column(length = 65535)

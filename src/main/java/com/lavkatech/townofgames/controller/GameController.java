@@ -9,6 +9,7 @@ import com.lavkatech.townofgames.entity.dto.UserDto;
 import com.lavkatech.townofgames.entity.enums.Group;
 import com.lavkatech.townofgames.entity.enums.LevelSA;
 import com.lavkatech.townofgames.service.HouseService;
+import com.lavkatech.townofgames.service.HouseVisitLogService;
 import com.lavkatech.townofgames.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,6 +27,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 @Controller
@@ -41,11 +43,13 @@ public class GameController {
     private static final Logger log = LogManager.getLogger();
     private final UserService userService;
     private final HouseService houseService;
+    private final HouseVisitLogService houseVisitLogService;
 
     @Autowired
-    public GameController(UserService userService, HouseService houseService) {
+    public GameController(UserService userService, HouseService houseService, HouseVisitLogService houseVisitLogService) {
         this.userService = userService;
         this.houseService = houseService;
+        this.houseVisitLogService = houseVisitLogService;
     }
 
     @PostMapping("/demo")
@@ -209,6 +213,11 @@ public class GameController {
             UserDto userDto = user.toDto();
             MapDto map = new MapDto(userDto, houses);
             model.addAttribute("json", map.toJsonString());
+
+            user.setLastLogin(LocalDateTime.now());
+            user = userService.saveUserChanges(user);
+
+            houseVisitLogService.saveLog(user);
             //Send users map
             return "index";
         } catch (NullPointerException e) {

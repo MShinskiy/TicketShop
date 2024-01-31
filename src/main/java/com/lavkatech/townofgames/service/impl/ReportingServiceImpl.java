@@ -2,11 +2,9 @@ package com.lavkatech.townofgames.service.impl;
 
 import com.lavkatech.townofgames.entity.enums.Group;
 import com.lavkatech.townofgames.entity.enums.LevelSA;
-import com.lavkatech.townofgames.entity.report.BalanceLogExportDto;
-import com.lavkatech.townofgames.entity.report.CoinImportDto;
-import com.lavkatech.townofgames.entity.report.LevelGroupImportDto;
-import com.lavkatech.townofgames.entity.report.TasksImportDto;
+import com.lavkatech.townofgames.entity.report.*;
 import com.lavkatech.townofgames.service.BalanceLogService;
+import com.lavkatech.townofgames.service.HouseVisitLogService;
 import com.lavkatech.townofgames.service.ReportingService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,9 +27,12 @@ public class ReportingServiceImpl implements ReportingService {
     private static final Logger log = LogManager.getLogger();
     private final static String tempPath = System.getProperty("java.io.tmpdir") + File.separator;
     private final BalanceLogService balanceLogService;
+    private final HouseVisitLogService houseVisitLogService;
 
-    public ReportingServiceImpl(BalanceLogService balanceLogService) {
+    public ReportingServiceImpl(BalanceLogService balanceLogService,
+                                HouseVisitLogService houseVisitLogService) {
         this.balanceLogService = balanceLogService;
+        this.houseVisitLogService = houseVisitLogService;
     }
 
     @Override
@@ -171,16 +172,11 @@ public class ReportingServiceImpl implements ReportingService {
 
     @Override
     public File exportActivity() throws IOException {
-        return null;
-    }
-
-    @Override
-    public File exportBalance() throws IOException {
         try {
             //Create report data
-            List<BalanceLogExportDto> report = balanceLogService.createReport();
+            List<HouseVisitLogExportDto> report = houseVisitLogService.createReport();
             //Create report file
-            String pathToFile = createReportFile(report);
+            String pathToFile = createVisitLogReportFile(report);
             //Send created file to user
             return new File(pathToFile);
         } catch (Exception e) {
@@ -189,7 +185,22 @@ public class ReportingServiceImpl implements ReportingService {
         }
     }
 
-    private String createReportFile(List<BalanceLogExportDto> lines) throws IOException {
+    @Override
+    public File exportBalance() throws IOException {
+        try {
+            //Create report data
+            List<BalanceLogExportDto> report = balanceLogService.createReport();
+            //Create report file
+            String pathToFile = createBalanceLogReportFile(report);
+            //Send created file to user
+            return new File(pathToFile);
+        } catch (Exception e) {
+            log.error("Error occurred while creating report", e);
+            return null;
+        }
+    }
+
+    private String createBalanceLogReportFile(List<BalanceLogExportDto> lines) throws IOException {
         //Имя
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyMMdd_HHmmss");
         String newFilePath = tempPath + "Report_" + dtf.format(LocalDateTime.now()) + ".xlsx";
@@ -206,7 +217,7 @@ public class ReportingServiceImpl implements ReportingService {
             for (Row row : sheet) {
                 if (row.getRowNum() == 0) {
                     //Создание наименований столбцов
-                    createHeader(wb);
+                    createBalanceLogHeader(wb);
                     continue;
                 }
 
@@ -229,7 +240,53 @@ public class ReportingServiceImpl implements ReportingService {
         return newFilePath;
     }
 
-    private static void createHeader(XSSFWorkbook wb) {
+    private String createVisitLogReportFile(List<HouseVisitLogExportDto> lines) throws IOException {
+        //Имя
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyMMdd_HHmmss");
+        String newFilePath = tempPath + "Report_" + dtf.format(LocalDateTime.now()) + ".xlsx";
+        //Создание файла
+        try(OutputStream fos = new FileOutputStream(newFilePath)) {
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFSheet sheet = wb.createSheet("Report");
+
+            int n = lines.size();
+            //Создание строчек соответственно кол-ву точек
+            for (int i = 0; i < n + 1; i++) sheet.createRow(i);
+
+            Iterator<HouseVisitLogExportDto> it = lines.listIterator();
+            for (Row row : sheet) {
+                if (row.getRowNum() == 0) {
+                    //Создание наименований столбцов
+                    createVisitLogHeader(wb);
+                    continue;
+                }
+
+                if (!it.hasNext()) break;
+
+                //Запись данных
+                HouseVisitLogExportDto line = it.next();
+                row.createCell(0).setCellValue(line.getDtprf());
+                row.createCell(1).setCellValue(line.getGroup());
+                row.createCell(2).setCellValue(line.getLogin());
+                row.createCell(3).setCellValue(line.getLevel());
+                row.createCell(4).setCellValue(line.getH1());
+                row.createCell(5).setCellValue(line.getH2());
+                row.createCell(6).setCellValue(line.getH3());
+                row.createCell(7).setCellValue(line.getH4());
+                row.createCell(8).setCellValue(line.getH5());
+                row.createCell(9).setCellValue(line.getH6());
+                row.createCell(10).setCellValue(line.getH7());
+                row.createCell(11).setCellValue(line.getH8());
+                row.createCell(12).setCellValue(line.getH9());
+            }
+
+            //Запись в файл
+            wb.write(fos);
+        }
+        return newFilePath;
+    }
+
+    private static void createBalanceLogHeader(XSSFWorkbook wb) {
         XSSFSheet sheet = wb.getSheet("Report");
         Row header = sheet.getRow(0);
 
@@ -240,6 +297,26 @@ public class ReportingServiceImpl implements ReportingService {
         header.createCell(4).setCellValue("Фактический баланс монет");
         header.createCell(5).setCellValue("Дата/время изменения баланса");
         header.createCell(6).setCellValue("Уровень SA");
+    }
+
+    private static void createVisitLogHeader(XSSFWorkbook wb) {
+        XSSFSheet sheet = wb.getSheet("Report");
+        Row header = sheet.getRow(0);
+
+        header.createCell(0).setCellValue("DTPRF");
+        header.createCell(1).setCellValue("Номер карты");
+        header.createCell(2).setCellValue("Дата/время последнего входа");
+        header.createCell(3).setCellValue("Уровень SA");
+        header.createCell(4).setCellValue("Дата/время дом 1");
+        header.createCell(5).setCellValue("Дата/время дом 2");
+        header.createCell(6).setCellValue("Дата/время дом 3");
+        header.createCell(7).setCellValue("Дата/время дом 4");
+        header.createCell(8).setCellValue("Дата/время дом 5");
+        header.createCell(9).setCellValue("Дата/время дом 6");
+        header.createCell(10).setCellValue("Дата/время дом 7");
+        header.createCell(11).setCellValue("Дата/время дом 8");
+        header.createCell(11).setCellValue("Дата/время дом 9");
+
     }
 
     private Integer tryGetNumericCellValue(Cell cell) {

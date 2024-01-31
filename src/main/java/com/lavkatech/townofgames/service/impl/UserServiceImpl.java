@@ -159,15 +159,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public User createUser(String dtprf, String username, @NonNull Group group, @NonNull LevelSA level) {
         List<House> housesForUser = houseService.getHousesForGroupAndLevel(group, level);
-        return userRepo.save(
-                User.builder()
+        return userRepo.save(null
+                /*User.builder()
                         .dtprf(dtprf)
                         .username(username)
                         .userProgressJson(UserProgress.initString(housesForUser))
                         .userGroup(group)
                         .userLevel(level)
                         .createdOn(LocalDateTime.now())
-                        .build());
+                        .build()*/);
     }
 
     @Override
