@@ -88,6 +88,7 @@ public class HouseServiceImpl implements HouseService {
         renderedString = renderedString.replace("{1}", houseProgress.getDescVar1());
         renderedString = renderedString.replace("{2}", houseProgress.getDescVar2());
         renderedString = renderedString.replace("{3}", houseProgress.getDescVar3());
+        log.info("Rendered string {} for vars: {}, {}, {}", renderedString, houseProgress.getDescVar1(), houseProgress.getDescVar2(), houseProgress.getDescVar3());
         long maxCoins = houseProgress.getMaxCoins();
 
         // Всего заданий 0? -> EMPTY, сделаны все задания? -> COMPLETE, иначе AVAILABLE

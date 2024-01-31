@@ -25,6 +25,6 @@ public class UserTask {
     @JoinColumn(name = "dtprf")
     private User user;
 
-    @OneToOne
-    private Task task;
+    /*@OneToOne
+    private Task task;*/
 }

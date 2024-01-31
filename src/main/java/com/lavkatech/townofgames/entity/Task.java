@@ -1,3 +1,4 @@
+/*
 package com.lavkatech.townofgames.entity;
 
 import jakarta.persistence.*;
@@ -20,6 +21,7 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private int taskOrder = -1;
+    @Column(length = 300)
     private String description = "";
     //private long reward = 0;
 
@@ -32,3 +34,4 @@ public class Task {
         this.house = house;
     }
 }
+*/

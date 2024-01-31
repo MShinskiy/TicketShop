@@ -25,8 +25,5 @@ public class HouseVisitLog {
 
 
     @ManyToOne
-    private House house;
-
-    @ManyToOne
     private User user;
 }
