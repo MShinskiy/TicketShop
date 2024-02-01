@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * Сущность описывает игроков
@@ -83,6 +84,33 @@ public class User {
                 .mapToInt(HouseProgress::tasksTotal).sum();
         //Получить сумму максимального кол-во монет по зданиям
         long max = up.getProgressPerHouseList().stream()
+                .mapToLong(HouseProgress::getMaxCoins).sum();
+
+        return UserDto.builder()
+                .dtprf(dtprf)
+                .username(username)
+                .group(userGroup)
+                .level(userLevel)
+                .coins(coins)
+                .maxCoins(max)
+                .points(points)
+                .tasksCount(count)
+                .tasksTotal(total)
+                .build();
+    }
+    public UserDto toDto(List<UUID> houses) {
+        UserProgress up = UserProgress.fromString(userProgressJson);
+        //Получить сумму сделанных заданий пользователя по зданиям
+        int count = up.getProgressPerHouseList().stream().filter(Objects::nonNull)
+                .filter(hp -> houses.contains(hp.getHouseId()))
+                .mapToInt(HouseProgress::tasksCompleted).sum();
+        //Получить сумму всех заданий пользователя по зданиям
+        int total = up.getProgressPerHouseList().stream()
+                .filter(hp -> houses.contains(hp.getHouseId()))
+                .mapToInt(HouseProgress::tasksTotal).sum();
+        //Получить сумму максимального кол-во монет по зданиям
+        long max = up.getProgressPerHouseList().stream()
+                .filter(hp -> houses.contains(hp.getHouseId()))
                 .mapToLong(HouseProgress::getMaxCoins).sum();
 
         return UserDto.builder()

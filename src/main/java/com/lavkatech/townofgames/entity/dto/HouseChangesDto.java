@@ -4,11 +4,14 @@ import com.google.gson.Gson;
 import com.lavkatech.townofgames.entity.enums.Group;
 import com.lavkatech.townofgames.entity.enums.LevelSA;
 import com.lavkatech.townofgames.entity.enums.TaskStatus;
+import com.lavkatech.townofgames.misc.Util;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.*;
+
+import static com.lavkatech.townofgames.misc.Util.renderString;
 
 @Getter
 @Setter
@@ -25,6 +28,7 @@ public class HouseChangesDto {
         Map<Integer, HouseStatusDto> map = new HashMap<>();
         int totalTasks = 0, completeTasks = 0;
         String group = "", level = "";
+        String var1 = "DEMO_VAR1", var2 = "DEMO_VAR2", var3 = "DEMO_VAR3";
         for(HouseEdit e : edits) {
             group = e.getGroup();
             level = e.getLevel();
@@ -33,14 +37,14 @@ public class HouseChangesDto {
             String text1 = null, text2 = null, text3 = null;
             String url1 = null, url2 = null, url3 = null;
             if(!Objects.equals(e.getTask1(), "")) {
-                task1 = e.getTask1();
+                task1 = Util.renderString(e.getTask1(), var1, var2, var3);
                 tt++;
                 totalTasks++;
                 tc++;
                 completeTasks++;
             }
             if(!Objects.equals(e.getTask2(), "")) {
-                task2 = e.getTask2();
+                task2 = Util.renderString(e.getTask2(), var1, var2, var3);
                 tt++;
                 totalTasks++;
                 tc++;
@@ -60,6 +64,9 @@ public class HouseChangesDto {
                 url3 = e.getUrl3();
 
             TaskStatus ts = tt > 0? TaskStatus.AVAILABLE : TaskStatus.EMPTY;
+            //String renderedProgress = Util.renderString(e.getProgress(), var1, var2, var3);
+            String renderedProgress = String.format("Выполнено заданий %d/%d", tc, tt);
+
 
             HouseStatusDto hsd = new HouseStatusDto(e.getName(),
                     e.getDescription(),
@@ -67,13 +74,13 @@ public class HouseChangesDto {
                     tt,
                     ts,
                     1000,
-                    e.getProgress(),
+                    renderedProgress,
                     e.getCaption());
 
             if(task1 != null)
-                hsd.addTask(task1, false);
+                hsd.addTask(renderString(task1, var1, var2, var2), false);
             if(task2 != null)
-                hsd.addTask(task2, false);
+                hsd.addTask(renderString(task2, var1, var2, var2), false);
             hsd.addButton(text1, url1);
             hsd.addButton(text2, url2);
             hsd.addButton(text3, url3);

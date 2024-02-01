@@ -1,16 +1,11 @@
 package com.lavkatech.townofgames.service.impl;
 
-import com.lavkatech.townofgames.entity.House;
 //import com.lavkatech.townofgames.entity.Task;
 //import com.lavkatech.townofgames.repository.TaskRepository;
-import com.lavkatech.townofgames.service.TaskService;
 import org.springframework.stereotype.Service;
 
-import java.util.NoSuchElementException;
-import java.util.UUID;
-
 @Service
-public class TaskServiceImpl implements TaskService {
+public class TaskServiceImpl {
 
     /*private final TaskRepository taskRepo;
 

@@ -1,6 +1,5 @@
 package com.lavkatech.townofgames.entity;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,21 +8,14 @@ import java.util.*;
 @Getter
 @Setter
 public class HouseProgress {
-/*    //Task - isComplete
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private final Map<String, Boolean> tasksStatus;
-    //order - task
-    @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private final Map<Integer, String> tasksOrder;*/
+
     private final UUID houseId;
     private final int mapId;
     private long maxCoins = 0;
     private long currentCoins = 0;
-    private String descVar1 = "";
-    private String descVar2 = "";
-    private String descVar3 = "";
+    private String descVar1 = " ";
+    private String descVar2 = " ";
+    private String descVar3 = " ";
     private String taskDesc1 = "";
     private boolean taskStatus1 = false;
     private String taskDesc2 = "";

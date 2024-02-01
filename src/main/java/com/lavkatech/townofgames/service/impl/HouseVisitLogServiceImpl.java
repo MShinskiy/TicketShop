@@ -2,6 +2,8 @@ package com.lavkatech.townofgames.service.impl;
 
 import com.lavkatech.townofgames.entity.HouseVisitLog;
 import com.lavkatech.townofgames.entity.User;
+import com.lavkatech.townofgames.entity.enums.Group;
+import com.lavkatech.townofgames.entity.enums.LevelSA;
 import com.lavkatech.townofgames.entity.report.HouseVisitLogExportDto;
 import com.lavkatech.townofgames.repository.HouseVisitLogRepository;
 import com.lavkatech.townofgames.service.HouseVisitLogService;
@@ -24,16 +26,19 @@ public class HouseVisitLogServiceImpl implements HouseVisitLogService {
     }
 
     @Override
-    public void saveLog(User user) {
-        houseVisitLogRepo.save(createLog(user));
+    public void saveLog(User user, Group group, LevelSA level) {
+        houseVisitLogRepo.save(createLog(user, group, level));
     }
 
     @Override
-    public HouseVisitLog createLog(User user) {
+    public HouseVisitLog createLog(User user, Group loginGroup, LevelSA loginLevel) {
         /*
         * TODO Получить лог по каждому дому
         * */
         return houseVisitLogRepo.save(HouseVisitLog.builder()
+                        .loginGroup(loginGroup)
+                        .loginLevel(loginLevel)
+                        .loginTimestamp(user.getLastLogin())
                 .house1(null)
                 .house2(null)
                 .house3(null)
@@ -55,9 +60,9 @@ public class HouseVisitLogServiceImpl implements HouseVisitLogService {
     public HouseVisitLogExportDto toDto(HouseVisitLog log) {
         return new HouseVisitLogExportDto(
                 log.getUser().getDtprf(),
-                log.getUser().getUserGroup().name(),
-                log.getUser().getUserLevel().name(),
-                log.getUser().getLastLogin().format(DateTimeFormatter.ofPattern(dateTimeFormat)),
+                log.getLoginGroup().name(),
+                log.getLoginLevel().name(),
+                log.getLoginTimestamp().format(DateTimeFormatter.ofPattern(dateTimeFormat)),
                 "",
                 "",
                 "",

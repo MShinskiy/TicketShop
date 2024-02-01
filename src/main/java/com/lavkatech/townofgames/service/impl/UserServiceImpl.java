@@ -11,14 +11,12 @@ import com.lavkatech.townofgames.entity.report.TasksImportDto;
 import com.lavkatech.townofgames.repository.UserRepository;
 import com.lavkatech.townofgames.service.BalanceLogService;
 import com.lavkatech.townofgames.service.HouseService;
-import com.lavkatech.townofgames.service.TaskService;
 import com.lavkatech.townofgames.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -26,13 +24,11 @@ public class UserServiceImpl implements UserService {
 
     private static final Logger log = LogManager.getLogger();
     private final UserRepository userRepo;
-    private final TaskService taskService;
     private final BalanceLogService balanceLogService;
     private final HouseService houseService;
 
-    public UserServiceImpl(UserRepository userRepo, TaskService taskService, BalanceLogService balanceLogService, HouseService houseService) {
+    public UserServiceImpl(UserRepository userRepo, BalanceLogService balanceLogService, HouseService houseService) {
         this.userRepo = userRepo;
-        this.taskService = taskService;
         this.balanceLogService = balanceLogService;
         this.houseService = houseService;
     }
@@ -48,7 +44,7 @@ public class UserServiceImpl implements UserService {
         return userRepo.save(new User(dtprf, "Игрок"));
     }
 
-    @Override
+   /* @Override
     public User getOrNull(String dtprf, Group group, LevelSA level) {
         return userRepo.findByDtprf(dtprf)
                 .orElse(userRepo.save(new User(dtprf, "Игрок", group, level)));
@@ -57,7 +53,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserOrNull(String dtprf) {
         return userRepo.findByDtprf(dtprf).orElse(null);
-    }
+    }*/
 
     @Override
     public void updateUsers(List<? extends ImportDto> importLines) {
@@ -66,7 +62,7 @@ public class UserServiceImpl implements UserService {
             return;
         }
         int count = 0;
-        List<String> wasModified = new ArrayList<>();
+        Set<String> wasModified = new HashSet<>();
         for (ImportDto line : importLines) {
             //Получить пользователя для которого происходит импорт
             User user = userRepo

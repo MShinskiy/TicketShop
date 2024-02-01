@@ -62,7 +62,7 @@ public class ReportingServiceImpl implements ReportingService {
 
                 count++;
 
-                if(dtprf == null || dtprf.equals(""))
+                if(dtprf == null || dtprf.isEmpty())
                     log.error("Importing row {} was skipped because service failed to parse dtprf (dtrpf={})", row.getRowNum(), dtprf);
                 else if(houseMapId == null)
                     log.error("Importing row {} was skipped because service failed to parse house map id (dtrpf={})", row.getRowNum(), dtprf);

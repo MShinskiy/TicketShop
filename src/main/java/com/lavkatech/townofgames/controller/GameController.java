@@ -2,6 +2,7 @@ package com.lavkatech.townofgames.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.lavkatech.townofgames.entity.House;
 import com.lavkatech.townofgames.entity.User;
 import com.lavkatech.townofgames.entity.dto.HouseStatusDto;
 import com.lavkatech.townofgames.entity.dto.MapDto;
@@ -18,17 +19,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import static com.lavkatech.townofgames.misc.Util.decrypt;
+import static com.lavkatech.townofgames.misc.Util.encrypt;
 
 @Controller
 public class GameController {
@@ -56,6 +67,8 @@ public class GameController {
     public String getDemoScreen(@RequestParam (name = "query") String query, Model model) {
         //System.out.println(query);
         //Decipher query parameter
+        if(query.startsWith("query="))
+            query = query.replace("query=", "");
         String res;
         String param = URLDecoder.decode(query.replace("query=", ""), StandardCharsets.UTF_8);
         res = decrypt(param, initVector, key);
@@ -141,7 +154,14 @@ public class GameController {
 
     @PostMapping("/play")
     public String getHomeScreen(@RequestBody String query, Model model) {
+        if(query.isEmpty()) {
+            log.error("Empty query");
+            model.addAttribute("errorMsg", genericErrorMessage);
+            return "error";
+        }
         //Decipher query parameter
+        if(query.startsWith("query="))
+            query = query.replace("query=", "");
         String res;
         String param = URLDecoder.decode(query.replace("query=", ""), StandardCharsets.UTF_8);
         res = decrypt(param, initVector, key);
@@ -175,7 +195,6 @@ public class GameController {
                 g = user.getUserGroup();
                 if(g == null) {
                     log.error("Group not found for dtprf {}", dtprf);
-                    //model.addAttribute("errorMsg", genericErrorMessage);
                     return "error";
                 }
             } else {
@@ -183,7 +202,6 @@ public class GameController {
                     g = Group.valueOf(group.toUpperCase());
                 } catch (IllegalArgumentException iae) {
                     log.error("Error while parsing {} to Group for dtprf {}", group, dtprf);
-                    //model.addAttribute("errorMsg", genericErrorMessage);
                     return "error";
                 }
             }
@@ -194,15 +212,13 @@ public class GameController {
                 l = user.getUserLevel();
                 if(l == null) {
                     log.error("Level not found for dtprf {}", dtprf);
-                    //model.addAttribute("errorMsg", genericErrorMessage);
                     return "error";
                 }
             } else {
                 try {
                     l = LevelSA.valueOf(level.toUpperCase());
                 } catch (IllegalArgumentException iae) {
-                    log.error("Error while parsing {} to LevelSA", level);
-                    //model.addAttribute("errorMsg", genericErrorMessage);
+                    log.error("Error while parsing {} to LevelSA for dtprf {}", level, dtprf);
                     return "error";
                 }
             }
@@ -210,39 +226,42 @@ public class GameController {
             user = userService.updateUserGroupLevel(user, g, l);
             user = userService.updateUserProgressTasks(user);
             Map<Integer, HouseStatusDto> houses = houseService.getHousesDtosForUserWithGroupAndLevel(user, g, l);
-            UserDto userDto = user.toDto();
+            List<UUID> userHouses = houseService.getHousesForGroupAndLevel(g, l).stream().map(House::getId).toList();
+            UserDto userDto = user.toDto(userHouses);
             MapDto map = new MapDto(userDto, houses);
             model.addAttribute("json", map.toJsonString());
 
             user.setLastLogin(LocalDateTime.now());
             user = userService.saveUserChanges(user);
 
-            houseVisitLogService.saveLog(user);
+            houseVisitLogService.saveLog(user, g, l);
             //Send users map
             return "index";
         } catch (NullPointerException e) {
             log.error("Could not parse json string:\n {} \nError:\n", query, e);
-            //model.addAttribute("errorMsg", genericErrorMessage);
             //Send error frame on error
             return "error";
         }
     }
 
-    //AES256CBC Message decryption
-    private static String decrypt(String encrypted, String initVector, String key) {
-        try {
-            IvParameterSpec iv = new IvParameterSpec(initVector.getBytes(StandardCharsets.UTF_8));
-            SecretKeySpec sKeySpec = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), "AES");
+    @GetMapping("/user/request")
+    public @ResponseBody String getUsersView(@RequestParam String dtprf) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        User user = userService.getOrNull(dtprf);
+        if(user== null) return "";
 
-            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
-            cipher.init(Cipher.DECRYPT_MODE, sKeySpec, iv);
-            byte[] original = cipher.doFinal(Base64.decodeBase64(encrypted));
+        String req = String.format("""
+                {
+                  "Timestamp": "2024-02-01 09:02:51",
+                  "User": {
+                    "Contact": {
+                      "DTE_Contact_Id__c": "%s",
+                      "mapID": "%s",
+                      "levelSA": "%s"
+                    }
+                  }
+                }
+                """, dtprf.toUpperCase(), user.getUserGroup().name(), user.getUserLevel().name());
 
-            return new String(original);
-        } catch (Exception ex) {
-            log.error(ex);
-        }
-        //Null on error
-        return null;
+        return encrypt(req, key, initVector);
     }
 }

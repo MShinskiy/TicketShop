@@ -14,15 +14,10 @@ import java.util.UUID;
 
 @Service
 public interface HouseService {
-
-    List<HouseStatusDto> getCurrentMapStateForUser(User user);
     Map<Integer, HouseStatusDto> getHousesDtosForUserWithGroupAndLevel(User user, Group group, LevelSA level);
-
     User updateLevelGroupHousesTasksProgress(User user, Group group, LevelSA level);
-
     List<House> getAllHouses();
     House getHouseForGroupLevelMapId(Group group, LevelSA level, Integer mapId);
-    House createHouse(int mapId, Group group, LevelSA level);
     House createHouse(int mapId, String name, Group group, LevelSA level);
     List<House> getHousesForGroupAndLevel(Group group, LevelSA level);
     void applyChanges(List<HouseEdit> edits);

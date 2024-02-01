@@ -17,8 +17,8 @@ public interface UserService {
 
     User createUser(String dtprf);
 
-    User getOrNull(String dtprf, Group group, LevelSA level);
-    User getUserOrNull(String dtprf);
+    /*User getOrNull(String dtprf, Group group, LevelSA level);
+    User getUserOrNull(String dtprf);*/
     void updateUsers(List<? extends ImportDto> importLines);
     User createUser(String dtprf, String username, Group group, LevelSA level);
     void addVisitLog(User user, HouseVisitLog log);

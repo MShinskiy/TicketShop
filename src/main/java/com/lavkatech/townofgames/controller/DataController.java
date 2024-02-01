@@ -5,16 +5,30 @@ import com.lavkatech.townofgames.entity.User;
 import com.lavkatech.townofgames.entity.enums.Group;
 import com.lavkatech.townofgames.entity.enums.HouseName;
 import com.lavkatech.townofgames.entity.enums.LevelSA;
+import com.lavkatech.townofgames.misc.Util;
 import com.lavkatech.townofgames.service.HouseService;
 import com.lavkatech.townofgames.service.UserService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+
+import static com.lavkatech.townofgames.misc.Util.encrypt;
+
 @RestController
 public class DataController {
-
+    @Value("${cipher.initVector}")
+    private String initVector;
+    @Value("${cipher.key}")
+    private String key;
     private final UserService userService;
     private final HouseService houseService;
 
@@ -41,10 +55,31 @@ public class DataController {
                             @RequestParam String username,
                             @RequestParam String group,
                             @RequestParam String level) {
-        userService.createUser(
+        /*userService.createUser(
                 dtprf,
                 username,
                 Group.valueOf(group.toUpperCase()),
-                LevelSA.valueOf(level.toUpperCase()));
+                LevelSA.valueOf(level.toUpperCase()));*/
+    }
+
+    @GetMapping("/data/get/user/post-request")
+    public String getUsersView(@RequestParam String dtprf) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        User user = userService.getOrNull(dtprf);
+        if(user== null) return "";
+
+        String req = String.format("""
+                {
+                  "Timestamp": "2024-02-01 09:02:51",
+                  "User": {
+                    "Contact": {
+                      "DTE_Contact_Id__c": "%s",
+                      "mapID": "%s",
+                      "levelSA": "%s"
+                    }
+                  }
+                }
+                """, dtprf.toUpperCase(), user.getUserGroup().name(), user.getUserLevel().name());
+
+        return encrypt(req, key, initVector);
     }
 }

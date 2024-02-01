@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -27,6 +26,12 @@ public class HouseVisitLog {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Enumerated(EnumType.STRING)
+    private Group loginGroup;
+    @Enumerated(EnumType.STRING)
+    private LevelSA loginLevel;
+
+    private LocalDateTime loginTimestamp;
     private LocalDateTime house1;
     private LocalDateTime house2;
     private LocalDateTime house3;
