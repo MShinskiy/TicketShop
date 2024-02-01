@@ -17,14 +17,11 @@ public interface UserService {
 
     User createUser(String dtprf);
 
-    /*User getOrNull(String dtprf, Group group, LevelSA level);
-    User getUserOrNull(String dtprf);*/
     void updateUsers(List<? extends ImportDto> importLines);
     User createUser(String dtprf, String username, Group group, LevelSA level);
     void addVisitLog(User user, HouseVisitLog log);
     void addBalanceLog(User user, BalanceLog log);
     User saveUserChanges(User user);
     User updateUserGroupLevel(User user, Group group, LevelSA level);
-
     User updateUserProgressTasks(User user);
 }

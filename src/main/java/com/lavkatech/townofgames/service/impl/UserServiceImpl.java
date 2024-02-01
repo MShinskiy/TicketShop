@@ -44,17 +44,6 @@ public class UserServiceImpl implements UserService {
         return userRepo.save(new User(dtprf, "Игрок"));
     }
 
-   /* @Override
-    public User getOrNull(String dtprf, Group group, LevelSA level) {
-        return userRepo.findByDtprf(dtprf)
-                .orElse(userRepo.save(new User(dtprf, "Игрок", group, level)));
-    }
-
-    @Override
-    public User getUserOrNull(String dtprf) {
-        return userRepo.findByDtprf(dtprf).orElse(null);
-    }*/
-
     @Override
     public void updateUsers(List<? extends ImportDto> importLines) {
         if(importLines == null || importLines.isEmpty()) {
@@ -64,15 +53,29 @@ public class UserServiceImpl implements UserService {
         int count = 0;
         Set<String> wasModified = new HashSet<>();
         for (ImportDto line : importLines) {
+
             //Получить пользователя для которого происходит импорт
             User user = userRepo
                     .findByDtprf(line.getDtprf())
                     .orElse(null);
-            if (user == null) continue;
-            //Обновление
-            if(user.getUserGroup() == null || user.getUserLevel() == null)
+
+            if(line instanceof LevelGroupImportDto dto) {
+                //Резервные значения группы и уровня.
+                //Заменить группу и уровень
+                if(user == null)
+                    user = createUser(dto.getDtprf());
+                user.setUserGroup(dto.getGroup());
+                user.setUserLevel(dto.getLevel());
+                //Сохранить пользователя
+                userRepo.save(user);
                 continue;
+            }
+            //Обновление
+            if(user == null || user.getUserGroup() == null || user.getUserLevel() == null)
+                continue;
+
             updateUserGroupLevel(user, user.getUserGroup(), user.getUserLevel());
+
             //Импорт
             if(line instanceof CoinImportDto dto ) {
                 //Начисление монет.
@@ -139,13 +142,6 @@ public class UserServiceImpl implements UserService {
                 wasModified.add(user.getDtprf());
                 //Посчитать кол-во обработанных строк
                 count++;
-            } else if(line instanceof LevelGroupImportDto dto) {
-                //Резервные значения группы и уровня.
-                //Заменить группу и уровень
-                user.setUserGroup(dto.getGroup());
-                user.setUserLevel(dto.getLevel());
-                //Сохранить пользователя
-                userRepo.save(user);
             } else
                 log.error("Unknown class for line {}", line);
         }
