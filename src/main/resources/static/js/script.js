@@ -186,6 +186,7 @@ document.querySelectorAll(".house").forEach(function(el) {
                 popupButtonEl.classList.add("popup-button");
                 popupButtonEl.href = button.url;
                 popupButtonEl.innerText = button.text;
+                popupButtonEl.target = '_blank';
 
                 // Добавляем созданный элемент в тело всплывающего окна
                 popupBodyEl.appendChild(popupButtonEl);

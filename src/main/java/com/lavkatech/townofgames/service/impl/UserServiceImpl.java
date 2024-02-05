@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUsers(List<? extends ImportDto> importLines) {
-        if(importLines == null || importLines.isEmpty()) {
+        if (importLines == null || importLines.isEmpty()) {
             log.error("No importing lines or received list is null.");
             return;
         }
@@ -59,10 +59,10 @@ public class UserServiceImpl implements UserService {
                     .findByDtprf(line.getDtprf())
                     .orElse(null);
 
-            if(line instanceof LevelGroupImportDto dto) {
+            if (line instanceof LevelGroupImportDto dto) {
                 //Резервные значения группы и уровня.
                 //Заменить группу и уровень
-                if(user == null)
+                if (user == null)
                     user = createUser(dto.getDtprf());
                 user.setUserGroup(dto.getGroup());
                 user.setUserLevel(dto.getLevel());
@@ -71,24 +71,24 @@ public class UserServiceImpl implements UserService {
                 continue;
             }
             //Обновление
-            if(user == null || user.getUserGroup() == null || user.getUserLevel() == null)
+            if (user == null || user.getUserGroup() == null || user.getUserLevel() == null)
                 continue;
 
             updateUserGroupLevel(user, user.getUserGroup(), user.getUserLevel());
 
             //Импорт
-            if(line instanceof CoinImportDto dto ) {
+            if (line instanceof CoinImportDto dto) {
                 //Начисление монет.
                 //Получить статус домов
                 UserProgress userProgress = UserProgress.fromString(user.getUserProgressJson());
                 HouseProgress houseProgress = userProgress.getHouseProgressByHouseMapId(dto.getHouseMapId());
                 //Дом не найден
-                if(houseProgress == null) {
+                if (houseProgress == null) {
                     log.error("House to update is not found for user.");
                     continue;
                 }
                 //Обнулить баланс перед импортом
-                if(!wasModified.contains(user.getDtprf())){
+                if (!wasModified.contains(user.getDtprf())) {
                     user.setCoins(0);
                     user.setMaxCoins(0);
                 }
@@ -107,13 +107,13 @@ public class UserServiceImpl implements UserService {
                 wasModified.add(user.getDtprf());
                 //Посчитать кол-во обработанных строк
                 count++;
-            } else if(line instanceof TasksImportDto dto) {
+            } else if (line instanceof TasksImportDto dto) {
                 //Переменные значения миссий.
                 //Получить статус домов
                 UserProgress userProgress = UserProgress.fromString(user.getUserProgressJson());
                 HouseProgress houseProgress = userProgress.getHouseProgressByHouseMapId(dto.getHouseMapId());
                 //Дом не найден
-                if(houseProgress == null) {
+                if (houseProgress == null) {
                     log.error("House to update is not found for user.");
                     break;
                 }
@@ -122,19 +122,18 @@ public class UserServiceImpl implements UserService {
                 houseProgress.setDescVar2(dto.getVar2());
                 houseProgress.setDescVar3(dto.getVar3());
                 //Отметить завершенные задания
-                if(dto.isTaskComplete()) {
-                    //Обновить задания
-                    updateUserProgressTasks(user);
-                    if (!houseProgress.getTaskDesc1().isEmpty() && dto.getTaskCode() == 1) {
-                        houseProgress.setTaskStatus1(true);
-                    } else
-                        log.error("Task to update is not found for user and house.");
+                //Обновить задания
+                updateUserProgressTasks(user);
+                if (!houseProgress.getTaskDesc1().isEmpty() && dto.getTaskCode() == 1) {
+                    houseProgress.setTaskStatus1(dto.isTaskComplete());
+                } else
+                    log.error("Task to update is not found for user and house.");
 
-                    if (!houseProgress.getTaskDesc2().isEmpty() && dto.getTaskCode() == 2) {
-                        houseProgress.setTaskStatus2(true);
-                    } else
-                        log.error("Task to update is not found for user and house.");
-                }
+                if (!houseProgress.getTaskDesc2().isEmpty() && dto.getTaskCode() == 2) {
+                    houseProgress.setTaskStatus2(dto.isTaskComplete());
+                } else
+                    log.error("Task to update is not found for user and house.");
+
                 //Сохранить статус домов
                 user.setUserProgressJson(userProgress.toString());
                 //Сохранить пользователя
@@ -182,22 +181,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUserGroupLevel(User user, Group group, LevelSA level) {
         boolean updateRequired = false;
-        if(group != null) {
+        if (group != null) {
             Group current = user.getUserGroup();
-            if(current != group) {
+            if (current != group) {
                 user.setUserGroup(group);
                 updateRequired = true;
             }
         }
-        if(level != null) {
+        if (level != null) {
             LevelSA current = user.getUserLevel();
-            if(current != level) {
+            if (current != level) {
                 user.setUserLevel(level);
                 updateRequired = true;
             }
         }
         UserProgress progress = UserProgress.fromString(user.getUserProgressJson());
-        if(updateRequired || progress.getProgressPerHouseList().isEmpty()) {
+        if (updateRequired || progress.getProgressPerHouseList().isEmpty()) {
             List<House> newListOfHouses = houseService.getHousesForGroupAndLevel(group, level);
             progress.addNewHouses(newListOfHouses);
             user.setUserProgressJson(progress.toString());
@@ -209,15 +208,15 @@ public class UserServiceImpl implements UserService {
     public User updateUserProgressTasks(User user) {
         UserProgress userProgress = UserProgress.fromString(user.getUserProgressJson());
         List<House> houses = houseService.getHousesForGroupAndLevel(user.getUserGroup(), user.getUserLevel());
-        for(House house : houses) {
+        for (House house : houses) {
             HouseProgress hp = userProgress.getHouseProgressByHouseMapId(house.getMapId());
 
-            if(house.getTask1() != null)
+            if (house.getTask1() != null)
                 hp.setTaskDesc1(house.getTask1());
             else
                 hp.setTaskDesc1("");
 
-            if(house.getTask2() != null)
+            if (house.getTask2() != null)
                 hp.setTaskDesc2(house.getTask2());
             else
                 hp.setTaskDesc2("");
