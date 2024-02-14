@@ -8,7 +8,6 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 public class UserProgress {
@@ -31,7 +30,47 @@ public class UserProgress {
         return gson.toJson(new UserProgress().progressPerHouseList);
     }
 
-    public static String initString(List<House> houses) {
+    public static UserProgress fromString(String json) {
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter().nullSafe())
+                .create();
+        List<HouseProgress> progresses = new ArrayList<>(List.of(gson.fromJson(json, HouseProgress[].class)));
+        return new UserProgress(progresses);
+    }
+
+    public HouseProgress getHouseProgressByHouseMapId(int mapId) {
+        return progressPerHouseList.stream()
+                .filter(prog -> prog.getMapId() == mapId)
+                .findAny()
+                .orElseGet(() -> createHouse(mapId));
+    }
+
+    public void updateHouses(List<House> houses) {
+        for (House house : houses) {
+            HouseProgress progress = progressPerHouseList.stream()
+                    .filter(prog -> prog.getMapId() == house.getMapId())
+                    .findAny()
+                    .orElseGet(() -> createHouse(house.getMapId()));
+
+            progress.setTaskDesc1(house.getTask1());
+            progress.setTaskDesc2(house.getTask2());
+        }
+    }
+
+    private HouseProgress createHouse(int mapId) {
+        HouseProgress hp = new HouseProgress(mapId);
+        progressPerHouseList.add(hp);
+        return hp;
+    }
+
+    @Override
+    public String toString() {
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter().nullSafe())
+                .create();
+        return gson.toJson(this.progressPerHouseList);
+    }
+        /*public static String initString(List<House> houses) {
         UserProgress userProgress = new UserProgress();
         for(House house : houses)
             userProgress.getProgressPerHouseList()
@@ -41,30 +80,14 @@ public class UserProgress {
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter().nullSafe())
                 .create();
         return gson.toJson(userProgress.progressPerHouseList);
-    }
+    }*/
 
-    public void addNewHouses(List<House> houses) {
+    /*public void addNewHouses(List<House> houses) {
         for(House house : houses) {
             if(progressPerHouseList.stream()
                     .noneMatch(h -> h.getHouseId().equals(house.getId())))
                 progressPerHouseList.add(new HouseProgress(house.getId(), house.getMapId()));
         }
-    }
-
-    public static UserProgress fromString(String json) {
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter().nullSafe())
-                .create();
-        List<HouseProgress> progresses = new ArrayList<>(List.of(gson.fromJson(json, HouseProgress[].class)));
-        return new UserProgress(progresses);
-    }
-
-    @Override
-    public String toString() {
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter().nullSafe())
-                .create();
-        return gson.toJson(this.progressPerHouseList);
     }
 
     public long getTotalCurrentCoinsForHouses() {
@@ -76,21 +99,7 @@ public class UserProgress {
         return progressPerHouseList.stream()
                 .mapToLong(HouseProgress::getMaxCoins)
                 .sum();
-    }
-
-    public HouseProgress getHouseProgressByHouseMapId(int mapId) {
-        return progressPerHouseList.stream()
-                .filter(prog -> prog.getMapId() == mapId)
-                .findAny()
-                .orElse(null);
-    }
-
-    public HouseProgress getHouseProgressByHouseId(UUID houseId) {
-        return progressPerHouseList.stream()
-                .filter(prog -> prog.getHouseId().equals(houseId))
-                .findAny()
-                .orElse(null);
-    }
+    }*/
 }
 
 

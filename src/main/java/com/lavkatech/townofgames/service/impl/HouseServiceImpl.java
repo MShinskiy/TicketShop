@@ -67,7 +67,7 @@ public class HouseServiceImpl implements HouseService {
 
         //Получить прогресс пользователя по дому
         HouseProgress houseProgress = userProgress
-                .getHouseProgressByHouseId(house.getId());
+                .getHouseProgressByHouseMapId(house.getMapId());
 
         //Получить данные о заданиях дома
         int tasksCompleted = houseProgress.tasksCompleted();
@@ -109,10 +109,6 @@ public class HouseServiceImpl implements HouseService {
         if(!house.getButtonText3().isEmpty() && !house.getButtonURL3().isEmpty()) {
             dto.addButton(renderString(house.getButtonText1(), houseProgress.getDescVar1(), houseProgress.getDescVar2(), houseProgress.getDescVar3()), house.getButtonURL3());
         }
-
-        /*dto.addButton(house.getButtonText1(), house.getButtonURL1());
-        dto.addButton(house.getButtonText2(), house.getButtonURL2());
-        dto.addButton(house.getButtonText3(), house.getButtonURL3());*/
 
         return dto;
     }

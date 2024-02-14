@@ -5,7 +5,6 @@ import com.lavkatech.townofgames.entity.enums.Group;
 import com.lavkatech.townofgames.entity.enums.LevelSA;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,7 +12,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
 /**
  * Сущность описывает игроков
@@ -65,9 +63,6 @@ public class User {
     @Column(length = 65535)
     private String userProgressJson = UserProgress.initString();
 
-/*    @OneToMany(mappedBy = "user")
-    private List<UserTask> userTasks;*/
-
     @OneToMany(mappedBy = "user")
     private List<HouseVisitLog> houseVisitLog = new ArrayList<>();
 
@@ -98,7 +93,7 @@ public class User {
                 .tasksTotal(total)
                 .build();
     }
-    public UserDto toDto(List<UUID> houses) {
+    /*public UserDto toDto(List<UUID> houses) {
         UserProgress up = UserProgress.fromString(userProgressJson);
         //Получить сумму сделанных заданий пользователя по зданиям
         int count = up.getProgressPerHouseList().stream().filter(Objects::nonNull)
@@ -124,5 +119,5 @@ public class User {
                 .tasksCount(count)
                 .tasksTotal(total)
                 .build();
-    }
+    }*/
 }

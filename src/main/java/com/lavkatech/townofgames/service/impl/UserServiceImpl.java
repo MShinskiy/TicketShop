@@ -68,10 +68,8 @@ public class UserServiceImpl implements UserService {
             User user = userRepo
                     .findByDtprf(line.getDtprf())
                     .orElse(null);
-            if (user == null) continue;
+            if (user == null) user = createUser(line.getDtprf());
             //Обновление
-            if(user.getUserGroup() == null || user.getUserLevel() == null)
-                continue;
             updateUserGroupLevel(user, user.getUserGroup(), user.getUserLevel());
             //Импорт
             if(line instanceof CoinImportDto dto ) {
@@ -79,11 +77,6 @@ public class UserServiceImpl implements UserService {
                 //Получить статус домов
                 UserProgress userProgress = UserProgress.fromString(user.getUserProgressJson());
                 HouseProgress houseProgress = userProgress.getHouseProgressByHouseMapId(dto.getHouseMapId());
-                //Дом не найден
-                if(houseProgress == null) {
-                    log.error("House to update is not found for user.");
-                    continue;
-                }
                 //Обнулить баланс перед импортом
                 if(!wasModified.contains(user.getDtprf())){
                     user.setCoins(0);
@@ -99,21 +92,11 @@ public class UserServiceImpl implements UserService {
                 user.setUserProgressJson(userProgress.toString());
                 //Логирование
                 user.getBalanceLog().add(balanceLogService.saveLog(user, Activity.IMPORT, user.getCoins()));
-                //Сохранить пользователя
-                userRepo.save(user);
-                wasModified.add(user.getDtprf());
-                //Посчитать кол-во обработанных строк
-                count++;
             } else if(line instanceof TasksImportDto dto) {
                 //Переменные значения миссий.
                 //Получить статус домов
                 UserProgress userProgress = UserProgress.fromString(user.getUserProgressJson());
                 HouseProgress houseProgress = userProgress.getHouseProgressByHouseMapId(dto.getHouseMapId());
-                //Дом не найден
-                if(houseProgress == null) {
-                    log.error("House to update is not found for user.");
-                    break;
-                }
                 //Обновить переменные
                 houseProgress.setDescVar1(dto.getVar1());
                 houseProgress.setDescVar2(dto.getVar2());
@@ -134,20 +117,19 @@ public class UserServiceImpl implements UserService {
                 }
                 //Сохранить статус домов
                 user.setUserProgressJson(userProgress.toString());
-                //Сохранить пользователя
-                userRepo.save(user);
-                wasModified.add(user.getDtprf());
-                //Посчитать кол-во обработанных строк
-                count++;
             } else if(line instanceof LevelGroupImportDto dto) {
                 //Резервные значения группы и уровня.
                 //Заменить группу и уровень
                 user.setUserGroup(dto.getGroup());
                 user.setUserLevel(dto.getLevel());
-                //Сохранить пользователя
-                userRepo.save(user);
             } else
+                //Не нормальное течение импорта
                 log.error("Unknown class for line {}", line);
+            //Сохранить пользователя
+            userRepo.save(user);
+            wasModified.add(user.getDtprf());
+            //Посчитать кол-во обработанных строк
+            count++;
         }
         log.info("{} lines processed, {} lines updated for {} user(s)", importLines.size(), count, wasModified.size());
     }
@@ -203,7 +185,7 @@ public class UserServiceImpl implements UserService {
         UserProgress progress = UserProgress.fromString(user.getUserProgressJson());
         if(updateRequired || progress.getProgressPerHouseList().isEmpty()) {
             List<House> newListOfHouses = houseService.getHousesForGroupAndLevel(group, level);
-            progress.addNewHouses(newListOfHouses);
+            progress.updateHouses(newListOfHouses);
             user.setUserProgressJson(progress.toString());
         }
         return userRepo.save(user);

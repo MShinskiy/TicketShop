@@ -195,7 +195,7 @@ public class GameController {
                 g = user.getUserGroup();
                 if(g == null) {
                     log.error("Group not found for dtprf {}", dtprf);
-                    return "error";
+                    //return "error";
                 }
             } else {
                 try {
@@ -212,22 +212,18 @@ public class GameController {
                 l = user.getUserLevel();
                 if(l == null) {
                     log.error("Level not found for dtprf {}", dtprf);
-                    return "error";
+                    //return "error";
                 }
             } else {
-                try {
-                    l = LevelSA.valueOf(level.toUpperCase());
-                } catch (IllegalArgumentException iae) {
-                    log.error("Error while parsing {} to LevelSA for dtprf {}", level, dtprf);
-                    return "error";
-                }
+                l = level.equalsIgnoreCase("HIGH") ? LevelSA.HIGH : LevelSA.LOW;
             }
 
-            user = userService.updateUserGroupLevel(user, g, l);
+            user = userService.updateUserGroupLevel(user,g , l);
             user = userService.updateUserProgressTasks(user);
             Map<Integer, HouseStatusDto> houses = houseService.getHousesDtosForUserWithGroupAndLevel(user, g, l);
-            List<UUID> userHouses = houseService.getHousesForGroupAndLevel(g, l).stream().map(House::getId).toList();
-            UserDto userDto = user.toDto(userHouses);
+            //List<UUID> userHouses = houseService.getHousesForGroupAndLevel(g, l).stream().map(House::getId).toList();
+            //UserDto userDto = user.toDto(userHouses);
+            UserDto userDto = user.toDto();
             MapDto map = new MapDto(userDto, houses);
             model.addAttribute("json", map.toJsonString());
 
@@ -245,9 +241,20 @@ public class GameController {
     }
 
     @GetMapping("/user/request")
-    public @ResponseBody String getUsersView(@RequestParam String dtprf) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
-        User user = userService.getOrNull(dtprf);
-        if(user== null) return "";
+    public @ResponseBody String getUsersView(@RequestParam String dtprf, @RequestParam String group, @RequestParam String level) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        /*User user = userService.getOrNull(dtprf);
+        if(user == null) return String.format("""
+                {
+                  "Timestamp": "2024-02-01 09:02:51",
+                  "User": {
+                    "Contact": {
+                      "DTE_Contact_Id__c": "%s",
+                      "mapID": "null",
+                      "levelSA": "null"
+                    }
+                  }
+                }
+                """, dtprf.toUpperCase());*/
 
         String req = String.format("""
                 {
@@ -260,7 +267,7 @@ public class GameController {
                     }
                   }
                 }
-                """, dtprf.toUpperCase(), user.getUserGroup().name(), user.getUserLevel().name());
+                """, dtprf.toUpperCase(), group.toUpperCase(), level.toUpperCase());
 
         return encrypt(req, key, initVector);
     }

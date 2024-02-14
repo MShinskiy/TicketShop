@@ -9,8 +9,8 @@
 </head>
 <body>
 <form id="form" target="iframe_window" action="/townofgames/play" method="post">
-    <input id="post-body" type="text" name="query" value="">
-    <input type="submit">
+    <input id="post-body" type="text" name="query" value="" hidden>
+    <input type="submit" hidden>
 </form>
 <iframe src="" name="iframe_window" style="width: 100%; height: 100%; position: fixed; bottom: 0px; right: 0px; left: 0px;">
 </iframe>
@@ -18,8 +18,19 @@
 <script>
     $(document).ready(() => {
         let dtprf = window.prompt("DTPRF:")
+        let group = window.prompt("p/o:").toLowerCase();
+        let level = window.prompt("h/l:").toLowerCase();
+
+        if(level === "h") level = "HIGH";
+        else if(level === "l") level = "LOW";
+
+        if(group === "p") group = "PARTNER";
+        else if(group === "o") group = "OTHER";
+
         $.get("/townofgames/user/request", {
-            dtprf: dtprf
+            dtprf: dtprf,
+            level: level,
+            group: group
         }, function (resp) {
             $("#post-body").attr("value", resp);
             $("#form").submit();

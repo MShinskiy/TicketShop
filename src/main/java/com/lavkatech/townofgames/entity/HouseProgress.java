@@ -9,7 +9,7 @@ import java.util.*;
 @Setter
 public class HouseProgress {
 
-    private final UUID houseId;
+    //private final UUID houseId;
     private final int mapId;
     private long maxCoins = 0;
     private long currentCoins = 0;
@@ -22,8 +22,8 @@ public class HouseProgress {
     private boolean taskStatus2 = false;
     private String visitTimeStamp = "";
 
-    public HouseProgress(UUID houseId, int mapId) {
-        this.houseId = houseId;
+    public HouseProgress(/*UUID houseId, */int mapId) {
+        //this.houseId = houseId;
         this.mapId = mapId;
         /*tasksStatus = new LinkedHashMap<>();
         tasksOrder = new LinkedHashMap<>();*/
