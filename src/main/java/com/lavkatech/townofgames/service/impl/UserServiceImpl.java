@@ -77,17 +77,19 @@ public class UserServiceImpl implements UserService {
                 //Получить статус домов
                 UserProgress userProgress = UserProgress.fromString(user.getUserProgressJson());
                 HouseProgress houseProgress = userProgress.getHouseProgressByHouseMapId(dto.getHouseMapId());
-                //Обнулить баланс перед импортом
+/*                //Обнулить баланс перед импортом
                 if(!wasModified.contains(user.getDtprf())){
                     user.setCoins(0);
                     user.setMaxCoins(0);
-                }
+                }*/
                 //Внести изменения
                 houseProgress.setCurrentCoins(dto.getNewValue());
                 houseProgress.setMaxCoins(dto.getMaxValue());
                 //Внести изменения в пользователя для общих чисел
-                user.setCoins(user.getCoins() + dto.getNewValue());
-                user.setMaxCoins(user.getMaxCoins() + dto.getMaxValue());
+               /* user.setCoins(user.getCoins() + dto.getNewValue());
+                user.setMaxCoins(user.getMaxCoins() + dto.getMaxValue());*/
+                user.setCoins(userProgress.getTotalCurrentCoinsForHouses());
+                user.setMaxCoins(userProgress.getTotalMaxCoinsForHouses());
                 //Сохранить статус домов
                 user.setUserProgressJson(userProgress.toString());
                 //Логирование

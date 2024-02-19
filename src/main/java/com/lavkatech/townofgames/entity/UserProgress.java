@@ -63,6 +63,17 @@ public class UserProgress {
         return hp;
     }
 
+    public long getTotalCurrentCoinsForHouses() {
+        return progressPerHouseList.stream()
+                .mapToLong(HouseProgress::getCurrentCoins)
+                .sum();
+    }
+    public long getTotalMaxCoinsForHouses() {
+        return progressPerHouseList.stream()
+                .mapToLong(HouseProgress::getMaxCoins)
+                .sum();
+    }
+
     @Override
     public String toString() {
         Gson gson = new GsonBuilder()
@@ -90,16 +101,7 @@ public class UserProgress {
         }
     }
 
-    public long getTotalCurrentCoinsForHouses() {
-        return progressPerHouseList.stream()
-                .mapToLong(HouseProgress::getCurrentCoins)
-                .sum();
-    }
-    public long getTotalMaxCoinsForHouses() {
-        return progressPerHouseList.stream()
-                .mapToLong(HouseProgress::getMaxCoins)
-                .sum();
-    }*/
+*/
 }
 
 

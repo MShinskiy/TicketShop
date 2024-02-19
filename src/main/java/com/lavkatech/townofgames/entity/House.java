@@ -44,17 +44,6 @@ public class House {
     // Принадлежность дома к уровню
     @Enumerated(EnumType.STRING)
     private LevelSA houseLevel;
-
-    /*@OneToOne
-    @JoinColumn(name = "id")
-    private Task task1 = null;
-
-    @OneToOne
-    @JoinColumn(name = "id")
-    private Task task2 = null;*/
-
-/*    @OneToMany(mappedBy = "house")
-    private List<Task> houseTasks = new ArrayList<>();*/
     @Column(length = 300)
     private String task1 = "";
     @Column(length = 300)

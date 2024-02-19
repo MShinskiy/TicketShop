@@ -22,11 +22,8 @@ public class HouseProgress {
     private boolean taskStatus2 = false;
     private String visitTimeStamp = "";
 
-    public HouseProgress(/*UUID houseId, */int mapId) {
-        //this.houseId = houseId;
+    public HouseProgress(int mapId) {
         this.mapId = mapId;
-        /*tasksStatus = new LinkedHashMap<>();
-        tasksOrder = new LinkedHashMap<>();*/
     }
 
     // Вернуть кол-во всех заданий
@@ -44,47 +41,4 @@ public class HouseProgress {
         if(taskStatus2) count++;
         return count;
     }
-
-    /*// Добавить задание
-    public void putTask(String task) {
-        tasksStatus.put(task, false);
-    }
-
-    public void putTask(String task, int order) {
-        tasksStatus.put(task, false);
-        tasksOrder.put(order, task);
-    }
-
-    public void removeTask(int order) {
-        String taskUUID = tasksOrder.get(order);
-        tasksStatus.remove(taskUUID);
-        tasksOrder.remove(order);
-    }
-
-    // Вернуть статус задания
-    public Boolean getTaskStatus(String task) {
-        return tasksStatus.get(task);
-    }
-
-    public String getTaskByOrder(int order){
-        return tasksOrder.get(order);
-    }
-
-    // Вернуть задания
-    public List<String> getTasksList() {
-        return new ArrayList<>(tasksStatus.keySet());
-    }
-
-*//*    public boolean hasTaskCode(int taskCode) {
-        for (UUID taskId : getTasksList()) {
-
-        }
-    }*//*
-
-    //return false if previous mapping was true (was already marked as finished) or no mapping/null (doesn't exist)
-    //true - complete, false - active
-    public boolean finishTask(String task) {
-        Boolean res = tasksStatus.put(task, true);
-        return res != null && !res;
-    }*/
 }

@@ -188,7 +188,6 @@ public class GameController {
             if(user == null)
                 user = userService.createUser(dtprf);
 
-
             //Parse group from query
             Group g;
             if(group == null) {
