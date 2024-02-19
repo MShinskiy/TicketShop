@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * DTO для передачи данных о домов на карту
+ * DTO для передачи данных о домах на карту
  */
 @Data
 public class HouseStatusDto {

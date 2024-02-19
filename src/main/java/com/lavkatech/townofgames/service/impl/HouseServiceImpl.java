@@ -83,8 +83,16 @@ public class HouseServiceImpl implements HouseService {
                         TaskStatus.COMPLETE : TaskStatus.AVAILABLE
                 : TaskStatus.EMPTY;
         // Создание DTO
-        HouseStatusDto dto
-                = new HouseStatusDto(house.getName(), house.getDescription(), tasksCompleted, tasksTotal, status, maxCoins, renderedProgress, house.getCaption());
+        HouseStatusDto dto = new HouseStatusDto(
+                house.getName(),
+                renderString(house.getDescription(), houseProgress.getDescVar1(), houseProgress.getDescVar2(), houseProgress.getDescVar3()),
+                tasksCompleted,
+                tasksTotal,
+                status,
+                maxCoins,
+                renderedProgress,
+                house.getCaption()
+        );
 
         // Добавление информации о заданиях
         if(houseProgress.getTaskDesc1() != null && !houseProgress.getTaskDesc1().isEmpty()) {

@@ -17,7 +17,7 @@ public class Util {
     private static final Logger log = LogManager.getLogger();
 
     public static String renderString(String toRender, String... vars) {
-        for(int i = 1; i <=3; i++)
+        for(int i = 1; i <=vars.length; i++)
             toRender = toRender.replace("{" + i + "}", vars[i-1]);
         return toRender;
     }

@@ -4,8 +4,8 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public enum LevelSA {
-    HIGH("Высокий"),
-    LOW("Низкий");
+    LOW("Низкий"),
+    HIGH("Высокий");
 
     private String name;
 

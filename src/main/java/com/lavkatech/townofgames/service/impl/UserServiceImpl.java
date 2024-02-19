@@ -101,20 +101,15 @@ public class UserServiceImpl implements UserService {
                 houseProgress.setDescVar1(dto.getVar1());
                 houseProgress.setDescVar2(dto.getVar2());
                 houseProgress.setDescVar3(dto.getVar3());
+                //Обновить задания
+                updateUserProgressTasks(user);
                 //Отметить завершенные задания
-                if(dto.isTaskComplete()) {
-                    //Обновить задания
-                    updateUserProgressTasks(user);
-                    if (!houseProgress.getTaskDesc1().isEmpty() && dto.getTaskCode() == 1) {
-                        houseProgress.setTaskStatus1(true);
-                    } else
-                        log.error("Task to update is not found for user and house.");
-
-                    if (!houseProgress.getTaskDesc2().isEmpty() && dto.getTaskCode() == 2) {
-                        houseProgress.setTaskStatus2(true);
-                    } else
-                        log.error("Task to update is not found for user and house.");
-                }
+                if (dto.getTaskCode() == 1)
+                    houseProgress.setTaskStatus1(dto.isTaskComplete());
+                else if (dto.getTaskCode() == 2)
+                    houseProgress.setTaskStatus2(dto.isTaskComplete());
+                else
+                    log.error("Task ({}) to update is not found for user and house.", dto.getTaskCode());
                 //Сохранить статус домов
                 user.setUserProgressJson(userProgress.toString());
             } else if(line instanceof LevelGroupImportDto dto) {
