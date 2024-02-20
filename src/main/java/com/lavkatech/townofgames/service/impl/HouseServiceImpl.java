@@ -94,16 +94,23 @@ public class HouseServiceImpl implements HouseService {
                 house.getCaption()
         );
 
+        String notAvail = "недоступно";
         // Добавление информации о заданиях
         if(houseProgress.getTaskDesc1() != null && !houseProgress.getTaskDesc1().isEmpty()) {
-            String renderedTask1 = renderString(houseProgress.getTaskDesc1(), houseProgress.getDescVar1(), houseProgress.getDescVar2(), houseProgress.getDescVar3());
-            dto.addTask(renderedTask1, houseProgress.isTaskStatus1());
+            String renderedTask = renderString(houseProgress.getTaskDesc1(), houseProgress.getDescVar1(), houseProgress.getDescVar2(), houseProgress.getDescVar3());
+            if(!renderedTask.equalsIgnoreCase(notAvail) && !renderedTask.isEmpty())
+                dto.addTask(renderedTask, houseProgress.isTaskStatus1());
         }
 
         if(houseProgress.getTaskDesc2() != null && !houseProgress.getTaskDesc2().isEmpty()) {
-            String renderedTask2 = renderString(houseProgress.getTaskDesc2(), houseProgress.getDescVar1(), houseProgress.getDescVar2(), houseProgress.getDescVar3());
-            dto.addTask(renderedTask2, houseProgress.isTaskStatus2());
+            String renderedTask = renderString(houseProgress.getTaskDesc2(), houseProgress.getDescVar1(), houseProgress.getDescVar2(), houseProgress.getDescVar3());
+            if(!renderedTask.equalsIgnoreCase(notAvail) && !renderedTask.isEmpty())
+                dto.addTask(renderedTask, houseProgress.isTaskStatus2());
         }
+
+        //Нет заданий - нет кнопок
+        if(dto.getTasks().isEmpty())
+            return dto;
 
         // Добавление информации о кнопках
         if(!house.getButtonText1().isEmpty() && !house.getButtonURL1().isEmpty()) {
@@ -115,7 +122,7 @@ public class HouseServiceImpl implements HouseService {
         }
 
         if(!house.getButtonText3().isEmpty() && !house.getButtonURL3().isEmpty()) {
-            dto.addButton(renderString(house.getButtonText1(), houseProgress.getDescVar1(), houseProgress.getDescVar2(), houseProgress.getDescVar3()), house.getButtonURL3());
+            dto.addButton(renderString(house.getButtonText3(), houseProgress.getDescVar1(), houseProgress.getDescVar2(), houseProgress.getDescVar3()), house.getButtonURL3());
         }
 
         return dto;
