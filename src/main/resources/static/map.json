@@ -275,5 +275,62 @@
         }
       ]
     }
+  },
+  "rating": {
+    "userPosition": 3,
+    "region": "Perm FM OC",
+    "validDate": "21.02.2024",
+    "records": [
+      {
+        "position": 1,
+        "user": "Александр",
+        "coins": 10000
+      },
+      {
+        "position": 2,
+        "user": "Анна",
+        "coins": 9000
+      },
+      {
+        "position": 3,
+        "user": "Арсений",
+        "coins": 7000
+      },
+      {
+        "position": 4,
+        "user": "Екатерина",
+        "coins": 5500
+      },
+      {
+        "position": 5,
+        "user": "Софья",
+        "coins": 5000
+      },
+      {
+        "position": 6,
+        "user": "Глеб",
+        "coins": 4000
+      },
+      {
+        "position": 7,
+        "user": "Артём",
+        "coins": 3900
+      },
+      {
+        "position": 8,
+        "user": "Семён",
+        "coins": 3800
+      },
+      {
+        "position": 9,
+        "user": "Мария",
+        "coins": 3800
+      },
+      {
+        "position": 10,
+        "user": "София",
+        "coins": 2000
+      }
+    ]
   }
 }

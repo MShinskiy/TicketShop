@@ -2,7 +2,6 @@ package com.lavkatech.townofgames.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.lavkatech.townofgames.entity.House;
 import com.lavkatech.townofgames.entity.User;
 import com.lavkatech.townofgames.entity.dto.HouseStatusDto;
 import com.lavkatech.townofgames.entity.dto.MapDto;
@@ -14,7 +13,6 @@ import com.lavkatech.townofgames.service.HouseVisitLogService;
 import com.lavkatech.townofgames.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -22,21 +20,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Map;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static com.lavkatech.townofgames.misc.Util.decrypt;
 import static com.lavkatech.townofgames.misc.Util.encrypt;
@@ -241,20 +233,6 @@ public class GameController {
 
     @GetMapping("/user/request")
     public @ResponseBody String getUsersView(@RequestParam String dtprf, @RequestParam String group, @RequestParam String level) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
-        /*User user = userService.getOrNull(dtprf);
-        if(user == null) return String.format("""
-                {
-                  "Timestamp": "2024-02-01 09:02:51",
-                  "User": {
-                    "Contact": {
-                      "DTE_Contact_Id__c": "%s",
-                      "mapID": "null",
-                      "levelSA": "null"
-                    }
-                  }
-                }
-                """, dtprf.toUpperCase());*/
-
         String req = String.format("""
                 {
                   "Timestamp": "2024-02-01 09:02:51",
