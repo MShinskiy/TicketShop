@@ -4,7 +4,7 @@ import com.lavkatech.townofgames.entity.HouseVisitLog;
 import com.lavkatech.townofgames.entity.User;
 import com.lavkatech.townofgames.entity.enums.Group;
 import com.lavkatech.townofgames.entity.enums.LevelSA;
-import com.lavkatech.townofgames.entity.report.HouseVisitLogExportDto;
+import com.lavkatech.townofgames.entity.report.dto.HouseVisitLogExportDto;
 import com.lavkatech.townofgames.repository.HouseVisitLogRepository;
 import com.lavkatech.townofgames.service.HouseVisitLogService;
 import org.springframework.beans.factory.annotation.Value;

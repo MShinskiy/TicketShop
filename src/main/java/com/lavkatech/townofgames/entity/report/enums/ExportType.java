@@ -1,4 +1,4 @@
-package com.lavkatech.townofgames.entity.report;
+package com.lavkatech.townofgames.entity.report.enums;
 
 public enum ExportType {
     ACTIVITY("Активность"),

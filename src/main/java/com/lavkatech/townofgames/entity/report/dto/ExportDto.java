@@ -1,4 +1,4 @@
-package com.lavkatech.townofgames.entity.report;
+package com.lavkatech.townofgames.entity.report.dto;
 
 import lombok.Getter;
 

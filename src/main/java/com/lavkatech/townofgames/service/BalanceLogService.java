@@ -3,7 +3,7 @@ package com.lavkatech.townofgames.service;
 import com.lavkatech.townofgames.entity.BalanceLog;
 import com.lavkatech.townofgames.entity.User;
 import com.lavkatech.townofgames.entity.enums.Activity;
-import com.lavkatech.townofgames.entity.report.BalanceLogExportDto;
+import com.lavkatech.townofgames.entity.report.dto.BalanceLogExportDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

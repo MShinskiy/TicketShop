@@ -2,7 +2,7 @@ package com.lavkatech.townofgames.service.impl;
 
 import com.lavkatech.townofgames.entity.enums.Group;
 import com.lavkatech.townofgames.entity.enums.LevelSA;
-import com.lavkatech.townofgames.entity.report.*;
+import com.lavkatech.townofgames.entity.report.dto.*;
 import com.lavkatech.townofgames.service.BalanceLogService;
 import com.lavkatech.townofgames.service.HouseVisitLogService;
 import com.lavkatech.townofgames.service.ReportingService;

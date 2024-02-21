@@ -3,7 +3,7 @@ package com.lavkatech.townofgames.service.impl;
 import com.lavkatech.townofgames.entity.BalanceLog;
 import com.lavkatech.townofgames.entity.User;
 import com.lavkatech.townofgames.entity.enums.Activity;
-import com.lavkatech.townofgames.entity.report.BalanceLogExportDto;
+import com.lavkatech.townofgames.entity.report.dto.BalanceLogExportDto;
 import com.lavkatech.townofgames.repository.BalanceLogRepository;
 import com.lavkatech.townofgames.service.BalanceLogService;
 import org.springframework.beans.factory.annotation.Value;

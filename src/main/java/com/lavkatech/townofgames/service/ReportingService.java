@@ -1,8 +1,8 @@
 package com.lavkatech.townofgames.service;
 
-import com.lavkatech.townofgames.entity.report.CoinImportDto;
-import com.lavkatech.townofgames.entity.report.LevelGroupImportDto;
-import com.lavkatech.townofgames.entity.report.TasksImportDto;
+import com.lavkatech.townofgames.entity.report.dto.CoinImportDto;
+import com.lavkatech.townofgames.entity.report.dto.LevelGroupImportDto;
+import com.lavkatech.townofgames.entity.report.dto.TasksImportDto;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
