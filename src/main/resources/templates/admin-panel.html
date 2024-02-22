@@ -30,7 +30,7 @@
                             </div>
                             <select class="custom-select" id="select-import-type" name="import-type">
                                 <option disabled selected value> -- выберите опцию --</option>
-                                <option th:each="importType : ${T(com.lavkatech.townofgames.entity.report.ImportType).values()}"
+                                <option th:each="importType : ${T(com.lavkatech.townofgames.entity.report.enums.ImportType).values()}"
                                         th:text="${importType.value()}"
                                         th:value="${importType.name()}">
                                 </option>
@@ -63,7 +63,7 @@
                             </div>
                             <select class="custom-select" id="select-export-type" name="export-type">
                                 <option disabled selected value> -- выберите опцию --</option>
-                                <option th:each="exportType : ${T(com.lavkatech.townofgames.entity.report.ExportType).values()}"
+                                <option th:each="exportType : ${T(com.lavkatech.townofgames.entity.report.enums.ExportType).values()}"
                                         th:text="${exportType.value()}"
                                         th:value="${exportType.name()}">
                                 </option>
