@@ -69,28 +69,15 @@ public class HouseServiceImpl implements HouseService {
         HouseProgress houseProgress = userProgress
                 .getHouseProgressByHouseMapId(house.getMapId());
 
-        //Получить данные о заданиях дома
-        int tasksCompleted = houseProgress.tasksCompleted();
-        int tasksTotal = houseProgress.tasksTotal();
-        String renderedProgress = String.format("Выполнено заданий %d/%d", tasksCompleted, tasksTotal);
-        //String renderedProgress = renderString(house.getTaskProgressDescription(), houseProgress.getDescVar1(), houseProgress.getDescVar2(), houseProgress.getDescVar3());
-        //log.info("Rendered string {} -> {} for vars: {}, {}, {}",house.getTaskProgressDescription(), renderedProgress, houseProgress.getDescVar1(), houseProgress.getDescVar2(), houseProgress.getDescVar3());
-        long maxCoins = houseProgress.getMaxCoins();
-
-        // Всего заданий 0? -> EMPTY, сделаны все задания? -> COMPLETE, иначе AVAILABLE
-        TaskStatus status = tasksTotal > 0 ?
-                tasksTotal == tasksCompleted ?
-                        TaskStatus.COMPLETE : TaskStatus.AVAILABLE
-                : TaskStatus.EMPTY;
         // Создание DTO
         HouseStatusDto dto = new HouseStatusDto(
                 house.getName(),
                 renderString(house.getDescription(), houseProgress.getDescVar1(), houseProgress.getDescVar2(), houseProgress.getDescVar3()),
-                tasksCompleted,
+/*                tasksCompleted,
                 tasksTotal,
                 status,
                 maxCoins,
-                renderedProgress,
+                renderedProgress,*/
                 house.getCaption()
         );
 
@@ -124,6 +111,26 @@ public class HouseServiceImpl implements HouseService {
         if(!house.getButtonText3().isEmpty() && !house.getButtonURL3().isEmpty()) {
             dto.addButton(renderString(house.getButtonText3(), houseProgress.getDescVar1(), houseProgress.getDescVar2(), houseProgress.getDescVar3()), house.getButtonURL3());
         }
+
+        //Получить данные о заданиях дома
+        int tasksCompleted = houseProgress.tasksCompleted();
+        dto.setTasksComplete(tasksCompleted);
+
+        int tasksTotal = dto.getTasks().size();
+        dto.setTasksTotal(tasksTotal);
+
+        String renderedProgress = String.format("Выполнено заданий %d/%d", tasksCompleted, tasksTotal);
+        dto.setTaskDescriptionStringMap(renderedProgress);
+
+        long maxCoins = houseProgress.getMaxCoins();
+        dto.setMaxCoins(maxCoins);
+
+        // Всего заданий 0? -> EMPTY, сделаны все задания? -> COMPLETE, иначе AVAILABLE
+        TaskStatus status = tasksTotal > 0 ?
+                tasksTotal == tasksCompleted ?
+                        TaskStatus.COMPLETE : TaskStatus.AVAILABLE
+                : TaskStatus.EMPTY;
+        dto.setTaskStatus(status);
 
         return dto;
     }

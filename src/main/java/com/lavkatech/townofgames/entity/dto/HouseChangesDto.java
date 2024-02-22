@@ -33,23 +33,10 @@ public class HouseChangesDto {
             group = e.getGroup();
             level = e.getLevel();
             int tt = 0, tc = 0;
-            String task1 = null, task2 = null;
+            String task1 = e.getTask1(), task2 = e.getTask2();
             String text1 = null, text2 = null, text3 = null;
             String url1 = null, url2 = null, url3 = null;
-            if(!Objects.equals(e.getTask1(), "")) {
-                task1 = Util.renderString(e.getTask1(), var1, var2, var3);
-                tt++;
-                totalTasks++;
-                tc++;
-                completeTasks++;
-            }
-            if(!Objects.equals(e.getTask2(), "")) {
-                task2 = Util.renderString(e.getTask2(), var1, var2, var3);
-                tt++;
-                totalTasks++;
-                tc++;
-                completeTasks++;
-            }
+
             if(!Objects.equals(e.getText1(), ""))
                 text1 = e.getText1();
             if(!Objects.equals(e.getText2(), ""))
@@ -63,27 +50,41 @@ public class HouseChangesDto {
             if(!Objects.equals(e.getUrl3(), ""))
                 url3 = e.getUrl3();
 
-            TaskStatus ts = tt > 0? TaskStatus.AVAILABLE : TaskStatus.EMPTY;
-            //String renderedProgress = Util.renderString(e.getProgress(), var1, var2, var3);
-            String renderedProgress = String.format("Выполнено заданий %d/%d", tc, tt);
-
-
-            HouseStatusDto hsd = new HouseStatusDto(e.getName(),
+            HouseStatusDto hsd = new HouseStatusDto(
+                    e.getName(),
                     e.getDescription(),
-                    tc,
-                    tt,
-                    ts,
-                    1000,
-                    renderedProgress,
-                    e.getCaption());
+                    e.getCaption()
+            );
 
-            if(task1 != null)
-                hsd.addTask(renderString(task1, var1, var2, var2), false);
-            if(task2 != null)
-                hsd.addTask(renderString(task2, var1, var2, var2), false);
+            String notAvail = "недоступно";
+            if(task1 != null && !task1.isEmpty()) {
+                String renderedTask = renderString(task1, var1, var2, var2);
+                if(!renderedTask.equalsIgnoreCase(notAvail) && !renderedTask.isEmpty()) {
+                    hsd.addTask(renderedTask, false);
+                    tt++;
+                    totalTasks++;
+                }
+            }
+            if(task2 != null && !task2.isEmpty()) {
+                String renderedTask = renderString(task2, var1, var2, var2);
+                if(!renderedTask.equalsIgnoreCase(notAvail) && !renderedTask.isEmpty()) {
+                    hsd.addTask(renderedTask, false);
+                    tt++;
+                    totalTasks++;
+                }
+            }
             hsd.addButton(text1, url1);
             hsd.addButton(text2, url2);
             hsd.addButton(text3, url3);
+
+            TaskStatus ts = tt > 0? TaskStatus.AVAILABLE : TaskStatus.EMPTY;
+
+            String renderedProgress = String.format("Выполнено заданий %d/%d", tc, tt);
+            hsd.setTaskDescriptionStringMap(renderedProgress);
+            hsd.setTaskStatus(ts);
+            hsd.setTasksComplete(tc);
+            hsd.setTasksTotal(tt);
+
             map.put(Integer.valueOf(e.getMapId()), hsd);
         }
         UserDto userDto = UserDto.builder()
