@@ -73,11 +73,6 @@ public class HouseServiceImpl implements HouseService {
         HouseStatusDto dto = new HouseStatusDto(
                 house.getName(),
                 renderString(house.getDescription(), houseProgress.getDescVar1(), houseProgress.getDescVar2(), houseProgress.getDescVar3()),
-/*                tasksCompleted,
-                tasksTotal,
-                status,
-                maxCoins,
-                renderedProgress,*/
                 house.getCaption()
         );
 

@@ -69,8 +69,8 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<BalanceLog> balanceLog = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
-    private List<Rating> ratings = new ArrayList<>();
+    /*@OneToMany(mappedBy = "user")
+    private List<Rating> ratings = new ArrayList<>();*/
 
     public UserDto toDto() {
         UserProgress up = UserProgress.fromString(userProgressJson);

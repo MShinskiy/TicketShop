@@ -5,6 +5,8 @@ import lombok.Setter;
 
 import java.util.*;
 
+import static com.lavkatech.townofgames.misc.Util.renderString;
+
 @Getter
 @Setter
 public class HouseProgress {
@@ -29,8 +31,10 @@ public class HouseProgress {
     // Вернуть кол-во всех заданий
     public int tasksTotal() {
         int count = 0;
-        if(!taskDesc1.isEmpty()) count++;
-        if(!taskDesc2.isEmpty()) count++;
+        if(!taskDesc1.isEmpty() && !renderString(taskDesc1, descVar1, descVar2, descVar3).equalsIgnoreCase("недоступно"))
+            count++;
+        if(!taskDesc2.isEmpty()  && !renderString(taskDesc2, descVar1, descVar2, descVar3).equalsIgnoreCase("недоступно"))
+            count++;
         return count;
     }
 
